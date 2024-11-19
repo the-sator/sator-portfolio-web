@@ -1,0 +1,23 @@
+{
+  "Dashboard": {
+    "dashboard": "Dashboard"
+  },
+  "SidebarItem": {
+    "dashboard": "Dashboard",
+    "user": "User",
+    "blog": "Blog",
+    "setting": "Setting",
+    "support": "Support",
+    "portfolio-form": "Portfolio Form",
+    "chat": "Chat",
+    "analytic": "Analytic",
+    "user-management": "User Management",
+    "content-management": "Content Managemnet",
+    "communication": "Communication",
+    "configuration": "Configuration",
+    "portfolio": "Portfolio"
+  },
+  "User": {
+    "user": "User"
+  }
+}
