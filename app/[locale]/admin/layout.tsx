@@ -60,14 +60,14 @@ export default async function RootLayout({
           <ThemeProviders>
             <SidebarProvider className="relative flex flex-1">
               <AppSidebar />
-              <main className="w-full overflow-hidden">
+              <div className="w-full overflow-hidden">
                 <Navbar
                   sidebarTrigger={<SidebarTrigger />}
                   currentLocale={locale}
                 />
                 {children}
                 <Toaster />
-              </main>
+              </div>
             </SidebarProvider>
           </ThemeProviders>
         </NextIntlClientProvider>
