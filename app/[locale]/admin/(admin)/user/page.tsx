@@ -6,6 +6,7 @@ import { getTranslations } from "next-intl/server";
 import React from "react";
 import { IoAddOutline } from "react-icons/io5";
 import { Input } from "@/components/ui/input";
+import { getAllAdmins } from "@/data/admin";
 async function getFakeUserData(): Promise<User[]> {
   return [
     {
@@ -38,16 +39,18 @@ async function getFakeUserData(): Promise<User[]> {
 export default async function page() {
   const t = await getTranslations("User");
   const fakeUsers = await getFakeUserData();
+  const admin = await getAllAdmins();
+  console.log("admin:", admin);
   return (
     <div className="p-4">
-      <div className="flex justify-between items-center mb-4">
+      <div className="mb-4 flex items-center justify-between">
         <h1 className="text-2xl">{t("user")}</h1>
         <Button variant="outline">
           <IoAddOutline size={14} />
           <p className="text-sm group-hover:text-blue-700">Create</p>
         </Button>
       </div>
-      <div className="flex gap-2 items-center">
+      <div className="flex items-center gap-2">
         <Input placeholder="Username" />
         <Input placeholder="Email" />
         <Button variant="destructive">Clear</Button>
