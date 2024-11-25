@@ -25,9 +25,10 @@ export default function LoginForm() {
       email: formData.get("email"),
       username: formData.get("username"),
       password: formData.get("password"),
+      otp: Number(formData.get("otp")),
     };
     const response = await login(data);
-    console.log("response:", response.error);
+    console.log("response:", response);
     if (response?.error) {
       //IF is http error then show toast
       if ("statusCode" in response.error) {
@@ -74,8 +75,8 @@ export default function LoginForm() {
           <InputWithLabel
             label="Email"
             name="email"
-            placeholder="test@gmail.com"
-            defaultValue="test@gmail.com"
+            placeholder="admin@test.com"
+            defaultValue="admin@test.com"
             errors={errors?.email}
           />
           <InputWithLabel
@@ -85,6 +86,14 @@ export default function LoginForm() {
             type="password"
             // defaultValue="21323123213123123"
             errors={errors?.password}
+          />
+          <InputWithLabel
+            label="OTP"
+            name="otp"
+            type="text"
+            maxLength={6}
+            placeholder="666666"
+            errors={errors?.otp}
           />
           <SubmitButton label="Login" className="mt-6" />
         </form>

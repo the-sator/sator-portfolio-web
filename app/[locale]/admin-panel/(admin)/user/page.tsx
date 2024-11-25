@@ -39,8 +39,6 @@ async function getFakeUserData(): Promise<User[]> {
 export default async function page() {
   const t = await getTranslations("User");
   const fakeUsers = await getFakeUserData();
-  const admin = await getAllAdmins();
-  console.log("admin:", admin);
   return (
     <div className="p-4">
       <div className="mb-4 flex items-center justify-between">

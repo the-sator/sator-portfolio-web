@@ -45,6 +45,7 @@ export function InputWithLabel({
   name,
   type = "text",
   placeholder,
+  maxLength,
   onChange,
   value,
   defaultValue,
@@ -60,6 +61,7 @@ export function InputWithLabel({
         name={name}
         variant={"outline"}
         placeholder={placeholder}
+        maxLength={maxLength}
         value={value}
         required={required}
         defaultValue={defaultValue}

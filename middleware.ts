@@ -7,7 +7,7 @@ import { getAdminSession } from "./data/admin";
 const intlMiddleware = createIntlMiddleware(routing);
 
 // Define public paths that don't require authentication
-const publicPaths = ["/admin/login", "/admin/register"];
+const publicPaths = ["/admin-panel/login", "/admin-panel/register"];
 
 // Helper function to check if a path is public
 const isPublicPath = (pathname: string) => {
@@ -25,13 +25,13 @@ export async function middleware(req: NextRequest) {
   }
 
   // Check if the path is under /admin
-  if (pathname.replace(/^\/(en|kh)/, "").startsWith("/admin")) {
+  if (pathname.replace(/^\/(en|kh)/, "").startsWith("/admin-panel")) {
     const { error } = await getAdminSession();
 
     if (error) {
       // Get the locale from the current path or default to 'en'
       const locale = pathname.startsWith("/kh") ? "kh" : "en";
-      const url = new URL(`/${locale}/admin/login`, req.url);
+      const url = new URL(`/${locale}/admin-panel/login`, req.url);
 
       // Add the original URL as a callback parameter
       url.searchParams.set("callbackUrl", pathname);
@@ -40,10 +40,10 @@ export async function middleware(req: NextRequest) {
     }
 
     // Handle the /admin root path redirect
-    if (pathname.replace(/^\/(en|kh)/, "") === "/admin") {
+    if (pathname.replace(/^\/(en|kh)/, "") === "/admin-panel") {
       const locale = pathname.startsWith("/kh") ? "kh" : "en";
       return NextResponse.redirect(
-        new URL(`/${locale}/admin/dashboard`, req.url),
+        new URL(`/${locale}/admin-panel/dashboard`, req.url),
       );
     }
   }

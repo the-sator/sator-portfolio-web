@@ -15,10 +15,13 @@ import { ChevronsUpDown } from "lucide-react";
 import { IoLogOutSharp } from "react-icons/io5";
 import { toast } from "@/hooks/use-toast";
 import { signout } from "@/action/auth.action";
-
-export default function ProfileConfigDropdown() {
+import { Session } from "@/types/base.type";
+type Props = {
+  session: Session;
+};
+export default function ProfileConfigDropdown({ session }: Props) {
   const handleSignout = async () => {
-    const { error } = await signout();
+    const { error } = await signout(session.id);
     if (error) {
       toast({
         title: "Error Signing Out",

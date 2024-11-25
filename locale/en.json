@@ -12,6 +12,8 @@
     "chat": "Chat",
     "analytic": "Analytic",
     "user-management": "User Management",
+    "admin-management": "Admin Management",
+    "admin": "Admin",
     "content-management": "Content Managemnet",
     "communication": "Communication",
     "configuration": "Configuration",
@@ -19,5 +21,8 @@
   },
   "User": {
     "user": "User"
+  },
+  "Admin": {
+    "admin": "Admin"
   }
 }

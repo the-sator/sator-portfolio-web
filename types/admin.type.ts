@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { Session } from "./base.type";
 
 enum Role {
   USER,
@@ -15,14 +16,12 @@ export type Admin = {
   lastLogin: Date | null;
   createdAt: Date;
   updatedAt: Date;
+  totp_key: Buffer | null;
 };
 
 export type AdminSession = {
   admin: Admin;
-  session: {
-    token: string;
-    expiredAt: Date;
-  };
+  session: Session;
 };
 
 export const AdminLoginSchema = z.object({
@@ -37,7 +36,17 @@ export const AdminLoginSchema = z.object({
   password: z
     .string()
     .min(6, { message: "Password must be at least 6 characters long" }),
+  otp: z.number().lt(999999, { message: "Must be 6 characters long" }),
   profilePictureUrl: z.string().url().nullable().optional(),
 });
 
+export const UpdateAdminTotpSchema = z.object({
+  id: z.string().trim().min(1, { message: "Admin ID is required" }),
+
+  key: z.string().trim().min(1, { message: "Key is required" }),
+  code: z.string().trim().min(1, { message: "Code is required" }),
+  sessionId: z.string().trim().min(1, { message: "Session ID is required" }),
+});
+
 export type AdminLoginSchema = z.infer<typeof AdminLoginSchema>;
+export type UpdateAdminTotp = z.infer<typeof UpdateAdminTotpSchema>;

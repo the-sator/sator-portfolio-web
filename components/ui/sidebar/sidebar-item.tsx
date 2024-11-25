@@ -37,7 +37,19 @@ const items = [
     children: [
       {
         title: "user",
-        url: "/admin/user",
+        url: "/admin-panel/user",
+        icon: FaUser,
+      },
+    ],
+  },
+
+  {
+    title: "admin-management",
+    url: "#",
+    children: [
+      {
+        title: "admin",
+        url: "/admin-panel/admin",
         icon: FaUser,
       },
     ],
@@ -49,19 +61,19 @@ const items = [
     children: [
       {
         title: "blog",
-        url: "/admin/blog",
+        url: "/admin-panel/blog",
         icon: MdArticle,
       },
 
       {
         title: "portfolio",
-        url: "/admin/portfolio",
+        url: "/admin-panel/portfolio",
         icon: MdDesignServices,
       },
 
       {
         title: "portfolio-form",
-        url: "/admin/portfolio-form",
+        url: "/admin-panel/portfolio-form",
         icon: FaQuestionCircle,
       },
     ],
@@ -73,7 +85,7 @@ const items = [
     children: [
       {
         title: "chat",
-        url: "/admin/chat",
+        url: "/admin-panel/chat",
         icon: IoChatboxEllipses,
       },
     ],
@@ -85,7 +97,7 @@ const items = [
     children: [
       {
         title: "setting",
-        url: "#",
+        url: "/admin-panel/setting",
         icon: IoIosSettings,
       },
     ],
