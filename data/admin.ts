@@ -14,7 +14,6 @@ export const getAllAdmins = async () => {
 };
 
 export const adminLogin = async (payload: AdminLoginSchema) => {
-  console.log("payload:", payload);
   const { data, error } = await fetchApi.post<AdminSession>(
     "/admin/login",
     payload,

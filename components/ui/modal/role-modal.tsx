@@ -47,7 +47,6 @@ export function EditRoleModal({ resources, roles }: ModalProps) {
     };
     const response = await adminUpdateRole(Number(selectedItem), data);
     if (response?.error) {
-      console.log("response?.erro:", response?.error);
       //IF is http error then show toast
       if ("statusCode" in response.error) {
         toast({

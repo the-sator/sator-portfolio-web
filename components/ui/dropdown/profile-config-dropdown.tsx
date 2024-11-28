@@ -16,10 +16,12 @@ import { IoLogOutSharp } from "react-icons/io5";
 import { toast } from "@/hooks/use-toast";
 import { signout } from "@/action/auth.action";
 import { Session } from "@/types/base.type";
+import { Admin } from "@/types/admin.type";
 type Props = {
   session: Session;
+  admin: Admin;
 };
-export default function ProfileConfigDropdown({ session }: Props) {
+export default function ProfileConfigDropdown({ session, admin }: Props) {
   const handleSignout = async () => {
     const { error } = await signout(session.id);
     if (error) {
@@ -43,9 +45,9 @@ export default function ProfileConfigDropdown({ session }: Props) {
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
             <div>
-              <p className="text-left text-sm">Ponleu</p>
+              <p className="text-left text-sm">{admin.username}</p>
               <p className="text-xs text-muted-foreground group-hover:text-accent-foreground/50">
-                ponleu@gmail.com
+                {admin.email}
               </p>
             </div>
           </div>

@@ -7,8 +7,6 @@ import ProfileConfigDropdown from "../dropdown/profile-config-dropdown";
 import SidebarItem from "./sidebar-item";
 import { getAdminSession } from "@/data/admin";
 import { redirect } from "next/navigation";
-import { checkRole, getRoleById } from "@/data/role";
-import { getAllResources } from "@/data/resource";
 
 export async function AppSidebar() {
   const { session, admin } = await getAdminSession();
@@ -21,7 +19,7 @@ export async function AppSidebar() {
       <SidebarItem admin={admin} />
       <SidebarFooter>
         <div className="flex items-center justify-between">
-          <ProfileConfigDropdown session={session} />
+          <ProfileConfigDropdown session={session} admin={admin} />
           {/* <ThemeSwitch /> */}
         </div>
       </SidebarFooter>

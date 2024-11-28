@@ -43,7 +43,6 @@ export default async function page() {
     { data: admins, error: adminError },
     { data: roles, error: roleError },
   ] = await Promise.all([getAllAdmins(), getAllRoles()]);
-  console.log("admins:", admins);
   return (
     <div className="p-4">
       <div className="mb-4 flex items-center justify-between">

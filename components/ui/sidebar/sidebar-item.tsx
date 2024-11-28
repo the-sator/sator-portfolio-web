@@ -75,7 +75,7 @@ const items = [
 
       {
         title: "portfolio",
-        resource: "Porfolio",
+        resource: "Portfolio",
         url: "/admin-panel/portfolio",
         icon: <MdDesignServices />,
       },
@@ -121,12 +121,12 @@ type Props = {
 export default async function SidebarItem({ admin }: Props) {
   const t = await getTranslations("SidebarItem");
   const { data } = await getRoleById(admin.role.id);
-  console.log("data:", data);
   const filteredItems = items
     .map((item) => ({
       ...item,
       children: item.children.filter((child) => {
-        if (["Dashboard", "Setting", "Role"].includes(child.resource))
+        // TODO: Config later, should only have dashboard and setting
+        if (["Dashboard", "Setting", "Portfolio Form"].includes(child.resource))
           return true;
         const permission = data?.permissions.find(
           (perm) => perm.resource?.name === child.resource,
