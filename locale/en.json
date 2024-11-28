@@ -14,6 +14,8 @@
     "user-management": "User Management",
     "admin-management": "Admin Management",
     "admin": "Admin",
+    "role": "Role",
+    "permission": "Permission",
     "content-management": "Content Managemnet",
     "communication": "Communication",
     "configuration": "Configuration",
@@ -24,5 +26,8 @@
   },
   "Admin": {
     "admin": "Admin"
+  },
+  "Role": {
+    "role": "Role"
   }
 }

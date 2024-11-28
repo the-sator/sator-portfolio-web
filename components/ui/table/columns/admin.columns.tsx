@@ -16,6 +16,9 @@ import { DataTableColumnHeader } from "../data-table-columns/data-table-column-h
 import { Admin } from "@/types/admin.type";
 import { FaCheck } from "react-icons/fa6";
 import { IoClose } from "react-icons/io5";
+import { useSelectedItem } from "@/store/selected-item";
+import { useOverlay } from "@/store/overlay";
+import Tag from "../../tag";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -57,7 +60,35 @@ export const AdminColumns: ColumnDef<Admin>[] = [
     accessorKey: "email",
     header: "Email",
   },
+  {
+    accessorKey: "role",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Role" />
+    ),
 
+    cell: ({ row }) => {
+      let color;
+
+      switch (row.original.role.name) {
+        case "Admin":
+          color = "blue";
+          break;
+        case "Super Admin":
+          color = "indigo";
+          break;
+        case "User":
+          color = "green";
+          break;
+        default:
+          color = "yellow";
+      }
+      return (
+        <div className="min-w-24">
+          <Tag color={color}>{row.original.role.name}</Tag>
+        </div>
+      );
+    },
+  },
   {
     accessorKey: "createdAt",
     header: ({ column }) => (
@@ -85,8 +116,9 @@ export const AdminColumns: ColumnDef<Admin>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const User = row.original;
-
+      const Admin = row.original;
+      const { setSelectedItem } = useSelectedItem();
+      const { setShowModal } = useOverlay();
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -100,13 +132,26 @@ export const AdminColumns: ColumnDef<Admin>[] = [
               Actions
             </DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(User.id)}
+              onClick={() => navigator.clipboard.writeText(Admin.id)}
             >
               Copy User ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View User details</DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={(e) => e.preventDefault()}
+              className="p-0"
+            >
+              <Button
+                variant={"ghost"}
+                className="flex h-fit w-full justify-start px-2 py-1"
+                onClick={() => {
+                  setSelectedItem(Admin.id);
+                  setShowModal(true);
+                }}
+              >
+                Assign Role
+              </Button>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

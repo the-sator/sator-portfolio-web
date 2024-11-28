@@ -4,11 +4,11 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar/sidebar";
 import { AppSidebar } from "@/components/ui/sidebar/app-sidebar";
-import { Toaster } from "@/components/ui/toaster";
 import Navbar from "@/components/ui/nav";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { setRequestLocale } from "next-intl/server";
+import ConfirmationDialog from "@/components/ui/confirmation-dialog";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -36,7 +36,7 @@ export default async function RootLayout({
         <div className="w-full overflow-hidden">
           <Navbar sidebarTrigger={<SidebarTrigger />} currentLocale={locale} />
           {children}
-          <Toaster />
+          <ConfirmationDialog />
         </div>
       </SidebarProvider>
     </div>

@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import {
   SidebarContent,
@@ -6,18 +5,17 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
 } from "./sidebar";
 import { MdArticle, MdDashboard, MdDesignServices } from "react-icons/md";
-import { FaUser } from "react-icons/fa6";
+import { FaKey, FaUser, FaUserLock } from "react-icons/fa6";
 // import ThemeSwitch from "../theme-switch";
 import { IoIosSettings } from "react-icons/io";
-import { usePathname } from "next/navigation";
-import Link from "next/link";
-import { useTranslations } from "next-intl";
 import { IoChatboxEllipses } from "react-icons/io5";
-import { FaQuestionCircle } from "react-icons/fa";
+import { FaQuestionCircle, FaUserCog } from "react-icons/fa";
+import SidebarMenuNavItem from "./sidebar-menu-nav-item";
+import { getMessages, getTranslations } from "next-intl/server";
+import { Admin } from "@/types/admin.type";
+import { getRoleById } from "@/data/role";
 
 const items = [
   {
@@ -26,8 +24,9 @@ const items = [
     children: [
       {
         title: "dashboard",
-        url: "/admin/dashboard",
-        icon: MdDashboard,
+        resource: "Dashboard",
+        url: "/admin-panel/dashboard",
+        icon: <MdDashboard />,
       },
     ],
   },
@@ -37,8 +36,9 @@ const items = [
     children: [
       {
         title: "user",
+        resource: "User",
         url: "/admin-panel/user",
-        icon: FaUser,
+        icon: <FaUser />,
       },
     ],
   },
@@ -49,8 +49,15 @@ const items = [
     children: [
       {
         title: "admin",
+        resource: "Admin",
         url: "/admin-panel/admin",
-        icon: FaUser,
+        icon: <FaUserCog />,
+      },
+      {
+        title: "role",
+        resource: "Role",
+        url: "/admin-panel/role",
+        icon: <FaKey />,
       },
     ],
   },
@@ -61,20 +68,23 @@ const items = [
     children: [
       {
         title: "blog",
+        resource: "Blog",
         url: "/admin-panel/blog",
-        icon: MdArticle,
+        icon: <MdArticle />,
       },
 
       {
         title: "portfolio",
+        resource: "Porfolio",
         url: "/admin-panel/portfolio",
-        icon: MdDesignServices,
+        icon: <MdDesignServices />,
       },
 
       {
         title: "portfolio-form",
+        resource: "Portfolio Form",
         url: "/admin-panel/portfolio-form",
-        icon: FaQuestionCircle,
+        icon: <FaQuestionCircle />,
       },
     ],
   },
@@ -85,8 +95,9 @@ const items = [
     children: [
       {
         title: "chat",
+        resource: "Chat",
         url: "/admin-panel/chat",
-        icon: IoChatboxEllipses,
+        icon: <IoChatboxEllipses />,
       },
     ],
   },
@@ -97,45 +108,43 @@ const items = [
     children: [
       {
         title: "setting",
+        resource: "Setting",
         url: "/admin-panel/setting",
-        icon: IoIosSettings,
+        icon: <IoIosSettings />,
       },
     ],
   },
 ];
-
-export default function SidebarItem() {
-  const pathname = usePathname();
-  const t = useTranslations("SidebarItem");
-
-  // const path = pathname.split("/")[2];
-  const isActivePath = (currentPath: string, childUrl: string) => {
-    if (childUrl === "/") {
-      return ["/", "/en", "/kh"].includes(currentPath);
-    }
-    return currentPath.replace(/^\/(en|kh)/, "") === childUrl;
-  };
-
+type Props = {
+  admin: Admin;
+};
+export default async function SidebarItem({ admin }: Props) {
+  const t = await getTranslations("SidebarItem");
+  const { data } = await getRoleById(admin.role.id);
+  console.log("data:", data);
+  const filteredItems = items
+    .map((item) => ({
+      ...item,
+      children: item.children.filter((child) => {
+        if (["Dashboard", "Setting", "Role"].includes(child.resource))
+          return true;
+        const permission = data?.permissions.find(
+          (perm) => perm.resource?.name === child.resource,
+        );
+        return permission?.read; // Only include if read is true
+      }),
+    }))
+    .filter((item) => item.children.length > 0);
   return (
     <SidebarContent>
-      {items.map((item) => (
+      {filteredItems.map((item) => (
         <SidebarGroup key={item.title}>
           <SidebarGroupLabel>{t(item.title)}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {item.children.map((child) => (
-                <SidebarMenuItem key={child.title}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={isActivePath(pathname, child.url)}
-                  >
-                    <Link href={`${child.url}`} className="text-label">
-                      <child.icon />
-                      <span>{t(child.title)}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {item.children.map((child) => {
+                return <SidebarMenuNavItem child={child} key={child.title} />;
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

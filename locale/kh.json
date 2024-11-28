@@ -12,6 +12,8 @@
     "portfolio-form": "សំណួរស្នាដៃ",
     "chat": "ផ្ញើសារ",
     "analytic": "វិភាគ",
+    "role": "តំណែង",
+    "permission": "ភាពអនុញ្ញាត",
     "user-management": "គ្រប់គ្រងអតិថិជន",
     "admin-management": "គ្រប់គ្រងរដ្ធបាល",
     "content-management": "គ្រប់គ្រងវេទិការ",
@@ -24,5 +26,8 @@
   },
   "Admin": {
     "admin": "រដ្ធបាល"
+  },
+  "Role": {
+    "role": "តំណែង"
   }
 }

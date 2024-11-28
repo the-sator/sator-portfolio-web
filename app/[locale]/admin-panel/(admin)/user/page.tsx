@@ -1,12 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { UserColumns } from "@/components/ui/table/columns/user-columns";
+import { UserColumns } from "@/components/ui/table/columns/user.columns";
 import { DataTable } from "@/components/ui/data-table";
 import { User } from "@/types/user.type";
 import { getTranslations } from "next-intl/server";
 import React from "react";
 import { IoAddOutline } from "react-icons/io5";
 import { Input } from "@/components/ui/input";
-import { getAllAdmins } from "@/data/admin";
 async function getFakeUserData(): Promise<User[]> {
   return [
     {

@@ -2,6 +2,7 @@ import {
   Admin,
   AdminLoginSchema,
   AdminSession,
+  AssignAdminRole,
   UpdateAdminTotp,
 } from "@/types/admin.type";
 import { fetchApi } from "@/utils/fetch-client";
@@ -41,6 +42,13 @@ export const adminSignout = async (id: string) => {
 export const adminSetUpTotp = async (payload: UpdateAdminTotp) => {
   const { data, error } = await fetchApi.post<Admin>("/admin/totp", payload, [
     "admin-session",
+  ]);
+  return { data, error };
+};
+
+export const assignRole = async (payload: AssignAdminRole) => {
+  const { data, error } = await fetchApi.post<Admin>("/admin/assign", payload, [
+    "admin-role",
   ]);
   return { data, error };
 };

@@ -21,17 +21,21 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DataTablePagination } from "./table/data-table-columns/data-table-columns-pagination";
+import { HttpError } from "@/types/base.type";
+import { toast } from "@/hooks/use-toast";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  error?: HttpError | null;
   showPagination?: boolean;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  error,
   showPagination = true,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -39,6 +43,15 @@ export function DataTable<TData, TValue>({
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
   // const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  useEffect(() => {
+    if (error) {
+      toast({
+        title: "Something Went Wrong",
+        description: error.error,
+        variant: "destructive",
+      });
+    }
+  }, [error]);
 
   const table = useReactTable({
     data,

@@ -12,7 +12,7 @@ import {
 } from "./select";
 import { UseFormRegisterReturn } from "react-hook-form";
 import { cn } from "@/lib/utils";
-type SelectOption = {
+export type SelectOption = {
   value: string;
   label: string;
 };
@@ -38,6 +38,7 @@ type SelectWithLabelProps = {
   placeholder?: string;
   name?: string;
   options: SelectOption[];
+  errors?: ZodErrorFormatted | null;
 };
 export function InputWithLabel({
   label,
@@ -179,6 +180,7 @@ export function SelectWithLabel({
   defaultValue,
   placeholder,
   name,
+  errors,
 }: SelectWithLabelProps) {
   return (
     <div className="flex flex-col gap-3">
@@ -196,6 +198,16 @@ export function SelectWithLabel({
           ))}
         </SelectContent>
       </Select>
+      {errors && (
+        <p className="text-xs text-red-400">
+          {errors._errors.map((error, index) => (
+            <span key={index}>
+              {error}
+              <br />
+            </span>
+          ))}
+        </p>
+      )}
     </div>
   );
 }

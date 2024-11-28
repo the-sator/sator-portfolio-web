@@ -10,6 +10,7 @@ import { getMessages, setRequestLocale } from "next-intl/server";
 import { Toaster } from "@/components/ui/toaster";
 import ThemeProviders from "@/context/theme-provider";
 import { NextIntlClientProvider } from "next-intl";
+import { ReactQueryClientProvider } from "@/context/query-provider";
 const font = _font({ subsets: ["latin"] });
 // const geistSans = localFont({
 //   src: "./fonts/GeistVF.woff",
@@ -38,7 +39,6 @@ export default async function RootLayout({
   if (!routing.locales.includes(locale as never)) {
     notFound();
   }
-
   const messages = await getMessages();
   setRequestLocale(locale);
   return (
@@ -47,12 +47,14 @@ export default async function RootLayout({
         // className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         className={cn(font.className)}
       >
-        <NextIntlClientProvider messages={messages}>
-          <ThemeProviders>
-            {children}
-            <Toaster />
-          </ThemeProviders>
-        </NextIntlClientProvider>
+        <ReactQueryClientProvider>
+          <NextIntlClientProvider messages={messages}>
+            <ThemeProviders>
+              {children}
+              <Toaster />
+            </ThemeProviders>
+          </NextIntlClientProvider>
+        </ReactQueryClientProvider>
       </body>
     </html>
   );

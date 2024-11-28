@@ -88,7 +88,7 @@ export const UserColumns: ColumnDef<User>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel className="text-label sr-only">
+            <DropdownMenuLabel className="sr-only text-label">
               Actions
             </DropdownMenuLabel>
             <DropdownMenuItem

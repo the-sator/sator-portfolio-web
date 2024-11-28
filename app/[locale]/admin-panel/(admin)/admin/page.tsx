@@ -5,7 +5,9 @@ import React from "react";
 import { IoAddOutline } from "react-icons/io5";
 import { Input } from "@/components/ui/input";
 import { getAllAdmins } from "@/data/admin";
-import { AdminColumns } from "@/components/ui/table/columns/admin-columns";
+import { AdminColumns } from "@/components/ui/table/columns/admin.columns";
+import { AssignRoleModal } from "@/components/ui/modal/role-modal";
+import { getAllRoles } from "@/data/role";
 // async function getFakeUserData(): Promise<User[]> {
 //   return [
 //     {
@@ -37,7 +39,11 @@ import { AdminColumns } from "@/components/ui/table/columns/admin-columns";
 
 export default async function page() {
   const t = await getTranslations("Admin");
-  const { data, error } = await getAllAdmins();
+  const [
+    { data: admins, error: adminError },
+    { data: roles, error: roleError },
+  ] = await Promise.all([getAllAdmins(), getAllRoles()]);
+  console.log("admins:", admins);
   return (
     <div className="p-4">
       <div className="mb-4 flex items-center justify-between">
@@ -52,7 +58,12 @@ export default async function page() {
         <Input placeholder="Email" />
         <Button variant="destructive">Clear</Button>
       </div>
-      <DataTable columns={AdminColumns} data={data || []} />
+      <DataTable
+        columns={AdminColumns}
+        data={admins || []}
+        error={adminError}
+      />
+      <AssignRoleModal roles={roles} error={roleError} admins={admins} />
     </div>
   );
 }

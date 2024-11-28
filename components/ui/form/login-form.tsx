@@ -28,7 +28,6 @@ export default function LoginForm() {
       otp: Number(formData.get("otp")),
     };
     const response = await login(data);
-    console.log("response:", response);
     if (response?.error) {
       //IF is http error then show toast
       if ("statusCode" in response.error) {
