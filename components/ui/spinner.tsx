@@ -6,7 +6,7 @@ type Props = {
 export default function Spinner({ size = 14 }: Props) {
   return (
     <AiOutlineLoading3Quarters
-      className="animate-spin text-neutral-500"
+      className="animate-spin text-foreground"
       size={size}
     />
   );
