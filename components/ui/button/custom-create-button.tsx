@@ -11,7 +11,7 @@ export default function CustomCreateButton({ href, className }: Props) {
     <Link
       href={href}
       className={cn(
-        "group flex min-h-[200px] w-full items-center justify-center rounded-md border border-dashed p-0 transition-all hover:border-label hover:dark:border-label/50",
+        "group flex min-h-[200px] w-full items-center justify-center rounded-md border border-dashed p-0 transition-all hover:border-label/50",
         className,
       )}
     >

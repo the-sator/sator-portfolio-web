@@ -2,7 +2,7 @@
 
 import { createRole, deleteRole, getRoleById, updateRole } from "@/data/role";
 import { CreateRoleSchema, UpdateRoleSchema } from "@/types/role.type";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidateTag } from "next/cache";
 
 export async function adminCreateRole(formData: unknown) {
   const result = CreateRoleSchema.safeParse(formData);
