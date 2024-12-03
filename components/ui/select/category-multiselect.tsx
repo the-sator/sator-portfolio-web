@@ -26,7 +26,9 @@ import TagSkeleton from "../skeleton/tag-skeleton";
 // import { createTags } from "@/action/tag";
 import Tag from "../tag";
 import Spinner from "../spinner";
-import TagEditDropdown from "../dropdown/category-edit-dropdown";
+import CategoryEditDropdown from "../dropdown/category-edit-dropdown";
+import { toast } from "@/hooks/use-toast";
+import { createCategoryAction } from "@/action/category.action";
 /**
  * Variants for the multi-select component to handle different styles.
  * Uses class-variance-authority (cva) to define different styles based on "variant" prop.
@@ -74,7 +76,7 @@ interface MultiSelectProps
   onValueChange: (value: string[]) => void;
 
   /** The default selected values when the component mounts. */
-  defaultValue: string[];
+  defaultValue?: string[];
 
   /**
    * Placeholder text to be displayed when no values are selected.
@@ -112,8 +114,6 @@ interface MultiSelectProps
    * Optional, can be used to add custom styles.
    */
   className?: string;
-
-  onTagUpdate?: () => Promise<void>;
 }
 
 export const CategoryMultiSelect = React.forwardRef<
@@ -132,7 +132,6 @@ export const CategoryMultiSelect = React.forwardRef<
       modalPopover = false,
       asChild = true,
       className,
-      onTagUpdate,
       ...props
     },
     ref,
@@ -163,50 +162,44 @@ export const CategoryMultiSelect = React.forwardRef<
         setTagLoading(true);
         if (empty || options.length == 0) {
           startLoadingTransition(async () => {
-            // try {
-            //   const { error } = await createTags({ name: inputValue.trim() });
-            //   if (error) {
-            //     if (error.code === "23505") {
-            //       toast({
-            //         title: "Error Creating Tag",
-            //         description: "Cannot create tag with the same name",
-            //         variant: "destructive",
-            //       });
-            //     } else if (error.code === "23514") {
-            //       toast({
-            //         title: "Error Creating Tag",
-            //         description: "Tag name cannot be longer than 20 characters",
-            //         variant: "destructive",
-            //       });
-            //     } else {
-            //       toast({
-            //         title: "Error Creating Tag",
-            //         description: error.message || "An unknown error occurred",
-            //         variant: "destructive",
-            //       });
-            //     }
-            //   } else {
-            //     toast({
-            //       title: "Tag Created",
-            //       description: "The tag was created successfully",
-            //       variant: "success",
-            //     });
-            //     setInputValue("");
-            //     // revalidatePathClient("/create");
-            //     if (onTagUpdate) {
-            //       onTagUpdate();
-            //     }
-            //   }
-            // } catch (error: unknown) {
-            //   toast({
-            //     title: "An unexpected error occurred",
-            //     description:
-            //       error instanceof Error ? error.message : String(error),
-            //     variant: "destructive",
-            //   });
-            // } finally {
-            //   setTagLoading(false);
-            // }
+            try {
+              const response = await createCategoryAction({
+                name: inputValue.trim(),
+              });
+              if (response.error) {
+                if ("statusCode" in response.error) {
+                  toast({
+                    title: "Create Category Error",
+                    description: response.error.error,
+                    variant: "destructive",
+                    duration: 1500,
+                  });
+                } else {
+                  toast({
+                    title: "Create Category Error",
+                    description: response.error.name?._errors,
+                    variant: "destructive",
+                    duration: 1500,
+                  });
+                }
+              } else {
+                toast({
+                  title: "Tag Created",
+                  description: "The tag was created successfully",
+                  variant: "success",
+                });
+                setInputValue("");
+              }
+            } catch (error: unknown) {
+              toast({
+                title: "An unexpected error occurred",
+                description:
+                  error instanceof Error ? error.message : String(error),
+                variant: "destructive",
+              });
+            } finally {
+              setTagLoading(false);
+            }
           });
         }
       } else if (event.key === "Backspace" && !event.currentTarget.value) {
@@ -252,13 +245,13 @@ export const CategoryMultiSelect = React.forwardRef<
             variant={"outline"}
             onClick={handleTogglePopover}
             className={cn(
-              "flex h-auto min-h-10 w-full items-center justify-between rounded-md bg-inherit px-3 py-1",
+              "h-auto min-h-10 w-full items-center justify-between rounded-md bg-inherit px-3 py-1",
               multiSelectVariants({ variant }),
               className,
             )}
           >
             {selectedValues.length > 0 ? (
-              <div className="flex w-full items-center justify-between">
+              <div className="z-50 flex w-full items-center justify-between">
                 <div className="flex flex-wrap items-center gap-2">
                   {selectedValues.slice(0, maxCount).map((value) => {
                     const option = options.find((o) => o.value === value);
@@ -267,6 +260,7 @@ export const CategoryMultiSelect = React.forwardRef<
                       <Tag
                         key={value}
                         color={option?.color}
+                        className="hover:bg-red-500"
                         // style={{ animationDuration: `${animation}s` }}
                       >
                         {IconComponent && (
@@ -274,7 +268,7 @@ export const CategoryMultiSelect = React.forwardRef<
                         )}
                         {option?.label}
                         <IoClose
-                          className="ml-2 h-4 w-4 cursor-pointer hover:text-blue-600"
+                          className="ml-2 h-4 w-4 cursor-pointer hover:opacity-50"
                           onClick={(event) => {
                             event.stopPropagation();
                             toggleOption(value);
@@ -367,9 +361,8 @@ export const CategoryMultiSelect = React.forwardRef<
                         />
                         <div className="flex w-full items-center justify-between">
                           <Tag color={option.color}>{option?.label}</Tag>
-                          <TagEditDropdown
-                            tag={option}
-                            onTagUpdate={onTagUpdate}
+                          <CategoryEditDropdown
+                            category={option}
                             startLoadingTransition={startLoadingTransition}
                           />
                         </div>

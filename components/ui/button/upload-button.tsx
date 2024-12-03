@@ -2,6 +2,7 @@ import React, { Dispatch, SetStateAction, useRef } from "react";
 import { Button } from "../button";
 
 import { Input } from "@/components/ui/input";
+import { compressImage } from "@/lib/image";
 type UploadButtonProps = {
   children: React.ReactNode;
   className?: string;
@@ -21,9 +22,14 @@ export default function UploadButton({
     }
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     if (event.target.files && event.target.files.length > 0) {
-      setImage(event.target.files[0]);
+      const compressedImage = await compressImage(event.target.files[0], {
+        maxSizeMB: 0.5,
+      });
+      setImage(compressedImage);
     }
   };
   return (

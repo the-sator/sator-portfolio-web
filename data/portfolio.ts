@@ -15,7 +15,7 @@ export const getAllPortfolio = async () => {
   return data;
 };
 
-export const create = async (payload: CreatePortfolio) => {
+export const createPortfolio = async (payload: CreatePortfolio) => {
   const data = await fetchApi.post<Portfolio>(`/admin/portfolio/`, payload, [
     "portfolio",
   ]);
