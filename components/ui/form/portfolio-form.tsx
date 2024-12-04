@@ -1,46 +1,69 @@
 "use client";
-import React, { FormEvent, useRef, useState } from "react";
+import React, { FormEvent, useRef, useState, useTransition } from "react";
 import DynamicEditor, { EditorRef } from "@/components/editor/editor";
 import { InputWithLabel, TextAreaWithLabel } from "@/components/ui/input-label";
 import { Label } from "@/components/ui/label";
 import { CategoryMultiSelect } from "@/components/ui/select/category-multiselect";
 import { Button } from "../button";
 import MultiUploadButton from "../button/multi-upload-button";
-import { FaCheck, FaPen, FaPlus } from "react-icons/fa6";
+import { FaCheck, FaPlus } from "react-icons/fa6";
 import { slugify } from "@/utils/string";
 import { nanoid } from "nanoid";
-import { createPortfolioAction } from "@/action/portfolio.action";
+import {
+  createPortfolioAction,
+  updatePortfolioAction,
+} from "@/action/portfolio.action";
 import { ZodFormattedError } from "zod";
-import { CreatePortfolio } from "@/types/portfolio.type";
+import { CreatePortfolio, Portfolio } from "@/types/portfolio.type";
 import { toast } from "@/hooks/use-toast";
 import { Admin } from "@/types/admin.type";
-import ImageContainerBlurClient from "../image/image-container-blur-client";
-import UploadButton from "../button/upload-button";
-import { toBase64 } from "@/lib/image";
 import { Category } from "@/types/category.type";
-import { cn } from "@/lib/utils";
+import { uploadImage } from "@/data/upload";
+import Spinner from "../spinner";
+import CoverImageUpload from "../cover-image-upload";
+import { ImagePreview, UploadState } from "@/types/base.type";
 
-type ImagePreview = {
-  base64: string;
-  name: string;
-  id: string;
-};
 type Props = {
   admin: Admin;
   categories: Category[];
+  portfolio?: Portfolio;
 };
-export default function PortfolioForm({ admin, categories }: Props) {
+export default function PortfolioForm({ admin, categories, portfolio }: Props) {
+  //Load Value
+  const galleryPreview =
+    portfolio && portfolio.gallery
+      ? portfolio.gallery.map((image) => {
+          return {
+            id: crypto.randomUUID(),
+            status: UploadState.UPLOADED,
+            url: image,
+          };
+        })
+      : [];
+  const categoryIds =
+    portfolio && portfolio.CategoryOnPorfolio
+      ? portfolio.CategoryOnPorfolio.map((category) => {
+          return category.category_id;
+        })
+      : [];
+
   //Image
   const [images, setImages] = useState<File[] | null>([]);
-  const [imagePreviews, setImagePreviews] = useState<ImagePreview[]>([]);
+  const [imagePreviews, setImagePreviews] =
+    useState<ImagePreview[]>(galleryPreview);
   const [coverImage, setCoverImage] = useState<File | null>(null);
-  const [coverPreview, setCoverPreviewUrl] = useState<string | null>(null);
+  const [coverPreviewUrl, setCoverPreviewUrl] = useState<string | null>(
+    portfolio?.cover_url ? portfolio.cover_url : null,
+  );
 
   //State
   const [errors, setErrors] =
     useState<ZodFormattedError<CreatePortfolio> | null>(null);
-  const [slug, setSlug] = useState("");
-  const [selectedCategories, setSelectedCategories] = useState<string[]>();
+  const [slug, setSlug] = useState(portfolio && portfolio.slug);
+  const [selectedCategories, setSelectedCategories] =
+    useState<string[]>(categoryIds);
+  const [isUploadPending, startUploadTransition] = useTransition();
+  const [isSubmitPending, startSubmitTransition] = useTransition();
 
   //Constant
   const categoryOption = categories?.map((category) => {
@@ -68,9 +91,14 @@ export default function PortfolioForm({ admin, categories }: Props) {
       admin_id: admin.id,
       slug: slug,
       categories: selectedCategories,
+      cover_url: coverPreviewUrl || "",
+      gallery: imagePreviews.map((image) => {
+        return image.url;
+      }),
     };
-    const response = await createPortfolioAction(data);
-    console.log("response:", response);
+    const response = portfolio
+      ? await updatePortfolioAction(portfolio.id, data)
+      : await createPortfolioAction(data);
     if (response?.error) {
       //IF is http error then show toast
       if ("statusCode" in response.error) {
@@ -97,15 +125,26 @@ export default function PortfolioForm({ admin, categories }: Props) {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // Prevent default form reset behavior
     const formData = new FormData(e.currentTarget);
-    await handleCreateProfile(formData);
+    startSubmitTransition(async () => {
+      await handleCreateProfile(formData);
+    });
   };
 
   React.useEffect(() => {
     if (!coverImage) return;
     const handleUploadCover = async (image: File) => {
-      const base64 = await toBase64(image);
-
-      setCoverPreviewUrl(base64);
+      try {
+        startUploadTransition(async () => {
+          const { url } = await uploadImage(image);
+          setCoverPreviewUrl(url);
+        });
+      } catch (error) {
+        toast({
+          title: "Unexpected Error!",
+          description: error instanceof Error ? error.message : String(error),
+          variant: "destructive",
+        });
+      }
     };
     handleUploadCover(coverImage);
   }, [coverImage]);
@@ -116,39 +155,13 @@ export default function PortfolioForm({ admin, categories }: Props) {
         <Label>
           Cover Image <span className="text-red-500">*</span>
         </Label>
-        {coverPreview && (
-          <div className="relative mb-2 bg-neutral-800">
-            <ImageContainerBlurClient
-              src={coverPreview}
-              className="h-32 opacity-50"
-              preview={true}
-            />
-            <UploadButton
-              className="group absolute bottom-0 h-fit w-fit px-2 py-1 hover:bg-label"
-              setImage={setCoverImage}
-            >
-              <div className="flex items-center gap-2 text-xs font-normal text-neutral-100 group-hover:text-neutral-300">
-                <FaPen size={12} />
-                <p>Edit</p>
-              </div>
-            </UploadButton>
-          </div>
-        )}
-        {!coverPreview && (
-          <UploadButton
-            className="group block h-fit w-full"
-            setImage={setCoverImage}
-          >
-            <div
-              className={cn(
-                "flex min-h-24 w-full items-center justify-center rounded-sm border border-dashed hover:border-label/50",
-                errors?.cover_url && "border-red-400 hover:border-red-500",
-              )}
-            >
-              <FaPlus />
-            </div>
-          </UploadButton>
-        )}
+        <CoverImageUpload
+          coverPreviewUrl={coverPreviewUrl}
+          setCoverImage={setCoverImage}
+          isUploadPending={isUploadPending}
+          setCoverPreviewUrl={setCoverPreviewUrl}
+          errors={errors?.cover_url}
+        />
       </div>
       <div>
         <InputWithLabel
@@ -157,6 +170,7 @@ export default function PortfolioForm({ admin, categories }: Props) {
           name="title"
           placeholder="My First Portfolio"
           onChange={handleSlugChange}
+          defaultValue={portfolio && portfolio.title}
           errors={errors?.title}
         />
         <span className="mt-1 text-xs text-label">Slug: {slug}</span>
@@ -169,6 +183,7 @@ export default function PortfolioForm({ admin, categories }: Props) {
         required
         placeholder="This is my awesome portfolio and it is all about..."
         onChange={handleSlugChange}
+        defaultValue={portfolio && portfolio.description}
         errors={errors?.description}
       />
       <div className="flex flex-col gap-4">
@@ -186,7 +201,7 @@ export default function PortfolioForm({ admin, categories }: Props) {
         />
         <div className="flex flex-col gap-4">
           <Label>Content</Label>
-          <DynamicEditor ref={editorRef} />
+          <DynamicEditor ref={editorRef} content={portfolio?.content} />
         </div>
         <div className="flex flex-col gap-4">
           <Label>Gallery</Label>
@@ -205,8 +220,15 @@ export default function PortfolioForm({ admin, categories }: Props) {
           </MultiUploadButton>
         </div>
       </div>
-      <Button className="fixed bottom-6 right-6 h-10 w-10 rounded-full p-0 hover:opacity-30">
-        <FaCheck />
+      <Button
+        disabled={isSubmitPending}
+        className="fixed bottom-6 right-6 h-10 w-10 rounded-full p-0 hover:opacity-30"
+      >
+        {isSubmitPending ? (
+          <Spinner className="text-foreground dark:text-background" />
+        ) : (
+          <FaCheck />
+        )}
       </Button>
     </form>
   );

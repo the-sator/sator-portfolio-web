@@ -1,5 +1,6 @@
 import { Block } from "@blocknote/core";
 import { z } from "zod";
+import { CategoryOnPorfolio } from "./category.type";
 
 export type Portfolio = {
   id: string;
@@ -13,6 +14,7 @@ export type Portfolio = {
   slug: string;
   gallery: string[];
   content: Block[] | null;
+  CategoryOnPorfolio: CategoryOnPorfolio[];
 };
 
 export const CreatePortfolioSchema = z.object({
@@ -25,7 +27,7 @@ export const CreatePortfolioSchema = z.object({
       message: "Description should not be longer than 200 characters",
     }),
   slug: z.string().min(1, { message: "Slug is required" }),
-  cover_url: z.string().min(1, { message: "Cover Image is required" }),
+  cover_url: z.string({ message: "Cover Image is required" }).optional(),
   gallery: z.array(z.string()).optional(),
   content: z.string().optional(),
   categories: z.array(z.string()).optional(),

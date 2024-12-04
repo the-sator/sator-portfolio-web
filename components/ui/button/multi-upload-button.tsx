@@ -2,10 +2,16 @@
 import React, { Dispatch, SetStateAction, useEffect, useRef } from "react";
 import { Button } from "../button";
 import { Input } from "../input";
-import { toBase64 } from "@/lib/image";
 import Masonry from "react-masonry-css";
 import ImageContainerBlurClient from "../image/image-container-blur-client";
 import { IoIosClose } from "react-icons/io";
+import { uploadImage } from "@/data/upload";
+import Spinner from "../spinner";
+import {
+  breakpointColumnsObj,
+  ImagePreview,
+  UploadState,
+} from "@/types/base.type";
 type UploadButtonProps = {
   children: React.ReactNode;
   className?: string;
@@ -14,17 +20,7 @@ type UploadButtonProps = {
   imagePreviews: ImagePreview[];
   setImagePreviews: Dispatch<SetStateAction<ImagePreview[]>>;
 };
-export const breakpointColumnsObj = {
-  default: 4,
-  1980: 3,
-  1400: 2,
-  500: 1,
-};
-type ImagePreview = {
-  base64: string;
-  name: string;
-  id: string;
-};
+
 export default function MultiUploadButton({
   children,
   className = "absolute bottom-0 right-0 hover:bg-neutral-700/50 rounded-full",
@@ -51,21 +47,51 @@ export default function MultiUploadButton({
 
   useEffect(() => {
     if (!images) return;
-    const handleUploadCover = async (images: File[]) => {
-      images.forEach(async (image) => {
-        const base64 = await toBase64(image);
-        setImagePreviews((prev) => [
-          ...prev,
-          {
-            id: crypto.randomUUID(),
-            name: image.name,
-            base64: base64,
-          },
-        ]);
+    const handleUploadGallery = async (images: File[]) => {
+      const previews: ImagePreview[] = images.map(() => {
+        return {
+          id: crypto.randomUUID(),
+          status: UploadState.PENDING,
+          url: null,
+        };
       });
+
+      setImagePreviews((prev) => [...prev, ...previews]);
+
+      const startIndex = imagePreviews.length;
+
+      // Process each image
+      const uploadPromises = images.map(async (image, localIndex) => {
+        const globalIndex = startIndex + localIndex;
+
+        try {
+          const { url } = await uploadImage(image);
+
+          setImagePreviews((prev) =>
+            prev.map((preview, i) =>
+              i === globalIndex
+                ? { ...preview, url, status: UploadState.UPLOADED }
+                : preview,
+            ),
+          );
+
+          return url;
+        } catch (error) {
+          console.log("error:", error);
+          setImagePreviews((prev) =>
+            prev.map((preview, i) =>
+              i === globalIndex
+                ? { ...preview, status: UploadState.FAILED }
+                : preview,
+            ),
+          );
+        }
+      });
+
+      await Promise.all(uploadPromises);
     };
 
-    handleUploadCover(images);
+    handleUploadGallery(images);
   }, [images]);
   const handleDeletePreview = (id: string) => {
     setImagePreviews((prev) => prev.filter((image) => image.id !== id));
@@ -79,16 +105,26 @@ export default function MultiUploadButton({
         >
           {imagePreviews.map((image, index) => (
             <div key={index} className="relative my-2">
-              <ImageContainerBlurClient
-                src={image.base64}
-                className="rounded-sm"
-              />
+              {image.status === UploadState.PENDING ? (
+                <div className="relative left-0 top-0 z-10 flex h-52 w-full items-center justify-center bg-accent/90">
+                  <Spinner size={24} />
+                </div>
+              ) : image.status === UploadState.UPLOADED ? (
+                <ImageContainerBlurClient
+                  src={image.url!} // Safe to access as it's set on upload completion
+                  className="rounded-sm"
+                />
+              ) : (
+                <div className="flex h-20 w-20 items-center justify-center rounded-sm bg-red-500 text-white">
+                  Failed
+                </div>
+              )}
               <Button
                 variant="icon"
                 type="button"
                 size="icon"
                 onClick={() => handleDeletePreview(image.id)}
-                className="absolute -right-1 -top-1 h-4 w-4 rounded-full bg-red-500 hover:bg-red-500/50"
+                className="absolute -right-1 -top-1 z-20 h-4 w-4 rounded-full bg-red-500 hover:bg-red-500/50"
               >
                 <IoIosClose />
               </Button>
@@ -111,7 +147,7 @@ export default function MultiUploadButton({
         multiple
         className="hidden"
         type="file"
-        accept="image/*"
+        accept="image/jpeg,image/png,image/bmp,image/tiff"
         onChange={handleFileChange}
       />
     </>

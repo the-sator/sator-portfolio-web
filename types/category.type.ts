@@ -21,6 +21,12 @@ export type Category = {
   color: Color;
 };
 
+export type CategoryOnPorfolio = {
+  portfolio_id: string;
+  category_id: string;
+  assignedBy: string;
+};
+
 export const CreateCategorySchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
   color: z.nativeEnum(Color).optional(),

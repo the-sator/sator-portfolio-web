@@ -21,3 +21,12 @@ export const createPortfolio = async (payload: CreatePortfolio) => {
   ]);
   return data;
 };
+
+export const updatePortfolio = async (id: string, payload: CreatePortfolio) => {
+  const data = await fetchApi.put<Portfolio>(
+    `/admin/portfolio/${id}`,
+    payload,
+    ["portfolio"],
+  );
+  return data;
+};

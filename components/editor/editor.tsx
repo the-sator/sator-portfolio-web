@@ -12,7 +12,8 @@ import {
   useCreateBlockNote,
 } from "@blocknote/react";
 import { useTheme } from "next-themes";
-import { BlockNoteEditor } from "@blocknote/core";
+import { Block, BlockNoteEditor } from "@blocknote/core";
+import { nanoid } from "nanoid";
 
 export interface EditorRef {
   editor: BlockNoteEditor | null; // Ensure this matches the actual type
@@ -20,16 +21,35 @@ export interface EditorRef {
 
 interface EditorProps {
   onChange?: () => void;
+  content?: Block[] | null;
 }
 
 const Editor = forwardRef<EditorRef, EditorProps>((prop, ref) => {
   const { resolvedTheme } = useTheme();
+
+  const initialContent = prop.content?.length
+    ? prop.content
+    : [
+        {
+          id: nanoid(10),
+          type: "paragraph",
+          props: {
+            backgroundColor: "default",
+            textColor: "default",
+            textAlignment: "left",
+            level: 2,
+          },
+          content: [],
+          children: [],
+        } as Block,
+      ];
   const editorRef = useRef<HTMLDivElement>(null);
   const editor = useCreateBlockNote({
     uploadFile: async (file) => {
       console.log(file);
       return "Uploaded";
     },
+    initialContent,
   });
 
   // Expose the editor instance to the parent

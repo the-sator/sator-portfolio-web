@@ -10,10 +10,30 @@ import "@blocknote/mantine/style.css";
 import { useTheme } from "next-themes";
 import { Block } from "@blocknote/core";
 import { useCreateBlockNote } from "@blocknote/react";
+import { nanoid } from "nanoid";
 export default function RenderContent({ content }: { content: Block[] }) {
   const { resolvedTheme } = useTheme();
+
+  //Add Fallback
+  const initialContent = content?.length
+    ? content
+    : [
+        {
+          id: nanoid(10),
+          type: "paragraph",
+          props: {
+            backgroundColor: "default",
+            textColor: "default",
+            textAlignment: "left",
+            level: 2,
+          },
+          content: [],
+          children: [],
+        } as Block,
+      ];
+
   const editor = useCreateBlockNote({
-    initialContent: content,
+    initialContent,
   });
   return (
     <BlockNoteView
