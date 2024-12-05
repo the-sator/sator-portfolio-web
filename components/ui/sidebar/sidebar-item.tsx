@@ -7,13 +7,13 @@ import {
   SidebarMenu,
 } from "./sidebar";
 import { MdArticle, MdDashboard, MdDesignServices } from "react-icons/md";
-import { FaKey, FaUser, FaUserLock } from "react-icons/fa6";
+import { FaKey, FaUser } from "react-icons/fa6";
 // import ThemeSwitch from "../theme-switch";
 import { IoIosSettings } from "react-icons/io";
 import { IoChatboxEllipses } from "react-icons/io5";
 import { FaQuestionCircle, FaUserCog } from "react-icons/fa";
 import SidebarMenuNavItem from "./sidebar-menu-nav-item";
-import { getMessages, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { Admin } from "@/types/admin.type";
 import { getRoleById } from "@/data/role";
 

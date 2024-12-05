@@ -44,7 +44,7 @@ export default async function RootLayout({
   const messages = await getMessages();
   setRequestLocale(locale);
   return (
-    <html lang={locale}>
+    <html lang={locale} data-theme="dark">
       <body
         // className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         className={cn(font.className)}
@@ -55,7 +55,6 @@ export default async function RootLayout({
               attribute="class"
               defaultTheme="system"
               enableSystem
-              disableTransitionOnChange
             >
               {children}
               <Toaster />

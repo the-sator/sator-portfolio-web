@@ -55,7 +55,10 @@ export function InputWithLabel({
 }: Props) {
   return (
     <div className="flex flex-col gap-3">
-      <Label htmlFor={name}>{label}</Label>
+      <Label htmlFor={name}>
+        {label}
+        <span className="text-red-500">{required && " *"}</span>
+      </Label>
       <Input
         {...register}
         type={type}
@@ -151,7 +154,10 @@ export function TextAreaWithLabel({
   };
   return (
     <div className="relative flex h-full flex-col gap-3">
-      <Label>{label}</Label>
+      <Label>
+        {label}
+        <span className="text-red-500">{required && " *"}</span>
+      </Label>
       <Textarea
         {...register}
         name={name}

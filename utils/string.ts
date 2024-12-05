@@ -12,10 +12,6 @@ export const constructSearchQuery = (query: string, searchOption: string) => {
   return query.trim().split(/\s+/).join(` ${searchOption} `);
 };
 
-export const isContentArray = (content: any): content is Array<any> => {
-  return Array.isArray(content);
-};
-
 export function getCorrectOrigin(origin: string): string {
   if (origin.includes("localhost")) {
     return origin.replace(/^https?:\/\//, "http://");
@@ -23,4 +19,15 @@ export function getCorrectOrigin(origin: string): string {
     return origin.replace("http://", "https://");
   }
   return origin;
+}
+
+export function slugify(text: string) {
+  return text
+    .toLowerCase()
+    .replace(/ /g, "-")
+    .replace(/[^\w-]+/g, "");
+}
+
+export function removeExtension(fileName: string) {
+  return fileName.replace(/\.[^.]+$/, "");
 }

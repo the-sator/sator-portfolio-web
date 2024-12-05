@@ -1,7 +1,6 @@
 "use client";
 import React, { ReactElement } from "react";
 import { SidebarMenuButton, SidebarMenuItem } from "./sidebar";
-import { IconType } from "react-icons/lib";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";

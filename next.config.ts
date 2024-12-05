@@ -8,6 +8,14 @@ const nextConfig: NextConfig = {
   sassOptions: {
     silenceDeprecations: ["legacy-js-api"],
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "sator-portfolio-bucket-0.s3.ap-southeast-1.amazonaws.com",
+      },
+    ],
+  },
 };
 
 export default withNextIntl(nextConfig);

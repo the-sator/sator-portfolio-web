@@ -4,6 +4,7 @@ import { adminLogin, adminSetUpTotp, adminSignout } from "@/data/admin";
 import { AdminLoginSchema, UpdateAdminTotpSchema } from "@/types/admin.type";
 import { deleteSessionCookies, setSessionCookies } from "@/utils/session";
 import { revalidatePath, revalidateTag } from "next/cache";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export async function login(formData: unknown) {
@@ -68,4 +69,9 @@ export async function adminTotp(formData: unknown) {
   }
 
   return { data, error };
+}
+
+export async function getSessionCookies() {
+  const cookieStore = await cookies();
+  return cookieStore.get("session");
 }

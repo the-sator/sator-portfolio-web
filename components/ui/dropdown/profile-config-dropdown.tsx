@@ -65,7 +65,7 @@ export default function ProfileConfigDropdown({ session, admin }: Props) {
             <Button
               variant={"icon"}
               onClick={handleSignout}
-              className="flex h-fit w-full items-center justify-start px-2 py-2 font-normal text-red-400"
+              className="flex h-fit w-full items-center justify-start gap-2 px-2 py-2 font-normal text-red-500 opacity-80 hover:opacity-100"
             >
               <IoLogOutSharp className="text-red-500" />
               <p className="text-red-500">Logout</p>
