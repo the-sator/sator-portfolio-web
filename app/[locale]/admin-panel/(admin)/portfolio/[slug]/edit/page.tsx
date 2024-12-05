@@ -1,9 +1,10 @@
 import PortfolioForm from "@/components/ui/form/portfolio-form";
+import { Skeleton } from "@/components/ui/skeleton";
 import { getAdminSession } from "@/data/admin";
 import { getAllCategories } from "@/data/category";
 import { getPortfolioBySlug } from "@/data/portfolio";
 import { notFound, redirect } from "next/navigation";
-import React from "react";
+import React, { Suspense } from "react";
 type Props = {
   params: Promise<{ slug: string }>;
 };
@@ -26,11 +27,13 @@ export default async function page({ params }: Props) {
 
   return (
     <div className="p-4">
-      <PortfolioForm
-        admin={admin}
-        categories={categories || []}
-        portfolio={portfolio}
-      />
+      <Suspense fallback={<Skeleton className="min-h-svh w-full" />}>
+        <PortfolioForm
+          admin={admin}
+          categories={categories || []}
+          portfolio={portfolio}
+        />
+      </Suspense>
     </div>
   );
 }

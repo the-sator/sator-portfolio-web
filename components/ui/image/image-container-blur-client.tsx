@@ -13,6 +13,7 @@ type Props = {
   objectFit?: "cover" | "contain";
   preview?: boolean;
   blur?: boolean;
+  priority?: boolean;
 };
 
 const handleClick = (e: React.MouseEvent) => {
@@ -27,6 +28,7 @@ export default function ImageContainerBlurClient({
   className,
   objectFit = "cover",
   preview = true,
+  priority = false,
   skeletonHeight,
 }: Props) {
   const imageProps = {
@@ -34,17 +36,17 @@ export default function ImageContainerBlurClient({
     alt,
     width: 0,
     height: 0,
+    priority: priority,
     style: { width: "100%", height: "100%", objectFit },
     sizes: "(max-width: 1250px) 100vw, 1250px",
   };
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     setLoading(false);
   }, []);
 
   if (loading) {
-    return <Skeleton className={cn("w-full", skeletonHeight)} />;
+    <Skeleton className={cn("h-32 w-full", skeletonHeight)} />;
   }
 
   return (

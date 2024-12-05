@@ -7,6 +7,7 @@ type Props = {
   alt?: string;
   className?: string;
   objectFit?: "cover" | "contain" | "fill";
+  priority?: boolean;
 };
 
 export default async function ImageContainer({
@@ -14,6 +15,7 @@ export default async function ImageContainer({
   alt = "",
   className,
   objectFit = "cover",
+  priority = false,
 }: Props) {
   return (
     <div className={cn("relative", className)}>
@@ -22,6 +24,7 @@ export default async function ImageContainer({
         alt={alt}
         width={0}
         height={0}
+        priority={priority}
         style={{ width: "100%", height: "100%", objectFit: objectFit }}
         sizes="(max-width: 1250px) 100vw, 1250px"
       />

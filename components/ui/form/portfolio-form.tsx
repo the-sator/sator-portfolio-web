@@ -53,7 +53,7 @@ export default function PortfolioForm({ admin, categories, portfolio }: Props) {
     useState<ImagePreview[]>(galleryPreview);
   const [coverImage, setCoverImage] = useState<File | null>(null);
   const [coverPreviewUrl, setCoverPreviewUrl] = useState<string | null>(
-    portfolio?.cover_url ? portfolio.cover_url : null,
+    portfolio && portfolio.cover_url ? portfolio.cover_url : null,
   );
 
   //State
@@ -91,7 +91,7 @@ export default function PortfolioForm({ admin, categories, portfolio }: Props) {
       admin_id: admin.id,
       slug: slug,
       categories: selectedCategories,
-      cover_url: coverPreviewUrl || "",
+      cover_url: coverPreviewUrl || null,
       gallery: imagePreviews.map((image) => {
         return image.url;
       }),

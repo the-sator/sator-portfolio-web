@@ -43,7 +43,7 @@ export default function UploadButton({
         ref={uploadRef}
         className="hidden"
         type="file"
-        accept="image/*"
+        accept="image/jpeg,image/png,image/jpg,image/bmp,image/tiff"
         onChange={handleFileChange}
       />
     </>

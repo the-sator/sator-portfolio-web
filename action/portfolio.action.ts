@@ -1,6 +1,12 @@
 "use server";
 
-import { createPortfolio, updatePortfolio } from "@/data/portfolio";
+import {
+  createPortfolio,
+  deletePortfolio,
+  publishPortfolio,
+  unpublishPortfolio,
+  updatePortfolio,
+} from "@/data/portfolio";
 import { CreatePortfolio, CreatePortfolioSchema } from "@/types/portfolio.type";
 import { revalidateTag } from "next/cache";
 
@@ -59,5 +65,41 @@ export const updatePortfolioAction = async (id: string, formData: unknown) => {
   }
   revalidateTag("portfolio");
   revalidateTag("portfolio-" + data!.slug);
+  return { data, error };
+};
+
+export const deletePortfolioAction = async (id: string) => {
+  const { data, error } = await deletePortfolio(id);
+  if (error) {
+    return {
+      data: null,
+      error: error,
+    };
+  }
+  revalidateTag("portfolio");
+  return { data, error };
+};
+
+export const publishPortfolioAction = async (id: string) => {
+  const { data, error } = await publishPortfolio(id);
+  if (error) {
+    return {
+      data: null,
+      error: error,
+    };
+  }
+  revalidateTag("portfolio");
+  return { data, error };
+};
+
+export const unpublishPortfolioAction = async (id: string) => {
+  const { data, error } = await unpublishPortfolio(id);
+  if (error) {
+    return {
+      data: null,
+      error: error,
+    };
+  }
+  revalidateTag("portfolio");
   return { data, error };
 };

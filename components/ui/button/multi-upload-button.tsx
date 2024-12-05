@@ -147,7 +147,7 @@ export default function MultiUploadButton({
         multiple
         className="hidden"
         type="file"
-        accept="image/jpeg,image/png,image/bmp,image/tiff"
+        accept="image/jpeg,image/png,image/jpg,image/bmp,image/tiff"
         onChange={handleFileChange}
       />
     </>

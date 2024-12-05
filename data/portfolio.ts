@@ -30,3 +30,26 @@ export const updatePortfolio = async (id: string, payload: CreatePortfolio) => {
   );
   return data;
 };
+
+export const deletePortfolio = async (id: string) => {
+  const data = await fetchApi.delete<Portfolio>(`/admin/portfolio/${id}`, [
+    "portfolio",
+  ]);
+  return data;
+};
+
+export const publishPortfolio = async (id: string) => {
+  const data = await fetchApi.post<Portfolio>(
+    `/admin/portfolio/${id}/publish`,
+    ["portfolio"],
+  );
+  return data;
+};
+
+export const unpublishPortfolio = async (id: string) => {
+  const data = await fetchApi.post<Portfolio>(
+    `/admin/portfolio/${id}/unpublish`,
+    ["portfolio"],
+  );
+  return data;
+};

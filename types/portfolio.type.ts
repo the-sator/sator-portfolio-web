@@ -27,7 +27,7 @@ export const CreatePortfolioSchema = z.object({
       message: "Description should not be longer than 200 characters",
     }),
   slug: z.string().min(1, { message: "Slug is required" }),
-  cover_url: z.string({ message: "Cover Image is required" }).optional(),
+  cover_url: z.string({ message: "Cover Image is required" }),
   gallery: z.array(z.string()).optional(),
   content: z.string().optional(),
   categories: z.array(z.string()).optional(),

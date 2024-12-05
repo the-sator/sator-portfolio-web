@@ -22,7 +22,6 @@ export async function POST(request: NextRequest) {
       name + "." + fileExtension,
       mimeType,
     );
-    console.log("url:", url);
 
     return NextResponse.json({ success: true, url });
   } catch (error) {

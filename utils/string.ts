@@ -27,3 +27,7 @@ export function slugify(text: string) {
     .replace(/ /g, "-")
     .replace(/[^\w-]+/g, "");
 }
+
+export function removeExtension(fileName: string) {
+  return fileName.replace(/\.[^.]+$/, "");
+}

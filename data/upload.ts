@@ -1,7 +1,9 @@
+import { removeExtension } from "@/utils/string";
+
 export async function uploadImage(image: File): Promise<{ url: string }> {
   const formData = new FormData();
   formData.append("file", image);
-  formData.append("name", image.name);
+  formData.append("name", removeExtension(image.name));
 
   // Send the request
   const res = await fetch("/api/upload-image", {

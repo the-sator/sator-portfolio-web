@@ -31,7 +31,9 @@ export default function CoverImageUpload({
         <div className="relative mb-2 bg-neutral-800">
           <ImageContainerBlurClient
             src={coverPreviewUrl}
-            className="h-32 opacity-50"
+            className="aspect-video h-32 opacity-50"
+            skeletonHeight="h-32"
+            priority={true}
             preview={true}
           />
           {isUploadPending && (
@@ -65,7 +67,7 @@ export default function CoverImageUpload({
           <div
             className={cn(
               "flex min-h-32 w-full items-center justify-center rounded-sm border border-dashed hover:border-label/50",
-              errors?.cover_url && "border-red-400 hover:border-red-500",
+              errors?._errors && "border-red-400 hover:border-red-500",
             )}
           >
             <FaPlus />
@@ -77,6 +79,16 @@ export default function CoverImageUpload({
             </div>
           )}
         </UploadButton>
+      )}
+      {errors && (
+        <p className="text-xs text-red-400">
+          {errors._errors.map((error, index) => (
+            <span key={index}>
+              {error}
+              <br />
+            </span>
+          ))}
+        </p>
       )}
     </>
   );
