@@ -12,6 +12,9 @@ import {
 } from "./select";
 import { UseFormRegisterReturn } from "react-hook-form";
 import { cn } from "@/lib/utils";
+import { TooltipContent, TooltipProvider, TooltipTrigger } from "./tooltip";
+import { Tooltip } from "@radix-ui/react-tooltip";
+import { AiOutlineExclamationCircle } from "react-icons/ai";
 export type SelectOption = {
   value: string;
   label: string;
@@ -28,6 +31,8 @@ type Props = {
   defaultValue?: string;
   required?: boolean;
   minHeight?: number;
+  className?: string;
+  instruction?: string;
   register?: UseFormRegisterReturn;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   errors?: ZodErrorFormatted | null;
@@ -48,16 +53,36 @@ export function InputWithLabel({
   placeholder,
   maxLength,
   onChange,
+  className,
+  instruction,
   value,
   defaultValue,
   errors,
   register,
 }: Props) {
   return (
-    <div className="flex flex-col gap-3">
-      <Label htmlFor={name}>
-        {label}
-        <span className="text-red-500">{required && " *"}</span>
+    <div className={cn("flex flex-col gap-3", className)}>
+      <Label htmlFor={name} className="flex items-center gap-2">
+        <div>
+          {label}
+          {required && <span className="text-red-500">{" *"}</span>}
+        </div>
+        {instruction && (
+          <TooltipProvider delayDuration={300}>
+            <Tooltip>
+              <TooltipTrigger>
+                <span className="sr-only w-full basis-1/2">Instruction</span>
+                <AiOutlineExclamationCircle size={16} />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{instruction}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          // <Button variant="icon" className="h-4 w-4 p-0">
+
+          // </Button>
+        )}
       </Label>
       <Input
         {...register}

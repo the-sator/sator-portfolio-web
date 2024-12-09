@@ -31,3 +31,33 @@ export function slugify(text: string) {
 export function removeExtension(fileName: string) {
   return fileName.replace(/\.[^.]+$/, "");
 }
+
+export function stringToPriceRange(str: string): number[] {
+  const s = str.split("-");
+  if (s.length === 1) {
+    const start = Number(s[0]);
+    return [start];
+  }
+  const start = Number(s[0]);
+  const end = Number(s[1]);
+  if (s.length !== 2 || isNaN(start) || isNaN(end)) {
+    return [0, 0]; // Return default range for invalid input
+  }
+  if (start > end) {
+    return [0, 0]; // Return default range for invalid input
+  }
+
+  return [start, end];
+}
+
+export function priceRangeToString(num: number[]): string {
+  if (num.length === 1) {
+    return String(num);
+  }
+
+  if (num.length > 2) {
+    return "0";
+  }
+  const str = String(num[0]) + " - " + String(num[1]);
+  return str;
+}

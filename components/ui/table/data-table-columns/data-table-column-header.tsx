@@ -20,19 +20,19 @@ export function DataTableColumnHeader<TData, TValue>({
   }
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex flex-shrink-0 items-center gap-2">
       <span>{title}</span>
       <Button
         variant="ghost"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        className="p-2 h-6 w-6"
+        className="h-6 w-6 flex-shrink-0 p-0"
       >
         {column.getIsSorted() === "desc" ? (
-          <ArrowDown />
+          <ArrowDown size={14} />
         ) : column.getIsSorted() === "asc" ? (
-          <ArrowUp />
+          <ArrowUp size={14} />
         ) : (
-          <ChevronsUpDown />
+          <ChevronsUpDown size={14} />
         )}
       </Button>
     </div>

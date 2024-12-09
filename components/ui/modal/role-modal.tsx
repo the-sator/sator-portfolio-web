@@ -146,6 +146,7 @@ export function CreateRoleModal({ resources, error }: ModalProps) {
           onClick={() => {
             setOpen((prev) => !prev);
           }}
+          className="gap-1"
         >
           <IoAddOutline size={14} />
           <p className="text-sm group-hover:text-blue-700">Create</p>

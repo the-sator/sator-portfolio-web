@@ -1,12 +1,13 @@
 "use client";
+
 import { formatDate } from "@/utils/date";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "../data-table-columns/data-table-column-header";
-import { Role } from "@/types/role.type";
-import { RoleActionColumn } from "../action-columns/role.action-column";
+import { FormQuestion } from "@/types/portfolio-form.type";
+import { PortfolioFormActionColumn } from "../action-columns/portfolio-form.action-column";
 
-export const RoleColumns: ColumnDef<Role>[] = [
+export const PortfolioFormColumns: ColumnDef<FormQuestion>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -34,12 +35,19 @@ export const RoleColumns: ColumnDef<Role>[] = [
     header: "ID",
   },
   {
-    accessorKey: "name",
+    accessorKey: "form_text",
+    header: "Form Text",
+  },
+  {
+    accessorKey: "type",
+    header: "Type",
+  },
+  {
+    accessorKey: "order",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Username" />
+      <DataTableColumnHeader column={column} title="Order" />
     ),
   },
-
   {
     accessorKey: "created_at",
     header: ({ column }) => (
@@ -52,6 +60,6 @@ export const RoleColumns: ColumnDef<Role>[] = [
   },
   {
     id: "actions",
-    cell: RoleActionColumn,
+    cell: PortfolioFormActionColumn,
   },
 ];

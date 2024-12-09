@@ -42,7 +42,7 @@ export default async function page() {
     <div className="p-4">
       <div className="mb-4 flex items-center justify-between">
         <h1 className="text-2xl">{t("user")}</h1>
-        <Button variant="outline">
+        <Button variant="outline" className="gap-1">
           <IoAddOutline size={14} />
           <p className="text-sm group-hover:text-blue-700">Create</p>
         </Button>
