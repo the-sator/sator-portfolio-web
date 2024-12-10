@@ -1,3 +1,5 @@
+import { usePathname, useRouter } from "next/navigation";
+
 export const routesWithFloatingButton = [
   "/bookmark",
   "/dashboard",
@@ -25,7 +27,7 @@ export function shouldShowFloatingButton(pathname: string): boolean {
 
 export function isProtectedRoute(
   pathname: string,
-  protectedPaths: ProtectedPaths
+  protectedPaths: ProtectedPaths,
 ) {
   // Check each path configuration
   for (const [_, config] of Object.entries(protectedPaths)) {
@@ -39,7 +41,7 @@ export function isProtectedRoute(
       if (pathname.startsWith(config.base)) {
         // Check if path matches any exceptions
         const isException = config.exceptions?.some((pattern) =>
-          pattern.test(pathname)
+          pattern.test(pathname),
         );
 
         // Check if path is in additional protected routes
@@ -60,7 +62,10 @@ export function isProtectedRoute(
 
 export function shouldCreateAnonymousUser(
   pathname: string,
-  routes: string[]
+  routes: string[],
 ): boolean {
-  return (routes.some((route) => pathname.startsWith(route)) || pathname.match(/^\/profile\/[0-9a-fA-F\-]{36}$/) !== null);
+  return (
+    routes.some((route) => pathname.startsWith(route)) ||
+    pathname.match(/^\/profile\/[0-9a-fA-F\-]{36}$/) !== null
+  );
 }

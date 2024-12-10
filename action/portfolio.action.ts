@@ -3,6 +3,7 @@
 import {
   createPortfolio,
   deletePortfolio,
+  paginatePortfolio,
   publishPortfolio,
   unpublishPortfolio,
   updatePortfolio,
@@ -102,4 +103,10 @@ export const unpublishPortfolioAction = async (id: string) => {
   }
   revalidateTag("portfolio");
   return { data, error };
+};
+
+export const getPortfolioPaginationAction = async (pageParam: string) => {
+  const { data, page } = await paginatePortfolio(pageParam);
+
+  return { data, page };
 };

@@ -1,5 +1,8 @@
+import { LIMIT } from "@/constant/base";
+import { PaginateResult } from "@/types/base.type";
 import { CreatePortfolio, Portfolio } from "@/types/portfolio.type";
 import { fetchApi } from "@/utils/fetch-client";
+import { toQueryString } from "@/utils/string";
 
 export const getPortfolioBySlug = async (slug: string) => {
   const data = await fetchApi.get<Portfolio>(`/admin/portfolio/${slug}`, [
@@ -8,15 +11,17 @@ export const getPortfolioBySlug = async (slug: string) => {
   return data;
 };
 
-export const getAllPortfolio = async () => {
-  const data = await fetchApi.get<Portfolio[]>(`/admin/portfolio`, [
-    `portfolio`,
-  ]);
-  return data;
+export const paginatePortfolio = async (page?: string, limit?: string) => {
+  const fullUrl = `/admin/portfolio${toQueryString({ page: page, limit: limit || String(LIMIT) })}`;
+  const { data, error } = await fetchApi.get<PaginateResult<Portfolio[]>>(
+    fullUrl,
+    [`portfolio`],
+  );
+  return { data: data ? data.data : null, page: data?.metadata.page, error };
 };
 
 export const createPortfolio = async (payload: CreatePortfolio) => {
-  const data = await fetchApi.post<Portfolio>(`/admin/portfolio/`, payload, [
+  const data = await fetchApi.post<Portfolio>(`/admin/portfolio`, payload, [
     "portfolio",
   ]);
   return data;

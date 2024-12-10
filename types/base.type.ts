@@ -27,3 +27,19 @@ export enum UploadState {
   UPLOADED = "uploaded",
   FAILED = "failed",
 }
+
+export type InfinitePaginateResult<T> = {
+  data: T;
+  hasMore: boolean;
+};
+
+export type PaginateMetadata = {
+  page: number | null;
+  count?: number;
+  currentPage?: number;
+};
+
+export type PaginateResult<T> = {
+  data: T;
+  metadata: PaginateMetadata;
+};

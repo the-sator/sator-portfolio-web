@@ -61,3 +61,16 @@ export function priceRangeToString(num: number[]): string {
   const str = String(num[0]) + " - " + String(num[1]);
   return str;
 }
+
+export function toQueryString(
+  params: Record<string, string | number | boolean | undefined>,
+): string {
+  const query = Object.entries(params)
+    .filter(([, value]) => value !== undefined && value !== null) // Filter out undefined/null values
+    .map(
+      ([key, value]) =>
+        `${encodeURIComponent(key)}=${encodeURIComponent(value!)}`,
+    )
+    .join("&");
+  return query ? `?${query}` : "";
+}

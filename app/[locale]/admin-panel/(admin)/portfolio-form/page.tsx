@@ -6,13 +6,17 @@ import {
   EditQuestionModal,
 } from "@/components/ui/modal/question-modal";
 import { PortfolioFormColumns } from "@/components/ui/table/columns/portfolio-form.column";
-import { getAllQuestions } from "@/data/portfolio-form";
+import { getAllQuestions, getPagination } from "@/data/portfolio-form";
 import { getTranslations } from "next-intl/server";
 import React from "react";
-
-export default async function page() {
+type Props = {
+  searchParams: Promise<{ page: string; limit: string }>;
+};
+export default async function page({ searchParams }: Props) {
   const t = await getTranslations("PortfolioForm");
-  const { data: questions } = await getAllQuestions();
+  const page = (await searchParams).page;
+  const limit = (await searchParams).limit;
+  const { data: questions, metadata } = await getPagination(page, limit);
   return (
     <div className="p-4">
       <div className="mb-4 flex items-center justify-between">
@@ -25,7 +29,12 @@ export default async function page() {
         <Input placeholder="Email" />
         <Button variant="destructive">Clear</Button>
       </div>
-      <DataTable columns={PortfolioFormColumns} data={questions || []} />
+      <DataTable
+        remote
+        columns={PortfolioFormColumns}
+        data={questions || []}
+        metadata={metadata}
+      />
     </div>
   );
 }

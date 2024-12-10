@@ -20,11 +20,27 @@ import { TransitionStartFunction } from "react";
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>;
+  metadata?: PaginateMetadata | null;
+  startTransition: TransitionStartFunction;
 }
 
-export function DataTablePagination<TData>({
+export function DataTablePaginationRemote<TData>({
   table,
+  metadata,
+  startTransition,
 }: DataTablePaginationProps<TData>) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const updateQueryParams = (key: string, value: string) => {
+    const params = new URLSearchParams();
+    console.log("params:", params);
+    params.set(key, value);
+    startTransition(() => {
+      const queryString = params.toString();
+      const newUrl = queryString ? `${pathname}?${queryString}` : pathname;
+      router.push(newUrl);
+    });
+  };
   return (
     <div className="flex justify-end px-2">
       <div className="flex items-center space-x-6 lg:space-x-8">
@@ -34,6 +50,7 @@ export function DataTablePagination<TData>({
             value={`${table.getState().pagination.pageSize}`}
             onValueChange={(value) => {
               table.setPageSize(Number(value));
+              updateQueryParams("limit", value);
             }}
           >
             <SelectTrigger className="h-8 w-[70px]">
@@ -49,15 +66,16 @@ export function DataTablePagination<TData>({
           </Select>
         </div>
         <div className="flex w-[100px] items-center justify-center text-sm text-label">
-          Page {table.getState().pagination.pageIndex + 1} of{" "}
-          {table.getPageCount()}
+          Page {metadata && metadata.currentPage ? metadata.currentPage : 1} of{" "}
+          {/* {table.getPageCount()} */}
+          {metadata && metadata.count ? Math.ceil(metadata.count / LIMIT) : 1}
         </div>
         <div className="flex items-center space-x-2">
           <Button
             variant="outline"
             className="hidden h-8 w-8 p-0 lg:flex"
-            onClick={() => table.setPageIndex(0)}
-            disabled={!table.getCanPreviousPage()}
+            onClick={() => updateQueryParams("page", String(1))}
+            disabled={metadata && metadata.page ? true : false}
           >
             <span className="sr-only">Go to first page</span>
             <ChevronsLeft />
@@ -65,8 +83,13 @@ export function DataTablePagination<TData>({
           <Button
             variant="outline"
             className="h-8 w-8 p-0"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
+            onClick={() =>
+              updateQueryParams(
+                "page",
+                String(metadata && metadata.page ? metadata.page - 1 : 1),
+              )
+            }
+            disabled={metadata && metadata.page ? true : false}
           >
             <span className="sr-only">Go to previous page</span>
             <ChevronLeft />
@@ -74,8 +97,8 @@ export function DataTablePagination<TData>({
           <Button
             variant="outline"
             className="h-8 w-8 p-0"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
+            onClick={() => updateQueryParams("page", String(metadata?.page))}
+            disabled={metadata && metadata.page ? false : true}
           >
             <span className="sr-only">Go to next page</span>
             <ChevronRight />
@@ -83,8 +106,17 @@ export function DataTablePagination<TData>({
           <Button
             variant="outline"
             className="hidden h-8 w-8 p-0 lg:flex"
-            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-            disabled={!table.getCanNextPage()}
+            onClick={() =>
+              updateQueryParams(
+                "page",
+                String(
+                  metadata && metadata.count
+                    ? Math.ceil(metadata.count / LIMIT)
+                    : 1,
+                ),
+              )
+            }
+            disabled={metadata && metadata.page ? false : true}
           >
             <span className="sr-only">Go to last page</span>
             <ChevronsRight />

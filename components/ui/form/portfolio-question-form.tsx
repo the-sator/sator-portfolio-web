@@ -97,7 +97,6 @@ export default function PortfolioQuestioForm({ setOpen, question }: Props) {
       return;
     }
     const { error } = await createQuestionAction(data);
-    console.log("error:", error);
     if (error) {
       if ("statusCode" in error) {
         toast({
