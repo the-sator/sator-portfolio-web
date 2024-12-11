@@ -8,7 +8,11 @@ import {
   unpublishPortfolio,
   updatePortfolio,
 } from "@/data/portfolio";
-import { CreatePortfolio, CreatePortfolioSchema } from "@/types/portfolio.type";
+import {
+  CreatePortfolio,
+  CreatePortfolioSchema,
+  PortfolioFilter,
+} from "@/types/portfolio.type";
 import { revalidateTag } from "next/cache";
 
 export const createPortfolioAction = async (formData: unknown) => {
@@ -105,8 +109,8 @@ export const unpublishPortfolioAction = async (id: string) => {
   return { data, error };
 };
 
-export const getPortfolioPaginationAction = async (pageParam: string) => {
-  const { data, page } = await paginatePortfolio(pageParam);
+export const getPortfolioPaginationAction = async (filter: PortfolioFilter) => {
+  const { data, page } = await paginatePortfolio(filter);
 
   return { data, page };
 };

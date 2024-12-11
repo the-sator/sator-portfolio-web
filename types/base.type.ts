@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 export const breakpointColumnsObj = {
   default: 4,
   1980: 3,
@@ -45,3 +47,10 @@ export type PaginateResult<T> = {
   data: T;
   metadata: PaginateMetadata;
 };
+
+export const BaseFilterSchema = z.object({
+  page: z.string().min(1).optional(),
+  limit: z.string().min(1).optional(),
+});
+
+export type BaseFilter = z.infer<typeof BaseFilterSchema>;

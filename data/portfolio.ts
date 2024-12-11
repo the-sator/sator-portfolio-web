@@ -1,6 +1,9 @@
-import { LIMIT } from "@/constant/base";
 import { PaginateResult } from "@/types/base.type";
-import { CreatePortfolio, Portfolio } from "@/types/portfolio.type";
+import {
+  CreatePortfolio,
+  Portfolio,
+  PortfolioFilter,
+} from "@/types/portfolio.type";
 import { fetchApi } from "@/utils/fetch-client";
 import { toQueryString } from "@/utils/string";
 
@@ -11,8 +14,8 @@ export const getPortfolioBySlug = async (slug: string) => {
   return data;
 };
 
-export const paginatePortfolio = async (page?: string, limit?: string) => {
-  const fullUrl = `/admin/portfolio${toQueryString({ page: page, limit: limit || String(LIMIT) })}`;
+export const paginatePortfolio = async (filter?: PortfolioFilter) => {
+  const fullUrl = `/admin/portfolio${toQueryString({ ...filter })}`;
   const { data, error } = await fetchApi.get<PaginateResult<Portfolio[]>>(
     fullUrl,
     [`portfolio`],

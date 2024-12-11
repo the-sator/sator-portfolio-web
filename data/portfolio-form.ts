@@ -1,7 +1,9 @@
-import { LIMIT } from "@/constant/base";
-import { toast } from "@/hooks/use-toast";
 import { PaginateResult } from "@/types/base.type";
-import { CreateFormQuestion, FormQuestion } from "@/types/portfolio-form.type";
+import {
+  CreateFormQuestion,
+  FormQuestion,
+  PortfolioFormFilter,
+} from "@/types/portfolio-form.type";
 import { fetchApi } from "@/utils/fetch-client";
 import { toQueryString } from "@/utils/string";
 
@@ -12,9 +14,8 @@ export const getAllQuestions = async () => {
   return data;
 };
 
-export const getPagination = async (page?: string, limit?: string) => {
-  const fullUrl = `/admin/question${toQueryString({ page, limit })}`;
-  console.log("fullUrl:", fullUrl);
+export const getPagination = async (filter: PortfolioFormFilter) => {
+  const fullUrl = `/admin/question${toQueryString({ ...filter })}`;
   const { data, error } = await fetchApi.get<PaginateResult<FormQuestion[]>>(
     fullUrl,
     ["form-question"],

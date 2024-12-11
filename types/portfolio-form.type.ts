@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { BaseFilterSchema } from "./base.type";
 
 enum QuestionType {
   MULTIPLE_CHOICE = "MUTLI_CHOICE",
@@ -39,5 +40,11 @@ export const CreateFormQuestionSchema = z.object({
   options: z.array(CreateFormOptionSchema),
 });
 
+export const PortfolioFormFilterSchema = BaseFilterSchema.extend({
+  order: z.string().optional(),
+  id: z.string().optional(),
+});
+
 export type CreateFormQuestion = z.infer<typeof CreateFormQuestionSchema>;
 export type CreateFormOption = z.infer<typeof CreateFormOptionSchema>;
+export type PortfolioFormFilter = z.infer<typeof PortfolioFormFilterSchema>;

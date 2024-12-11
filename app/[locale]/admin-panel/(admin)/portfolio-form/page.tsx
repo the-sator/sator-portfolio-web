@@ -1,25 +1,24 @@
-import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
+import ClearFilterButton from "@/components/ui/filter/clear-filter-button";
 import FilterInput from "@/components/ui/filter/filter-input";
-import { Input } from "@/components/ui/input";
 import {
   CreateQuestionModal,
   EditQuestionModal,
 } from "@/components/ui/modal/question-modal";
 import { PortfolioFormColumns } from "@/components/ui/table/columns/portfolio-form.column";
-import { getAllQuestions, getPagination } from "@/data/portfolio-form";
+import { getPagination } from "@/data/portfolio-form";
+import { PortfolioFormFilter } from "@/types/portfolio-form.type";
 import { getTranslations } from "next-intl/server";
 import React from "react";
 type Props = {
-  searchParams: Promise<{ page: string; limit: string }>;
+  searchParams?: { [key: string]: string | string[] | undefined };
 };
 export default async function page({ searchParams }: Props) {
   const t = await getTranslations("PortfolioForm");
   const filter = await searchParams;
-  console.log("filter:", filter);
-  const page = (await searchParams).page;
-  const limit = (await searchParams).limit;
-  const { data: questions, metadata } = await getPagination(page, limit);
+  const { data: questions, metadata } = await getPagination(
+    filter as PortfolioFormFilter,
+  );
   return (
     <div className="p-4">
       <div className="mb-4 flex items-center justify-between">
@@ -30,7 +29,7 @@ export default async function page({ searchParams }: Props) {
       <div className="flex items-center gap-2">
         <FilterInput placeholder="ID" filterKey="id" />
         <FilterInput placeholder="Order" filterKey="order" />
-        <Button variant="destructive">Clear</Button>
+        <ClearFilterButton />
       </div>
       <DataTable
         remote

@@ -26,9 +26,16 @@ export default function PortfolioCard({ portfolio }: Props) {
         </p>
       </div>
       <div className="mt-4 flex items-center justify-between">
-        <Tag color="blue" className="rounded-full">
-          Art
-        </Tag>
+        <div className="flex gap-2">
+          {portfolio.CategoryOnPorfolio.map((category) => (
+            <Tag
+              key={category.category_id}
+              color={category.category.color.toLowerCase()}
+            >
+              {category.category.name}
+            </Tag>
+          ))}
+        </div>
         <PortfolioOptionDropdown portfolio={portfolio} />
       </div>
     </Link>

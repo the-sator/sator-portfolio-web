@@ -1,9 +1,9 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input } from "../input";
 import { useDebouncedCallback } from "use-debounce";
-import { useUpdateQuery } from "@/hooks/use-update-query";
 import { useQueryParamsContext } from "@/context/query-params-provider";
+import { useSearchParams } from "next/navigation";
 type Props = {
   filterKey: string;
   debounce?: boolean;
@@ -15,28 +15,34 @@ export default function FilterInput({
   filterKey,
   ...props
 }: FilterInputProps) {
-  const [query, setQuery] = useState("");
+  const params = useSearchParams();
   const { updateQuery } = useQueryParamsContext();
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (debounce) {
-      if (!query) return;
-      debouceSearch();
-      return;
-    }
-  };
+  const [query, setQuery] = useState(params.get(filterKey) || "");
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-
     setQuery(value);
   };
-  const debouceSearch = useDebouncedCallback(async () => {
+  const debounceSearch = useDebouncedCallback(async () => {
     handleOnFilter();
   }, 500);
 
   const handleOnFilter = () => {
-    updateQuery({ [filterKey]: query });
+    updateQuery({ [filterKey]: query, page: "1" });
   };
 
-  return <Input {...props} onChange={handleChange} onKeyDown={handleKeyDown} />;
+  useEffect(() => {
+    if (debounce) {
+      if (!query) return;
+      debounceSearch();
+    }
+  }, [query, debounce, debounceSearch]);
+
+  useEffect(() => {
+    setQuery(params.get(filterKey) || "");
+  }, [params, filterKey]);
+
+  return (
+    <Input {...props} value={query} variant="outline" onChange={handleChange} />
+  );
 }

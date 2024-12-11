@@ -13,7 +13,6 @@ export default function PortfolioInfiniteScroll({ portfolios }: Props) {
     portfolios,
     {},
   );
-
   const portfolioItems = data?.pages.flatMap((page) => page.data) || [];
   return (
     <InfiniteScroll

@@ -1,7 +1,6 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Portfolio } from "@/types/portfolio.type";
 import { getPortfolioPaginationAction } from "@/action/portfolio.action";
-import { toast } from "@/hooks/use-toast";
 export function getQueryKey() {
   return ["portfolio"];
 }
@@ -13,9 +12,9 @@ export function useGetInfinitePortfolios(
   return useInfiniteQuery({
     queryKey: getQueryKey(),
     queryFn: ({ pageParam = 1 }) =>
-      getPortfolioPaginationAction(String(pageParam)),
+      getPortfolioPaginationAction({ page: String(pageParam) }),
     getNextPageParam: (lastPage) => {
-      return lastPage.page !== 0 ? lastPage.page : undefined;
+      return lastPage.page !== null ? lastPage.page : undefined;
     },
     initialPageParam: 1,
     initialData: {
