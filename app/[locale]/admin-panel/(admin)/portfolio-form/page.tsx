@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
+import FilterInput from "@/components/ui/filter/filter-input";
 import { Input } from "@/components/ui/input";
 import {
   CreateQuestionModal,
@@ -14,6 +15,8 @@ type Props = {
 };
 export default async function page({ searchParams }: Props) {
   const t = await getTranslations("PortfolioForm");
+  const filter = await searchParams;
+  console.log("filter:", filter);
   const page = (await searchParams).page;
   const limit = (await searchParams).limit;
   const { data: questions, metadata } = await getPagination(page, limit);
@@ -25,8 +28,8 @@ export default async function page({ searchParams }: Props) {
         <EditQuestionModal questions={questions} />
       </div>
       <div className="flex items-center gap-2">
-        <Input placeholder="Username" />
-        <Input placeholder="Email" />
+        <FilterInput placeholder="ID" filterKey="id" />
+        <FilterInput placeholder="Order" filterKey="order" />
         <Button variant="destructive">Clear</Button>
       </div>
       <DataTable

@@ -36,7 +36,9 @@ export type InfinitePaginateResult<T> = {
 export type PaginateMetadata = {
   page: number | null;
   count?: number;
-  currentPage?: number;
+  current_page?: number;
+  page_count?: number;
+  page_size?: number;
 };
 
 export type PaginateResult<T> = {

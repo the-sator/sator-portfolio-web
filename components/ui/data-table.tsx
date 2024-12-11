@@ -21,12 +21,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import { DataTablePagination } from "./table/data-table-columns/data-table-columns-pagination";
 import { HttpError, PaginateMetadata } from "@/types/base.type";
 import { toast } from "@/hooks/use-toast";
 import Spinner from "./spinner";
 import { DataTablePaginationRemote } from "./table/data-table-columns/data-table-columns-pagination-remote";
+import { useQueryParamsContext } from "@/context/query-params-provider";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -47,7 +48,11 @@ export function DataTable<TData, TValue>({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState({});
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const [isPending, startTransition] = useTransition();
+  const { isPending } = useQueryParamsContext();
+
+  useEffect(() => {
+    console.log("isPending:", isPending);
+  }, [isPending]);
 
   // const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   useEffect(() => {
@@ -141,11 +146,7 @@ export function DataTable<TData, TValue>({
       {showPagination && (
         <>
           {remote ? (
-            <DataTablePaginationRemote
-              table={table}
-              metadata={metadata}
-              startTransition={startTransition}
-            />
+            <DataTablePaginationRemote table={table} metadata={metadata} />
           ) : (
             <DataTablePagination table={table} />
           )}

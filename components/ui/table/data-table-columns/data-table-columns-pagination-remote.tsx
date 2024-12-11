@@ -15,42 +15,28 @@ import {
 import { Button } from "../../button";
 import { PaginateMetadata } from "@/types/base.type";
 import { LIMIT } from "@/constant/base";
-import { usePathname, useRouter } from "next/navigation";
-import { TransitionStartFunction } from "react";
+import { useQueryParamsContext } from "@/context/query-params-provider";
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>;
   metadata?: PaginateMetadata | null;
-  startTransition: TransitionStartFunction;
 }
 
 export function DataTablePaginationRemote<TData>({
   table,
   metadata,
-  startTransition,
 }: DataTablePaginationProps<TData>) {
-  const pathname = usePathname();
-  const router = useRouter();
-  const updateQueryParams = (key: string, value: string) => {
-    const params = new URLSearchParams();
-    console.log("params:", params);
-    params.set(key, value);
-    startTransition(() => {
-      const queryString = params.toString();
-      const newUrl = queryString ? `${pathname}?${queryString}` : pathname;
-      router.push(newUrl);
-    });
-  };
+  const { updateQuery } = useQueryParamsContext();
   return (
     <div className="flex justify-end px-2">
       <div className="flex items-center space-x-6 lg:space-x-8">
         <div className="flex items-center space-x-2">
           <p className="text-sm text-label">Rows per page</p>
           <Select
-            value={`${table.getState().pagination.pageSize}`}
+            value={`${metadata && metadata.page_size ? metadata.page_size : LIMIT}`}
             onValueChange={(value) => {
               table.setPageSize(Number(value));
-              updateQueryParams("limit", value);
+              updateQuery({ limit: value });
             }}
           >
             <SelectTrigger className="h-8 w-[70px]">
@@ -66,16 +52,16 @@ export function DataTablePaginationRemote<TData>({
           </Select>
         </div>
         <div className="flex w-[100px] items-center justify-center text-sm text-label">
-          Page {metadata && metadata.currentPage ? metadata.currentPage : 1} of{" "}
-          {/* {table.getPageCount()} */}
-          {metadata && metadata.count ? Math.ceil(metadata.count / LIMIT) : 1}
+          Page {metadata && metadata.current_page ? metadata.current_page : 1}{" "}
+          of {/* {table.getPageCount()} */}
+          {metadata && metadata.page_count ? metadata.page_count : 1}
         </div>
         <div className="flex items-center space-x-2">
           <Button
             variant="outline"
             className="hidden h-8 w-8 p-0 lg:flex"
-            onClick={() => updateQueryParams("page", String(1))}
-            disabled={metadata && metadata.page ? true : false}
+            onClick={() => updateQuery({ page: String(1) })}
+            disabled={metadata && metadata.current_page === 1 ? true : false}
           >
             <span className="sr-only">Go to first page</span>
             <ChevronsLeft />
@@ -84,12 +70,11 @@ export function DataTablePaginationRemote<TData>({
             variant="outline"
             className="h-8 w-8 p-0"
             onClick={() =>
-              updateQueryParams(
-                "page",
-                String(metadata && metadata.page ? metadata.page - 1 : 1),
-              )
+              updateQuery({
+                page: String(metadata && metadata.page ? metadata.page - 1 : 1),
+              })
             }
-            disabled={metadata && metadata.page ? true : false}
+            disabled={metadata && metadata.current_page === 1 ? true : false}
           >
             <span className="sr-only">Go to previous page</span>
             <ChevronLeft />
@@ -97,7 +82,7 @@ export function DataTablePaginationRemote<TData>({
           <Button
             variant="outline"
             className="h-8 w-8 p-0"
-            onClick={() => updateQueryParams("page", String(metadata?.page))}
+            onClick={() => updateQuery({ page: String(metadata?.page) })}
             disabled={metadata && metadata.page ? false : true}
           >
             <span className="sr-only">Go to next page</span>
@@ -107,14 +92,13 @@ export function DataTablePaginationRemote<TData>({
             variant="outline"
             className="hidden h-8 w-8 p-0 lg:flex"
             onClick={() =>
-              updateQueryParams(
-                "page",
-                String(
+              updateQuery({
+                page: String(
                   metadata && metadata.count
                     ? Math.ceil(metadata.count / LIMIT)
                     : 1,
                 ),
-              )
+              })
             }
             disabled={metadata && metadata.page ? false : true}
           >
