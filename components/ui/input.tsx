@@ -3,13 +3,13 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { cva, VariantProps } from "class-variance-authority";
 const inputVariants = cva(
-  "flex h-10 w-full rounded-md px-3 py-2 placeholder:text-neutral-500 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:opacity-50",
+  "flex h-full w-full rounded-md placeholder:text-label/80 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:opacity-50",
   {
     variants: {
       variant: {
         default: "bg-card text-foreground hover:bg-accent",
         outline:
-          "border bg-transparent focus-visible:ring-1 focus-visible:ring-neutral-500 outline-0",
+          "border focus-visible:ring-1 focus-visible:ring-neutral-500 outline-0",
       },
       input_size: {
         default: "h-10 px-4 py-2 ",
@@ -33,11 +33,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <input
         type={type}
-        className={cn(
-          "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:opacity-50 md:text-sm",
-          inputVariants({ variant, input_size }),
-          className,
-        )}
+        className={cn(inputVariants({ variant, input_size }), className)}
         ref={ref}
         {...props}
       />

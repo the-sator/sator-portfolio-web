@@ -3,13 +3,11 @@ import { RoleColumns } from "@/components/ui/table/columns/role.column";
 import { getAllRoles } from "@/data/role";
 import { getTranslations } from "next-intl/server";
 import React from "react";
-import CreateButton from "./_component/create-button";
 import {
   CreateRoleModal,
   EditRoleModal,
 } from "@/components/ui/modal/role-modal";
 import { getAllResources } from "@/data/resource";
-import DeleteAlertDialog from "@/components/ui/confirmation-dialog";
 
 export default async function page() {
   const t = await getTranslations("Role");

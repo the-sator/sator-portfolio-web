@@ -25,6 +25,7 @@ export type CategoryOnPorfolio = {
   portfolio_id: string;
   category_id: string;
   assignedBy: string;
+  category: Category;
 };
 
 export const CreateCategorySchema = z.object({

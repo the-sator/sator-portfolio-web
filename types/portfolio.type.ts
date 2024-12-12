@@ -1,6 +1,7 @@
 import { Block } from "@blocknote/core";
 import { z } from "zod";
 import { CategoryOnPorfolio } from "./category.type";
+import { BaseFilterSchema } from "./base.type";
 
 export type Portfolio = {
   id: string;
@@ -33,4 +34,10 @@ export const CreatePortfolioSchema = z.object({
   categories: z.array(z.string()).optional(),
 });
 
+export const PortfolioFilterSchema = BaseFilterSchema.extend({
+  title: z.string().optional(),
+  categories: z.array(z.string()).optional(),
+});
+
 export type CreatePortfolio = z.infer<typeof CreatePortfolioSchema>;
+export type PortfolioFilter = z.infer<typeof PortfolioFilterSchema>;

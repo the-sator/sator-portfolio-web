@@ -13,6 +13,7 @@ import { Toaster } from "@/components/ui/toaster";
 import ThemeProviders from "@/context/theme-provider";
 import { NextIntlClientProvider } from "next-intl";
 import { ReactQueryClientProvider } from "@/context/query-provider";
+import { QueryParamsProvider } from "@/context/query-params-provider";
 const font = _font({ subsets: ["latin"] });
 // const geistSans = localFont({
 //   src: "./fonts/GeistVF.woff",
@@ -51,14 +52,16 @@ export default async function RootLayout({
       >
         <ReactQueryClientProvider>
           <NextIntlClientProvider messages={messages}>
-            <ThemeProviders
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-            >
-              {children}
-              <Toaster />
-            </ThemeProviders>
+            <QueryParamsProvider>
+              <ThemeProviders
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+              >
+                {children}
+                <Toaster />
+              </ThemeProviders>
+            </QueryParamsProvider>
           </NextIntlClientProvider>
         </ReactQueryClientProvider>
       </body>

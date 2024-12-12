@@ -5,7 +5,6 @@ import { FiMinusCircle } from "react-icons/fi";
 import { FormOption } from "@/types/portfolio-form.type";
 import { toast } from "@/hooks/use-toast";
 import { priceRangeToString, stringToPriceRange } from "@/utils/string";
-import UploadButton from "../ui/button/upload-button";
 type Props = {
   option: FormOption;
   options: FormOption[];

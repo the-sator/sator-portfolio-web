@@ -23,13 +23,18 @@ import {
 } from "@/components/ui/table";
 import { useEffect, useState } from "react";
 import { DataTablePagination } from "./table/data-table-columns/data-table-columns-pagination";
-import { HttpError } from "@/types/base.type";
+import { HttpError, PaginateMetadata } from "@/types/base.type";
 import { toast } from "@/hooks/use-toast";
+import Spinner from "./spinner";
+import { DataTablePaginationRemote } from "./table/data-table-columns/data-table-columns-pagination-remote";
+import { useQueryParamsContext } from "@/context/query-params-provider";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   error?: HttpError | null;
   showPagination?: boolean;
+  metadata?: PaginateMetadata | null;
+  remote?: boolean;
 }
 
 export function DataTable<TData, TValue>({
@@ -37,10 +42,17 @@ export function DataTable<TData, TValue>({
   data,
   error,
   showPagination = true,
+  metadata,
+  remote = false,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState({});
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const { isPending } = useQueryParamsContext();
+
+  useEffect(() => {
+    console.log("isPending:", isPending);
+  }, [isPending]);
 
   // const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   useEffect(() => {
@@ -69,51 +81,13 @@ export function DataTable<TData, TValue>({
       sorting,
       rowSelection,
       columnVisibility,
-
-      // columnFilters,
     },
   });
 
   return (
     <div>
-      <div className="flex items-center py-4">
-        {/* <Input
-          placeholder="Filter emails..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />*/}
-        {/* <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columns
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu> */}
-      </div>
-      <div className="mb-4 rounded-md border">
-        <Table>
+      <div className="my-4 mb-4 rounded-md border">
+        <Table className="relative">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -133,6 +107,13 @@ export function DataTable<TData, TValue>({
             ))}
           </TableHeader>
           <TableBody>
+            {isPending && (
+              <tr>
+                <td className="absolute z-50 flex min-h-[calc(100%-42.5px)] w-full items-center justify-center bg-background/50">
+                  <Spinner size={30} />
+                </td>
+              </tr>
+            )}
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
@@ -162,7 +143,15 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      {showPagination && <DataTablePagination table={table} />}
+      {showPagination && (
+        <>
+          {remote ? (
+            <DataTablePaginationRemote table={table} metadata={metadata} />
+          ) : (
+            <DataTablePagination table={table} />
+          )}
+        </>
+      )}
     </div>
   );
 }

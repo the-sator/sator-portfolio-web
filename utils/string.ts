@@ -61,3 +61,23 @@ export function priceRangeToString(num: number[]): string {
   const str = String(num[0]) + " - " + String(num[1]);
   return str;
 }
+
+export function toQueryString(
+  params: Record<string, string | string[] | number | boolean | undefined>,
+): string {
+  const query = Object.entries(params)
+    .filter(([, value]) => value !== undefined && value !== null)
+    .flatMap(([key, value]) => {
+      if (Array.isArray(value)) {
+        // Handle arrays by repeating the key for each value
+        return value.map(
+          (item) =>
+            `${encodeURIComponent(key)}=${encodeURIComponent(String(item))}`,
+        );
+      }
+      // Handle single values
+      return `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`;
+    })
+    .join("&");
+  return query ? `?${query}` : "";
+}

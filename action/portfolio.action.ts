@@ -3,11 +3,16 @@
 import {
   createPortfolio,
   deletePortfolio,
+  paginatePortfolio,
   publishPortfolio,
   unpublishPortfolio,
   updatePortfolio,
 } from "@/data/portfolio";
-import { CreatePortfolio, CreatePortfolioSchema } from "@/types/portfolio.type";
+import {
+  CreatePortfolio,
+  CreatePortfolioSchema,
+  PortfolioFilter,
+} from "@/types/portfolio.type";
 import { revalidateTag } from "next/cache";
 
 export const createPortfolioAction = async (formData: unknown) => {
@@ -102,4 +107,10 @@ export const unpublishPortfolioAction = async (id: string) => {
   }
   revalidateTag("portfolio");
   return { data, error };
+};
+
+export const getPortfolioPaginationAction = async (filter: PortfolioFilter) => {
+  const { data, page } = await paginatePortfolio(filter);
+
+  return { data, page };
 };

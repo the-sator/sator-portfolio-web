@@ -1,19 +1,34 @@
-import CustomCreateButton from "@/components/ui/button/custom-create-button";
 import { LinkButton } from "@/components/ui/button/link-button";
-import ImageContainer from "@/components/ui/image/image-container";
-import Tag from "@/components/ui/tag";
-import { getAllPortfolio } from "@/data/portfolio";
-import Link from "next/link";
-import React, { Suspense } from "react";
+import { paginatePortfolio } from "@/data/portfolio";
+import React from "react";
 import { IoAddOutline } from "react-icons/io5";
-import placeholder from "@/public/image/placeholder-portfolio.png";
-import PortfolioOptionDropdown from "@/components/ui/dropdown/portfolio-option-dropdown";
-import PortfolioListSkeleton from "@/components/ui/skeleton/portfolio-list-skeleton";
-import { Portfolio } from "@/types/portfolio.type";
+import PortfolioInfiniteScroll from "@/components/portfolio/portfolio-infinite-scroll";
+import FilterInput from "@/components/ui/filter/filter-input";
+import { getAllCategories } from "@/data/category";
+import { ComboboxOption } from "@/components/ui/combobox";
+import { CategoryFilterCombobox } from "@/components/ui/filter/category-filter-combobox";
+type Props = {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
 
-export default async function PortfolioPage() {
-  const { data: portfolios, error } = await getAllPortfolio();
-
+type ComboboxOptionWithColor = ComboboxOption & {
+  color?: string;
+};
+export default async function PortfolioPage({ searchParams }: Props) {
+  const filter = await searchParams;
+  const [{ data: portfolios, page }, { data: categories }] = await Promise.all([
+    paginatePortfolio(filter),
+    getAllCategories(),
+  ]);
+  const options: ComboboxOptionWithColor[] = categories
+    ? categories.map((category) => {
+        return {
+          label: category.name,
+          value: category.id,
+          color: category.color.toLowerCase(),
+        };
+      })
+    : [];
   return (
     <div className="p-4">
       <div className="flex justify-between">
@@ -27,40 +42,23 @@ export default async function PortfolioPage() {
           <p className="text-sm group-hover:text-blue-700">Create</p>
         </LinkButton>
       </div>
-      <Suspense fallback={<PortfolioListSkeleton />}>
-        <div className="mt-4 flex gap-2">
-          {portfolios?.map((portfolio) => (
-            <Link
-              href={"/admin-panel/portfolio/" + portfolio.slug}
-              key={portfolio.id}
-              className="max-h-[350px] min-h-[100px] w-[300px] rounded-md border p-3 transition-all duration-300 hover:cursor-pointer hover:border-label/50"
-            >
-              <ImageContainer
-                src={portfolio.cover_url || placeholder}
-                className="h-[200px] overflow-hidden rounded-sm"
-              />
-              <div className="my-2 min-h-[70px]">
-                <h2 className="line-clamp-1 text-lg font-bold">
-                  {portfolio.title}
-                </h2>
-                <p className="mt-1 line-clamp-2 text-xs text-label">
-                  {portfolio.description}
-                </p>
-              </div>
-              <div className="mt-4 flex items-center justify-between">
-                <Tag color="blue" className="rounded-full">
-                  Art
-                </Tag>
-                <PortfolioOptionDropdown portfolio={portfolio} />
-              </div>
-            </Link>
-          ))}
-          <CustomCreateButton
-            href="/admin-panel/portfolio/create"
-            className="h-[350px] w-[300px] px-4 py-1"
-          />
-        </div>
-      </Suspense>
+      <div className="my-2 flex h-10 gap-2">
+        <FilterInput placeholder="Title" filterKey="title" className="h-full" />
+        {/* <FilterCombobox filterKey="category" options={options} /> */}
+        <CategoryFilterCombobox
+          filterKey={"categories"}
+          defaultValue={(filter.categories as string[]) || []}
+          options={options || []}
+          placeholder="Category"
+          maxCount={1}
+          className="w-full"
+        />
+      </div>
+      <PortfolioInfiniteScroll
+        portfolios={portfolios!}
+        page={page}
+        filter={filter}
+      />
     </div>
   );
 }

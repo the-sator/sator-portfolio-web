@@ -11,7 +11,7 @@ import { SlOptionsVertical } from "react-icons/sl";
 import { FaPen } from "react-icons/fa6";
 import { BsCloudUploadFill } from "react-icons/bs";
 import { LinkButton } from "../button/link-button";
-import { redirect, usePathname } from "next/navigation";
+import { redirect } from "next/navigation";
 import { AiFillDelete } from "react-icons/ai";
 import useConfirmationStore from "@/store/confirmation";
 import {
@@ -29,7 +29,6 @@ export default function PortfolioOptionDropdown({
   portfolio,
   deleteRedirect = false,
 }: Props) {
-  const pathname = usePathname();
   const { openConfirmation } = useConfirmationStore();
   const handleDelete = async () => {
     const { error } = await deletePortfolioAction(portfolio.id);
@@ -46,7 +45,9 @@ export default function PortfolioOptionDropdown({
         variant: "success",
         duration: 1500,
       });
-      deleteRedirect && redirect("/admin-panel/portfolio");
+      if (deleteRedirect) {
+        redirect("/admin-panel/portfolio");
+      }
     }
   };
   const handlePublish = async () => {
@@ -95,7 +96,7 @@ export default function PortfolioOptionDropdown({
       <DropdownMenuContent className="w-fit">
         <DropdownMenuItem className="p-0" onSelect={(e) => e.preventDefault()}>
           <LinkButton
-            href={pathname + "/edit"}
+            href={`/admin-panel/portfolio/${portfolio.slug}/edit`}
             variant={"icon"}
             className="w-full justify-start gap-3 opacity-80 hover:opacity-100"
           >
@@ -111,7 +112,11 @@ export default function PortfolioOptionDropdown({
             onClick={(e) => {
               e.stopPropagation();
               e.preventDefault();
-              portfolio.published_at ? handleUnpublish() : handlePublish();
+              if (portfolio.published_at) {
+                handleUnpublish();
+              } else {
+                handlePublish();
+              }
             }}
           >
             <BsCloudUploadFill size={14} />

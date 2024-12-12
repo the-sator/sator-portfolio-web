@@ -1,18 +1,24 @@
-import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
-import { Input } from "@/components/ui/input";
+import ClearFilterButton from "@/components/ui/filter/clear-filter-button";
+import FilterInput from "@/components/ui/filter/filter-input";
 import {
   CreateQuestionModal,
   EditQuestionModal,
 } from "@/components/ui/modal/question-modal";
 import { PortfolioFormColumns } from "@/components/ui/table/columns/portfolio-form.column";
-import { getAllQuestions } from "@/data/portfolio-form";
+import { getPagination } from "@/data/portfolio-form";
+import { PortfolioFormFilter } from "@/types/portfolio-form.type";
 import { getTranslations } from "next-intl/server";
 import React from "react";
-
-export default async function page() {
+type Props = {
+  searchParams?: { [key: string]: string | string[] | undefined };
+};
+export default async function page({ searchParams }: Props) {
   const t = await getTranslations("PortfolioForm");
-  const { data: questions } = await getAllQuestions();
+  const filter = await searchParams;
+  const { data: questions, metadata } = await getPagination(
+    filter as PortfolioFormFilter,
+  );
   return (
     <div className="p-4">
       <div className="mb-4 flex items-center justify-between">
@@ -21,11 +27,16 @@ export default async function page() {
         <EditQuestionModal questions={questions} />
       </div>
       <div className="flex items-center gap-2">
-        <Input placeholder="Username" />
-        <Input placeholder="Email" />
-        <Button variant="destructive">Clear</Button>
+        <FilterInput placeholder="ID" filterKey="id" />
+        <FilterInput placeholder="Order" filterKey="order" />
+        <ClearFilterButton />
       </div>
-      <DataTable columns={PortfolioFormColumns} data={questions || []} />
+      <DataTable
+        remote
+        columns={PortfolioFormColumns}
+        data={questions || []}
+        metadata={metadata}
+      />
     </div>
   );
 }

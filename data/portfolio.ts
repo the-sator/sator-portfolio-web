@@ -1,5 +1,11 @@
-import { CreatePortfolio, Portfolio } from "@/types/portfolio.type";
+import { PaginateResult } from "@/types/base.type";
+import {
+  CreatePortfolio,
+  Portfolio,
+  PortfolioFilter,
+} from "@/types/portfolio.type";
 import { fetchApi } from "@/utils/fetch-client";
+import { toQueryString } from "@/utils/string";
 
 export const getPortfolioBySlug = async (slug: string) => {
   const data = await fetchApi.get<Portfolio>(`/admin/portfolio/${slug}`, [
@@ -8,15 +14,20 @@ export const getPortfolioBySlug = async (slug: string) => {
   return data;
 };
 
-export const getAllPortfolio = async () => {
-  const data = await fetchApi.get<Portfolio[]>(`/admin/portfolio`, [
-    `portfolio`,
-  ]);
-  return data;
+export const paginatePortfolio = async (filter?: PortfolioFilter) => {
+  const fullUrl = `/admin/portfolio${toQueryString({ ...filter })}`;
+  const { data, error } = await fetchApi.get<PaginateResult<Portfolio[]>>(
+    fullUrl,
+    [`portfolio`],
+  );
+  if (!data) {
+    return { data: null, page: null, error };
+  }
+  return { data: data?.data, page: data?.metadata.page, error };
 };
 
 export const createPortfolio = async (payload: CreatePortfolio) => {
-  const data = await fetchApi.post<Portfolio>(`/admin/portfolio/`, payload, [
+  const data = await fetchApi.post<Portfolio>(`/admin/portfolio`, payload, [
     "portfolio",
   ]);
   return data;

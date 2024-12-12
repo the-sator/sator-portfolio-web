@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 export const breakpointColumnsObj = {
   default: 4,
   1980: 3,
@@ -27,3 +29,28 @@ export enum UploadState {
   UPLOADED = "uploaded",
   FAILED = "failed",
 }
+
+export type InfinitePaginateResult<T> = {
+  data: T;
+  hasMore: boolean;
+};
+
+export type PaginateMetadata = {
+  page: number | null;
+  count?: number;
+  current_page?: number;
+  page_count?: number;
+  page_size?: number;
+};
+
+export type PaginateResult<T> = {
+  data: T;
+  metadata: PaginateMetadata;
+};
+
+export const BaseFilterSchema = z.object({
+  page: z.string().min(1).optional(),
+  limit: z.string().min(1).optional(),
+});
+
+export type BaseFilter = z.infer<typeof BaseFilterSchema>;
