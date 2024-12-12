@@ -16,6 +16,7 @@ export default function FilterInput({
   ...props
 }: FilterInputProps) {
   const params = useSearchParams();
+  const [mount, setMount] = useState(false);
   const { updateQuery } = useQueryParamsContext();
   const [query, setQuery] = useState(params.get(filterKey) || "");
 
@@ -32,11 +33,16 @@ export default function FilterInput({
   };
 
   useEffect(() => {
+    if (!mount) return;
     if (debounce) {
-      if (!query) return;
+      // if (!query) return;
       debounceSearch();
     }
-  }, [query, debounce, debounceSearch]);
+  }, [query, debounce, mount, debounceSearch]);
+
+  useEffect(() => {
+    setMount(true);
+  }, []);
 
   useEffect(() => {
     setQuery(params.get(filterKey) || "");

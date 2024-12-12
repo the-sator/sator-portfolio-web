@@ -20,7 +20,10 @@ export const paginatePortfolio = async (filter?: PortfolioFilter) => {
     fullUrl,
     [`portfolio`],
   );
-  return { data: data ? data.data : null, page: data?.metadata.page, error };
+  if (!data) {
+    return { data: null, page: null, error };
+  }
+  return { data: data?.data, page: data?.metadata.page, error };
 };
 
 export const createPortfolio = async (payload: CreatePortfolio) => {

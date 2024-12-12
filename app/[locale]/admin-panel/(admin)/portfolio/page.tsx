@@ -4,27 +4,31 @@ import React from "react";
 import { IoAddOutline } from "react-icons/io5";
 import PortfolioInfiniteScroll from "@/components/portfolio/portfolio-infinite-scroll";
 import FilterInput from "@/components/ui/filter/filter-input";
-import FilterCombobox from "@/components/ui/filter/filter-combobox";
 import { getAllCategories } from "@/data/category";
 import { ComboboxOption } from "@/components/ui/combobox";
+import { CategoryFilterCombobox } from "@/components/ui/filter/category-filter-combobox";
 type Props = {
-  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
+type ComboboxOptionWithColor = ComboboxOption & {
+  color?: string;
 };
 export default async function PortfolioPage({ searchParams }: Props) {
   const filter = await searchParams;
-  const [{ data: portfolios }, { data: categories }] = await Promise.all([
+  const [{ data: portfolios, page }, { data: categories }] = await Promise.all([
     paginatePortfolio(filter),
     getAllCategories(),
   ]);
-  const options: ComboboxOption[] = categories
+  const options: ComboboxOptionWithColor[] = categories
     ? categories.map((category) => {
         return {
           label: category.name,
           value: category.id,
+          color: category.color.toLowerCase(),
         };
       })
     : [];
-  console.log("portfolios:", portfolios);
   return (
     <div className="p-4">
       <div className="flex justify-between">
@@ -40,9 +44,21 @@ export default async function PortfolioPage({ searchParams }: Props) {
       </div>
       <div className="my-2 flex h-10 gap-2">
         <FilterInput placeholder="Title" filterKey="title" className="h-full" />
-        <FilterCombobox filterKey="category" options={options} />
+        {/* <FilterCombobox filterKey="category" options={options} /> */}
+        <CategoryFilterCombobox
+          filterKey={"categories"}
+          defaultValue={(filter.categories as string[]) || []}
+          options={options || []}
+          placeholder="Category"
+          maxCount={1}
+          className="w-full"
+        />
       </div>
-      <PortfolioInfiniteScroll portfolios={portfolios!} />
+      <PortfolioInfiniteScroll
+        portfolios={portfolios!}
+        page={page}
+        filter={filter}
+      />
     </div>
   );
 }

@@ -1,19 +1,35 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import PortfolioCard from "./portfolio-card";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { Portfolio } from "@/types/portfolio.type";
+import { Portfolio, PortfolioFilter } from "@/types/portfolio.type";
 import Spinner from "../ui/spinner";
 import { useGetInfinitePortfolios } from "@/data/query/portfolio";
+import { toast } from "@/hooks/use-toast";
 type Props = {
   portfolios: Portfolio[];
+  page: number | null | undefined;
+  filter: PortfolioFilter;
 };
-export default function PortfolioInfiniteScroll({ portfolios }: Props) {
-  const { data, fetchNextPage, hasNextPage } = useGetInfinitePortfolios(
-    portfolios,
-    {},
-  );
-  const portfolioItems = data?.pages.flatMap((page) => page.data) || [];
+export default function PortfolioInfiniteScroll({
+  portfolios,
+  filter,
+  page,
+}: Props) {
+  const { data, fetchNextPage, hasNextPage, error, isError } =
+    useGetInfinitePortfolios(portfolios, page, filter, {});
+  const portfolioItems = data.pages.flatMap((page) => page.data) || [];
+
+  useEffect(() => {
+    if (isError) {
+      toast({
+        title: "Error Fetching Portfolio",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  }, [isError]);
+
   return (
     <InfiniteScroll
       dataLength={portfolioItems.length}
