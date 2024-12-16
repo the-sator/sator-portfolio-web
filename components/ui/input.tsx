@@ -7,7 +7,7 @@ const inputVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-card text-foreground hover:bg-accent",
+        default: "bg-card text-foreground",
         outline:
           "border focus-visible:ring-1 focus-visible:ring-neutral-500 outline-0",
       },

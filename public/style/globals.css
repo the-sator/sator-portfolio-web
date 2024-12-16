@@ -112,6 +112,11 @@ body {
   background: #555;
 }
 
+.no-scrollbar {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+
 .L-shape {
   height: 65px;
   width: 1px;
