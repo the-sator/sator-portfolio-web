@@ -1,22 +1,51 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Input } from "../ui/input";
 import ChatBubble from "./chat-bubble";
-import { ChatMessage, ChatRoom } from "@/types/chat.type";
+import { ChatMessage, ChatMessageFilter, ChatRoom } from "@/types/chat.type";
 import { Admin } from "@/types/admin.type";
 import socket from "@/lib/socket";
-import { refetchChatMessage } from "@/action/chat-message.action";
-import { formatDate, isDifferentDay } from "@/utils/date";
+import { isDifferentDay } from "@/utils/date";
 import ChatDate from "./chat-date";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { useGetInfiniteAdminChat } from "@/data/query/admin-chat";
+import { toast } from "@/hooks/use-toast";
+import Spinner from "../ui/spinner";
 type Props = {
-  chatMessages: ChatMessage[] | null;
   admin: Admin;
   room: ChatRoom;
+  filter: ChatMessageFilter;
 };
-export default function ChatPane({ room, chatMessages, admin }: Props) {
+export default function ChatPane({ room, filter, admin }: Props) {
+  const {
+    data,
+    error,
+    isError,
+    refetch,
+    isLoading,
+    fetchNextPage,
+    isFetchingNextPage,
+    hasNextPage,
+  } = useGetInfiniteAdminChat(room.id, filter, {});
   const handleUpdateChatRoom = async () => {
-    await refetchChatMessage(room.id);
+    await refetch();
   };
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+  useEffect(() => {
+    if (isError) {
+      toast({
+        title: "Error Fetching Portfolio",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+
+    if (data) {
+      console.log("data:", data);
+      const allMessages = data.pages.flatMap((page) => page.data || []);
+      setChatMessages(allMessages);
+    }
+  }, [data, isError]);
+
   useEffect(() => {
     socket.on(`chat-room:${room.id}`, handleUpdateChatRoom);
     return () => {
@@ -25,25 +54,48 @@ export default function ChatPane({ room, chatMessages, admin }: Props) {
   });
 
   return (
-    <div className="no-scrollbar flex h-[calc(100%-90px)] flex-col-reverse gap-2 overflow-y-auto p-3">
-      {chatMessages &&
-        chatMessages.map((message, index) => {
-          const currentDate = new Date(message.created_at);
-          const previousMessage = chatMessages[index + 1]; // Remember, the array is reversed
-          const showDateBadge =
-            !previousMessage ||
-            isDifferentDay(currentDate, new Date(previousMessage.created_at));
+    <div
+      className="flex h-[calc(100%-90px)] w-full flex-col-reverse gap-4 overflow-auto px-4 py-3"
+      id="scroll-container"
+    >
+      {isLoading && (
+        <div className="flex flex-1 items-center justify-center">
+          <Spinner className="animate-spin" />
+        </div>
+      )}
 
-          return (
-            <React.Fragment key={message.id}>
-              <ChatBubble
-                isMe={message.chat_member.admin_id === admin.id}
-                message={message}
-              />
-              {showDateBadge && <ChatDate date={message.created_at} />}
-            </React.Fragment>
-          );
-        })}
+      <InfiniteScroll
+        className="flex h-full flex-col-reverse gap-4"
+        dataLength={chatMessages.length}
+        next={fetchNextPage}
+        inverse={true}
+        scrollableTarget="scroll-container"
+        hasMore={hasNextPage || isFetchingNextPage}
+        loader={
+          <div className="flex justify-center">
+            <Spinner />
+          </div>
+        }
+      >
+        {chatMessages &&
+          chatMessages.map((message, index) => {
+            const currentDate = new Date(message.created_at);
+            const previousMessage = chatMessages[index + 1]; // Remember, the array is reversed
+            const showDateBadge =
+              !previousMessage ||
+              isDifferentDay(currentDate, new Date(previousMessage.created_at));
+
+            return (
+              <React.Fragment key={message.id}>
+                <ChatBubble
+                  isMe={message.chat_member.admin_id === admin.id}
+                  message={message}
+                />
+                {showDateBadge && <ChatDate date={message.created_at} />}
+              </React.Fragment>
+            );
+          })}
+      </InfiniteScroll>
     </div>
   );
 }

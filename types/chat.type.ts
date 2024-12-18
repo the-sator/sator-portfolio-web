@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { Admin } from "./admin.type";
 import { User } from "./user.type";
+import { BaseFilterSchema } from "./base.type";
 export type ChatMember = {
   id: string;
   admin_id: string;
@@ -60,5 +61,10 @@ export const CreateChatMemberSchema = z.object({
   chat_room_id: z.string({ message: "Chat Room ID is Required" }),
 });
 
+export const ChatMessageFilterSchema = BaseFilterSchema.extend({
+  content: z.string().optional(),
+});
+
 export type CreateChatMember = z.infer<typeof CreateChatMemberSchema>;
 export type CreateChatMessage = z.infer<typeof CreateChatMessageSchema>;
+export type ChatMessageFilter = z.infer<typeof ChatMessageFilterSchema>;

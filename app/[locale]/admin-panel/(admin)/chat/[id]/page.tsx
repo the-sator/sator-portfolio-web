@@ -3,26 +3,24 @@ import ChatList from "@/components/chat/chat-list";
 import ChatWindow from "@/components/chat/chat-window";
 import { Input } from "@/components/ui/input";
 import { getAdminSession } from "@/data/admin";
-import { getMessagesByRoomID } from "@/data/chat-message";
+import { paginateMessagesByRoomID } from "@/data/chat-message";
 import { getAllRooms, getById } from "@/data/chat-room";
 import { notFound, redirect } from "next/navigation";
 import React from "react";
 type Props = {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
-export default async function page({ params }: Props) {
+export default async function page({ params, searchParams }: Props) {
   const id = (await params).id;
-  const [
-    { data: rooms },
-    { data: room },
-    { data: chatMessages, error },
-    { admin },
-  ] = await Promise.all([
-    getAllRooms(),
-    getById(id),
-    getMessagesByRoomID(id),
-    getAdminSession(),
-  ]);
+  const filter = await searchParams;
+  const [{ data: rooms }, { data: room }, { error }, { admin }] =
+    await Promise.all([
+      getAllRooms(),
+      getById(id),
+      paginateMessagesByRoomID(id, filter),
+      getAdminSession(),
+    ]);
 
   if (!admin) {
     redirect("/admin-panel/login");
@@ -49,7 +47,7 @@ export default async function page({ params }: Props) {
 
       <div className="relative col-span-2 h-[calc(100svh-72px)] w-full overflow-hidden rounded-sm bg-accent">
         {error && <ChatBlur room={room} admin={admin} />}
-        <ChatWindow room={room} chatMessages={chatMessages} admin={admin} />
+        <ChatWindow filter={filter} room={room} admin={admin} />
       </div>
     </div>
   );
