@@ -27,7 +27,7 @@ export function useGetInfinitePortfolios(
     },
     initialPageParam: 1,
     initialData: {
-      pages: [{ data: initialData || [], page: initialPage }],
+      pages: [{ data: initialData || [], page: initialPage || null }],
       pageParams: [undefined],
     },
     ...options,

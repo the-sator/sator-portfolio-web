@@ -1,19 +1,15 @@
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import ChatPane from "./chat-pane";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import { MdSend } from "react-icons/md";
-import ChatBlur from "./chat-blur";
-import { ChatMessage, ChatRoom } from "@/types/chat.type";
+import { ChatMessageFilter, ChatRoom } from "@/types/chat.type";
 import { Admin } from "@/types/admin.type";
 import ChatInput from "./chat-input";
 type Props = {
-  chatMessages: ChatMessage[] | null;
   admin: Admin;
   room: ChatRoom;
+  filter: ChatMessageFilter;
 };
-export default function ChatWindow({ chatMessages, admin, room }: Props) {
+export default function ChatWindow({ filter, admin, room }: Props) {
   return (
     <div className="h-full">
       <div className="z-20 w-full bg-primary p-2">
@@ -25,7 +21,7 @@ export default function ChatWindow({ chatMessages, admin, room }: Props) {
           <p className="text-background">Jame</p>
         </div>
       </div>
-      <ChatPane room={room} chatMessages={chatMessages} admin={admin} />
+      <ChatPane filter={filter} room={room} admin={admin} />
       <ChatInput room={room} admin={admin} />
     </div>
   );

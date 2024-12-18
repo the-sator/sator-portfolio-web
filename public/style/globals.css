@@ -133,3 +133,7 @@ body {
   height: 1px;
   width: 8px;
 }
+
+.infinite-full > div:first-child {
+  height: 100%;
+}

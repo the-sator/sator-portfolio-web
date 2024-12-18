@@ -11,7 +11,7 @@ export default function ChatBubble({ isMe = true, message }: Props) {
     <div className={cn("flex w-full", isMe && "justify-end")}>
       <div
         className={cn(
-          "h-fit w-fit rounded-lg bg-primary px-4 py-1.5 text-sm text-background",
+          "relative h-fit min-w-[10%] max-w-[60%] rounded-lg bg-primary px-4 py-1.5 text-sm text-background",
           isMe && "bg-blue-500 text-white",
         )}
       >
@@ -20,14 +20,11 @@ export default function ChatBubble({ isMe = true, message }: Props) {
             {message.chat_member.admin?.username}
           </p>
         )}
-        <div className="flex gap-2">
-          <p>{message.content}</p>
-          <p className="relative top-1.5 text-xs italic">
-            {formatTime(message.created_at)}
-          </p>
-        </div>
+        <p>{message.content}</p>
+        <p className={cn("mt-2 text-right text-xs italic")}>
+          {formatTime(message.created_at)}
+        </p>
       </div>
-      <div></div>
     </div>
   );
 }
