@@ -7,11 +7,16 @@ export async function apiFetch<T>(
 ): Promise<{ data: T | null; error: HttpError | null }> {
   const baseUrl =
     process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api";
+  const isAdmin = url.startsWith("/admin");
+  const cookie = isAdmin
+    ? (await cookies()).get("session-admin")?.value
+    : (await cookies()).get("session-user")?.value;
+  console.log("cookie:", cookie);
   const defaultOptions: RequestInit = {
     credentials: "include", // Important for cookies
     headers: {
       "Content-Type": "application/json",
-      Cookie: (await cookies()).toString(),
+      Cookie: `${isAdmin ? "session-admin" : "session-user"}=${cookie}`,
       ...options.headers,
     },
   };

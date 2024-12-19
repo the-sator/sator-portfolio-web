@@ -5,16 +5,16 @@ import { getAdminSession } from "@/data/admin";
 import { redirect } from "next/navigation";
 
 export async function AppSidebar() {
-  const { session, admin } = await getAdminSession();
-  if (!session || !admin) {
-    return redirect("/admin/login");
+  const { session, auth } = await getAdminSession();
+  if (!session || !auth) {
+    return redirect("/admin-panel/login");
   }
   return (
     <Sidebar>
-      <SidebarItem admin={admin} />
+      <SidebarItem admin={auth} />
       <SidebarFooter>
         <div className="flex items-center justify-between">
-          <ProfileConfigDropdown session={session} admin={admin} />
+          <ProfileConfigDropdown session={session} admin={auth} />
           {/* <ThemeSwitch /> */}
         </div>
       </SidebarFooter>

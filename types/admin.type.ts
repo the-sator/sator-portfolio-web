@@ -16,11 +16,6 @@ export type Admin = {
   totp_key: Buffer | null;
 };
 
-export type AdminSession = {
-  admin: Admin;
-  session: Session;
-};
-
 export const AdminLoginSchema = z.object({
   username: z
     .string()

@@ -2,14 +2,15 @@ import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import ChatPane from "./chat-pane";
 import { ChatMessageFilter, ChatRoom } from "@/types/chat.type";
-import { Admin } from "@/types/admin.type";
 import ChatInput from "./chat-input";
+import { Auth } from "@/types/auth.type";
 type Props = {
-  admin: Admin;
+  auth: Partial<Auth>;
   room: ChatRoom;
   filter: ChatMessageFilter;
+  isAdmin: boolean;
 };
-export default function ChatWindow({ filter, admin, room }: Props) {
+export default function ChatWindow({ filter, auth, room, isAdmin }: Props) {
   return (
     <div className="h-full">
       <div className="z-20 w-full bg-primary p-2">
@@ -21,8 +22,8 @@ export default function ChatWindow({ filter, admin, room }: Props) {
           <p className="text-background">Jame</p>
         </div>
       </div>
-      <ChatPane filter={filter} room={room} admin={admin} />
-      <ChatInput room={room} admin={admin} />
+      <ChatPane filter={filter} room={room} auth={auth} isAdmin={isAdmin} />
+      <ChatInput room={room} auth={auth} />
     </div>
   );
 }

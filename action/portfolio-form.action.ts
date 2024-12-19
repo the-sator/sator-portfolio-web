@@ -24,7 +24,6 @@ export async function createQuestionAction(formData: unknown) {
   };
 
   const { error } = await createQuestion(data);
-  console.log("error:", error);
   if (error) {
     return {
       error: error,

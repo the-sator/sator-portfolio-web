@@ -14,7 +14,7 @@ import { Button } from "../button";
 import { ChevronsUpDown } from "lucide-react";
 import { IoLogOutSharp } from "react-icons/io5";
 import { toast } from "@/hooks/use-toast";
-import { signout } from "@/action/auth.action";
+import { adminSignoutAction } from "@/action/auth.action";
 import { Session } from "@/types/base.type";
 import { Admin } from "@/types/admin.type";
 type Props = {
@@ -23,7 +23,7 @@ type Props = {
 };
 export default function ProfileConfigDropdown({ session, admin }: Props) {
   const handleSignout = async () => {
-    const { error } = await signout(session.id);
+    const { error } = await adminSignoutAction(session.id);
     if (error) {
       toast({
         title: "Error Signing Out",

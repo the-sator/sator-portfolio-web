@@ -10,12 +10,19 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { useGetInfiniteAdminChat } from "@/data/query/admin-chat";
 import { toast } from "@/hooks/use-toast";
 import Spinner from "../ui/spinner";
+import { Auth } from "@/types/auth.type";
 type Props = {
-  admin: Admin;
+  auth: Partial<Auth>;
   room: ChatRoom;
   filter: ChatMessageFilter;
+  isAdmin?: boolean;
 };
-export default function ChatPane({ room, filter, admin }: Props) {
+export default function ChatPane({
+  room,
+  filter,
+  auth,
+  isAdmin = false,
+}: Props) {
   const {
     data,
     error,
@@ -25,7 +32,7 @@ export default function ChatPane({ room, filter, admin }: Props) {
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
-  } = useGetInfiniteAdminChat(room.id, filter, {});
+  } = useGetInfiniteAdminChat(room.id, filter, isAdmin, {});
   const handleUpdateChatRoom = async () => {
     await refetch();
   };
@@ -88,7 +95,10 @@ export default function ChatPane({ room, filter, admin }: Props) {
             return (
               <React.Fragment key={message.id}>
                 <ChatBubble
-                  isMe={message.chat_member.admin_id === admin.id}
+                  isMe={
+                    message.chat_member.admin_id === auth.id ||
+                    message.chat_member.user_id === auth.id
+                  }
                   message={message}
                 />
                 {showDateBadge && <ChatDate date={message.created_at} />}

@@ -38,7 +38,7 @@ export default function FilterInput({
       // if (!query) return;
       debounceSearch();
     }
-  }, [query, debounce, mount, debounceSearch]);
+  }, [query, debounce, debounceSearch]);
 
   useEffect(() => {
     setMount(true);

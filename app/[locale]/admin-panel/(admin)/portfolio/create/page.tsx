@@ -4,16 +4,16 @@ import { getAllCategories } from "@/data/category";
 import { redirect } from "next/navigation";
 
 export default async function App() {
-  const [{ admin }, { data: categories }] = await Promise.all([
+  const [{ auth }, { data: categories }] = await Promise.all([
     getAdminSession(),
     getAllCategories(),
   ]);
-  if (!admin) {
+  if (!auth) {
     return redirect("/admin-panel/login");
   }
   return (
     <div className="p-4">
-      <PortfolioForm admin={admin} categories={categories || []} />
+      <PortfolioForm admin={auth} categories={categories || []} />
     </div>
   );
 }

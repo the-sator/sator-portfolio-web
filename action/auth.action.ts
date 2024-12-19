@@ -1,14 +1,16 @@
 "use server";
 
 import { adminLogin, adminSetUpTotp, adminSignout } from "@/data/admin";
-import { AdminLoginSchema, UpdateAdminTotpSchema } from "@/types/admin.type";
+import { userlogin } from "@/data/user";
+import { UpdateAdminTotpSchema } from "@/types/admin.type";
+import { LoginSchema } from "@/types/auth.type";
 import { deleteSessionCookies, setSessionCookies } from "@/utils/session";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-export async function login(formData: unknown) {
-  const result = AdminLoginSchema.safeParse(formData);
+export async function adminLoginAction(formData: unknown) {
+  const result = LoginSchema.safeParse(formData);
   if (!result.success) {
     return {
       error: result.error.format(),
@@ -23,7 +25,11 @@ export async function login(formData: unknown) {
   });
 
   if (!error && data) {
-    await setSessionCookies(data.session.token, String(data.session.expiredAt));
+    await setSessionCookies(
+      "session-admin",
+      data.session.token,
+      String(data.session.expiredAt),
+    );
     revalidatePath("/", "layout");
     revalidateTag("admin");
     redirect("/admin-panel/user");
@@ -34,10 +40,10 @@ export async function login(formData: unknown) {
   }
 }
 
-export async function signout(id: string) {
+export async function adminSignoutAction(id: string) {
   const { data, error } = await adminSignout(id);
   if (!error && data) {
-    await deleteSessionCookies();
+    await deleteSessionCookies("session-admin");
     revalidatePath("/", "layout");
     revalidateTag("admin-session");
     revalidateTag("admin");
@@ -74,4 +80,36 @@ export async function adminTotp(formData: unknown) {
 export async function getSessionCookies() {
   const cookieStore = await cookies();
   return cookieStore.get("session");
+}
+
+/* User */
+export async function userLoginAction(formData: unknown) {
+  const result = LoginSchema.safeParse(formData);
+  if (!result.success) {
+    return {
+      error: result.error.format(),
+    };
+  }
+
+  const { data, error } = await userlogin({
+    email: result.data.email,
+    password: result.data.password,
+    username: result.data.username,
+    otp: result.data.otp,
+  });
+
+  if (!error && data) {
+    await setSessionCookies(
+      "session-user",
+      data.session.token,
+      String(data.session.expiredAt),
+    );
+    revalidatePath("/", "layout");
+    revalidateTag("admin");
+    redirect("/chat");
+  } else {
+    return {
+      error: error,
+    };
+  }
 }

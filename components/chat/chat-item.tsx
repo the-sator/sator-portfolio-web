@@ -6,10 +6,15 @@ import { cn } from "@/lib/utils";
 type Props = {
   room: ChatRoom;
   activeRoomId?: string;
+  isAdmin?: boolean;
 };
-export default function ChatItem({ room, activeRoomId }: Props) {
+export default function ChatItem({
+  room,
+  activeRoomId,
+  isAdmin = false,
+}: Props) {
   return (
-    <Link href={`/admin-panel/chat/${room.id}`}>
+    <Link href={isAdmin ? `/admin-panel/chat/${room.id}` : `/chat/${room.id}`}>
       <div
         className={cn(
           "flex w-full justify-between rounded-md px-1 py-2 hover:cursor-pointer hover:bg-popover",

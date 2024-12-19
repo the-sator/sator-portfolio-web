@@ -6,6 +6,9 @@ import {
 } from "@/types/chat.type";
 import { fetchApi } from "@/utils/fetch-client";
 import { toQueryString } from "@/utils/string";
+const getAdminPath = () => {
+  return "/admin/chat-message";
+};
 const getPath = () => {
   return "/admin/chat-message";
 };
@@ -18,7 +21,7 @@ const getPath = () => {
 // };
 
 export const sendMessage = async (payload: CreateChatMessage) => {
-  const data = await fetchApi.post<ChatMessage>(`${getPath()}`, payload, [
+  const data = await fetchApi.post<ChatMessage>(`${getAdminPath()}`, payload, [
     `chat-message:${payload.chat_room_id}`,
   ]);
   return data;
@@ -27,9 +30,10 @@ export const sendMessage = async (payload: CreateChatMessage) => {
 export const paginateMessagesByRoomID = async (
   roomId: string,
   filter: ChatMessageFilter,
+  isAdmin: boolean,
 ) => {
   //TODO: Add Filter Later
-  const fullUrl = `${getPath()}/${roomId}${toQueryString({ ...filter })}`;
+  const fullUrl = `${getAdminPath()}/${roomId}${toQueryString({ ...filter })}`;
   const { data, error } = await fetchApi.get<PaginateResult<ChatMessage[]>>(
     fullUrl,
     [`chat-message:${roomId}`],
