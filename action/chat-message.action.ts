@@ -20,8 +20,13 @@ export const refetchChatMessage = async (roomId: string) => {
 export const paginateMessageByRoomIDAction = async (
   roomId: string,
   filter: ChatMessageFilter,
+  isAdmin: boolean,
 ) => {
-  const { data, page } = await paginateMessagesByRoomID(roomId, filter);
+  const { data, page } = await paginateMessagesByRoomID(
+    roomId,
+    filter,
+    isAdmin,
+  );
 
   return { data, page };
 };

@@ -1,9 +1,6 @@
-import { toast } from "@/hooks/use-toast";
-import useConfirmationStore from "@/store/confirmation";
-import { useOverlay } from "@/store/overlay";
-import { useSelectedItem } from "@/store/selected-item";
+import { User } from "@/types/user.type";
 import { Row } from "@tanstack/react-table";
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,35 +10,17 @@ import {
 } from "../../dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
 import { Button } from "../../button";
-import { FormQuestion } from "@/types/portfolio-form.type";
-import { deleteQuestionAction } from "@/action/portfolio-form.action";
+import useConfirmationStore from "@/store/confirmation";
+import { useOverlay } from "@/store/overlay";
+import { useSelectedItem } from "@/store/selected-item";
 
-export const PortfolioFormActionColumn = ({
-  row,
-}: {
-  row: Row<FormQuestion>;
-}) => {
-  const Question = row.original;
+export default function UserActionColumn({ row }: { row: Row<User> }) {
+  const User = row.original;
   const [open, setOpen] = useState(false);
   const { openConfirmation } = useConfirmationStore();
-  const { setSelectedItem } = useSelectedItem();
-  const { setShowModal } = useOverlay();
-  const handleDelete = async () => {
-    const { error } = await deleteQuestionAction(Question.id);
-    if (error) {
-      toast({
-        title: "Error Delete Portfolio Question",
-        description: error.error,
-        variant: "destructive",
-        duration: 1500,
-      });
-    } else {
-      toast({
-        title: "Portfolio Question Deleted",
-        variant: "success",
-        duration: 1500,
-      });
-    }
+  //TODO: Delete user
+  const handleDelete = () => {
+    console.log("DELETE USER...");
   };
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
@@ -55,18 +34,6 @@ export const PortfolioFormActionColumn = ({
         <DropdownMenuLabel className="sr-only text-label">
           Actions
         </DropdownMenuLabel>
-        <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="p-0">
-          <Button
-            variant={"ghost"}
-            className="flex h-fit w-full justify-start px-2 py-1"
-            onClick={() => {
-              setSelectedItem(Question.id);
-              setShowModal(true);
-            }}
-          >
-            Edit
-          </Button>
-        </DropdownMenuItem>
         <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="p-0">
           <Button
             className="flex h-fit w-full justify-start px-2 py-1 text-red-500 hover:text-red-400"
@@ -89,4 +56,4 @@ export const PortfolioFormActionColumn = ({
       </DropdownMenuContent>
     </DropdownMenu>
   );
-};
+}

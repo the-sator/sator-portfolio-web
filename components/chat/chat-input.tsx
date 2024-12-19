@@ -11,14 +11,15 @@ import {
 import { Admin } from "@/types/admin.type";
 import { toast } from "@/hooks/use-toast";
 import { sendMessageAction } from "@/action/chat-message.action";
+import { Auth } from "@/types/auth.type";
 type Props = {
+  auth: Partial<Auth>;
   room: ChatRoom;
-  admin: Admin;
 };
-export default function ChatInput({ room, admin }: Props) {
+export default function ChatInput({ room, auth }: Props) {
   const [content, setContent] = useState("");
   const chat_member = room.chat_members.find(
-    (member) => member.admin_id === admin.id,
+    (member) => member.admin_id === auth.id || member.user_id === auth.id,
   );
 
   const handleSendMessage = async () => {

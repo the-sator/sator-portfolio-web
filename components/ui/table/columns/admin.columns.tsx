@@ -1,28 +1,14 @@
 "use client";
 import { formatDate } from "@/utils/date";
 import { ColumnDef } from "@tanstack/react-table";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../../dropdown-menu";
-import { MoreHorizontal } from "lucide-react";
-import { Button } from "../../button";
+
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "../data-table-columns/data-table-column-header";
 import { Admin } from "@/types/admin.type";
 import { FaCheck } from "react-icons/fa6";
 import { IoClose } from "react-icons/io5";
-import { useSelectedItem } from "@/store/selected-item";
-import { useOverlay } from "@/store/overlay";
 import Tag from "../../tag";
-
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-
+import { AdminActionColumn } from "../action-columns/admin.action-column";
 export const AdminColumns: ColumnDef<Admin>[] = [
   {
     id: "select",
@@ -115,46 +101,6 @@ export const AdminColumns: ColumnDef<Admin>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => {
-      const Admin = row.original;
-      const { setSelectedItem } = useSelectedItem();
-      const { setShowModal } = useOverlay();
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel className="sr-only text-label">
-              Actions
-            </DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(Admin.id)}
-            >
-              Copy User ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onSelect={(e) => e.preventDefault()}
-              className="p-0"
-            >
-              <Button
-                variant={"ghost"}
-                className="flex h-fit w-full justify-start px-2 py-1"
-                onClick={() => {
-                  setSelectedItem(Admin.id);
-                  setShowModal(true);
-                }}
-              >
-                Assign Role
-              </Button>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    cell: AdminActionColumn,
   },
 ];

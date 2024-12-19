@@ -13,16 +13,21 @@ export function getChatRoomQueryKey(roomId: string) {
 export function useGetInfiniteAdminChat(
   roomId: string,
   filter: ChatMessageFilter,
+  isAdmin: boolean,
   options: object,
 ) {
   return useInfiniteQuery({
     queryKey: getChatRoomQueryKey(roomId),
     queryFn: ({ pageParam }) => {
-      return paginateMessageByRoomIDAction(roomId, {
-        ...filter,
-        page: String(pageParam),
-        limit: "20",
-      });
+      return paginateMessageByRoomIDAction(
+        roomId,
+        {
+          ...filter,
+          page: String(pageParam),
+          limit: "20",
+        },
+        isAdmin,
+      );
     },
     getNextPageParam: (lastPage) => {
       return lastPage.page !== null ? lastPage.page : undefined;

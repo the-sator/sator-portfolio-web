@@ -10,11 +10,13 @@ import {
 import { InputWithLabel } from "../input-label";
 import SubmitButton from "../button/submit-button";
 import { toast } from "@/hooks/use-toast";
-import { login } from "@/action/auth.action";
+import { adminLoginAction, userLoginAction } from "@/action/auth.action";
 import { ZodFormattedError } from "zod";
 import { AdminLoginSchema } from "@/types/admin.type";
-
-export default function LoginForm() {
+type Props = {
+  isAdmin: boolean;
+};
+export default function LoginForm({ isAdmin }: Props) {
   const [errors, setErrors] =
     useState<ZodFormattedError<AdminLoginSchema> | null>(null);
 
@@ -27,7 +29,12 @@ export default function LoginForm() {
       password: formData.get("password"),
       otp: Number(formData.get("otp")),
     };
-    const response = await login(data);
+    let response;
+    if (isAdmin) {
+      response = await adminLoginAction(data);
+    } else {
+      response = await userLoginAction(data);
+    }
     if (response?.error) {
       //IF is http error then show toast
       if ("statusCode" in response.error) {
@@ -60,7 +67,7 @@ export default function LoginForm() {
     <Card className="min-w-[400px] p-2">
       <CardHeader>
         <CardTitle>Login</CardTitle>
-        <CardDescription>Login to admin dashboard</CardDescription>
+        {isAdmin && <CardDescription>Login to admin dashboard</CardDescription>}
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">

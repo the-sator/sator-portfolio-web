@@ -17,7 +17,9 @@ export default function ChatBubble({ isMe = true, message }: Props) {
       >
         {!isMe && (
           <p className="text-xs font-bold">
-            {message.chat_member.admin?.username}
+            {message.chat_member.admin
+              ? message.chat_member.admin.username
+              : message.chat_member.user?.username}
           </p>
         )}
         <p>{message.content}</p>

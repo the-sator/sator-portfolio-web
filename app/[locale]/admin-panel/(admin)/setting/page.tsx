@@ -9,19 +9,19 @@ import { getAdminSession } from "@/data/admin";
 import { redirect } from "next/navigation";
 
 export default async function page() {
-  const { admin, session } = await getAdminSession();
+  const { auth, session } = await getAdminSession();
   if (!session) {
-    return redirect("/admin/login");
+    return redirect("/admin-panel/login");
   }
-  if (!admin) {
-    return redirect("/admin/login");
+  if (!auth) {
+    return redirect("/admin-panel/login");
   }
   const totpKey = new Uint8Array(20);
   crypto.getRandomValues(totpKey);
   const encodedTOTPKey = encodeBase64(totpKey);
   const keyURI = createTOTPKeyURI(
     "Sator Portfolio",
-    admin.username,
+    auth.username,
     totpKey,
     30,
     6,
@@ -52,7 +52,7 @@ export default async function page() {
           <TotpModal
             qrcode={qrcode}
             encodedTOTPKey={encodedTOTPKey}
-            admin={admin}
+            admin={auth}
             session={session}
           />
           {/* <Button variant={"outline"}>Set up</Button> */}

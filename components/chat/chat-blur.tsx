@@ -5,16 +5,18 @@ import { ChatMemberRole, ChatRoom, CreateChatMember } from "@/types/chat.type";
 import { Admin } from "@/types/admin.type";
 import { toast } from "@/hooks/use-toast";
 import { joinAction } from "@/action/chat-member.action";
+import { Auth } from "@/types/auth.type";
 type Props = {
   room: ChatRoom;
-  admin: Admin;
+  auth: Partial<Auth>;
 };
-export default function ChatBlur({ room, admin }: Props) {
+export default function ChatBlur({ room, auth }: Props) {
   const handleJoinRoom = async () => {
     const payload: CreateChatMember = {
       chat_room_id: room.id,
       role: ChatMemberRole.ADMIN,
-      admin_id: admin.id,
+      admin_id: auth.id,
+      user_id: auth.id,
     };
     const { error } = await joinAction(payload);
     if (error) {

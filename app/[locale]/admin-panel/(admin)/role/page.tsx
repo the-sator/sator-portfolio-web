@@ -21,7 +21,6 @@ export default async function page() {
         <h1 className="text-2xl">{t("role")}</h1>
         <CreateRoleModal resources={resources} error={resourceErr} />
         <EditRoleModal resources={resources} roles={roles} />
-        {/* <DeleteAlertDialog /> */}
       </div>
       <DataTable columns={RoleColumns} data={roles || []} error={roleErr} />
     </div>

@@ -19,27 +19,22 @@ const isPublicPath = (pathname: string) => {
 export async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
 
-  // Skip authentication check for public paths
   if (isPublicPath(pathname)) {
     return intlMiddleware(req);
   }
 
-  // Check if the path is under /admin
   if (pathname.replace(/^\/(en|kh)/, "").startsWith("/admin-panel")) {
-    const { error } = await getAdminSession();
+    const { auth, error } = await getAdminSession();
 
     if (error) {
-      // Get the locale from the current path or default to 'en'
       const locale = pathname.startsWith("/kh") ? "kh" : "en";
       const url = new URL(`/${locale}/admin-panel/login`, req.url);
 
-      // Add the original URL as a callback parameter
       url.searchParams.set("callbackUrl", pathname);
 
       return NextResponse.redirect(url);
     }
 
-    // Handle the /admin root path redirect
     if (pathname.replace(/^\/(en|kh)/, "") === "/admin-panel") {
       const locale = pathname.startsWith("/kh") ? "kh" : "en";
       return NextResponse.redirect(
@@ -48,7 +43,6 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  // Continue with internationalization middleware
   return intlMiddleware(req);
 }
 
