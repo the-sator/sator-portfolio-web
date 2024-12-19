@@ -11,7 +11,6 @@ export async function apiFetch<T>(
   const cookie = isAdmin
     ? (await cookies()).get("session-admin")?.value
     : (await cookies()).get("session-user")?.value;
-  console.log("cookie:", cookie);
   const defaultOptions: RequestInit = {
     credentials: "include", // Important for cookies
     headers: {
@@ -49,7 +48,7 @@ export async function apiFetch<T>(
     if (contentType && contentType.includes("application/json")) {
       const json = await response.json();
       return {
-        data: json.data ?? json,
+        data: json.data as T,
         error: null,
       };
     }

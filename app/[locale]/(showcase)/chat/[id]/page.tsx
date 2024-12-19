@@ -14,13 +14,17 @@ type Props = {
 export default async function page({ params, searchParams }: Props) {
   const id = (await params).id;
   const filter = await searchParams;
-  const [{ data: rooms }, { data: room }, { error }, { auth }] =
-    await Promise.all([
-      getUserChatRoom(),
-      getById(id),
-      paginateMessagesByRoomID(id, filter, false),
-      getUserSession(),
-    ]);
+  const [
+    { data: rooms },
+    { data: room, error: roomError },
+    { error },
+    { auth },
+  ] = await Promise.all([
+    getUserChatRoom(),
+    getById(id),
+    paginateMessagesByRoomID(id, filter, false),
+    getUserSession(),
+  ]);
 
   if (!auth) {
     redirect("/admin-panel/login");

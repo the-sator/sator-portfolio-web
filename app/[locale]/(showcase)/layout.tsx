@@ -34,28 +34,26 @@ export default function layout({ children }: { children: React.ReactNode }) {
   ];
   return (
     <div>
-      <header>
-        <nav className="flex h-14 w-full items-center justify-between border-b px-20">
-          <div className="flex gap-20">
-            <p>LOGO</p>
-            <ul className="flex gap-4">
-              {navItems.map((item) => (
-                <li key={item.id}>
-                  <Link href={item.href}>{item.label}</Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="flex items-center gap-6">
-            <Link href={"/chat"}>
-              <IoChatbox size={20} />
-            </Link>
-            <LinkButton href={"/login"} className="h-7">
-              Login
-            </LinkButton>
-          </div>
-        </nav>
-      </header>
+      <nav className="flex h-14 w-full items-center justify-between border-b px-20">
+        <div className="flex gap-20">
+          <p>LOGO</p>
+          <ul className="flex gap-4">
+            {navItems.map((item) => (
+              <li key={item.id}>
+                <Link href={item.href}>{item.label}</Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="flex items-center gap-6">
+          <Link href={"/chat"}>
+            <IoChatbox size={20} />
+          </Link>
+          <LinkButton href={"/login"} className="h-7">
+            Login
+          </LinkButton>
+        </div>
+      </nav>
       {children}
     </div>
   );

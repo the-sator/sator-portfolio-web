@@ -47,7 +47,6 @@ export default function ChatPane({
     }
 
     if (data) {
-      console.log("data:", data);
       const allMessages = data.pages.flatMap((page) => page.data || []);
       setChatMessages(allMessages);
     }

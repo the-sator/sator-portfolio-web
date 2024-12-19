@@ -111,7 +111,6 @@ export default function PortfolioForm({ admin, categories, portfolio }: Props) {
       } else {
         //ELSE set Zod error to input
         setErrors(response.error);
-        console.log("response.error:", response.error);
       }
     } else {
       toast({

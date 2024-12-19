@@ -12,15 +12,18 @@ import { Admin } from "@/types/admin.type";
 import { toast } from "@/hooks/use-toast";
 import { sendMessageAction } from "@/action/chat-message.action";
 import { Auth } from "@/types/auth.type";
+import { notFound } from "next/navigation";
 type Props = {
   auth: Partial<Auth>;
   room: ChatRoom;
 };
 export default function ChatInput({ room, auth }: Props) {
   const [content, setContent] = useState("");
-  const chat_member = room.chat_members.find(
-    (member) => member.admin_id === auth.id || member.user_id === auth.id,
-  );
+  const chat_member = room.chat_members
+    ? room.chat_members.find(
+        (member) => member.admin_id === auth.id || member.user_id === auth.id,
+      )
+    : undefined;
 
   const handleSendMessage = async () => {
     if (!content.trim()) {

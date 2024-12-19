@@ -22,12 +22,12 @@ export default async function page({ params, searchParams }: Props) {
       getAdminSession(),
     ]);
 
-  if (!auth) {
-    redirect("/admin-panel/login");
-  }
-
   if (!room) {
     notFound();
+  }
+
+  if (!auth) {
+    redirect("/login");
   }
 
   return (

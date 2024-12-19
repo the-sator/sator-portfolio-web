@@ -46,9 +46,6 @@ export const getUserSession = async () => {
   const { data, error } = await fetchApi.get<AuthSession>(`${getPath()}/me`, [
     "user-sessin",
   ]);
-  error;
-  console.log("error:", error);
-  console.log("user:", data);
   const { auth, session } = data || {};
   return { auth, session, error };
 };

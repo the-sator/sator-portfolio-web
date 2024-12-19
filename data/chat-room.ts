@@ -15,10 +15,12 @@ export const getAllRooms = async () => {
 };
 
 export const getById = async (id: string) => {
-  const data = await fetchApi.get<ChatRoom>(`${getAdminPath()}/${id}`, [
-    `chat-room:${id}`,
-  ]);
-  return data;
+  const { data, error } = await fetchApi.get<ChatRoom>(
+    `${getAdminPath()}/${id}`,
+    [`chat-room:${id}`],
+  );
+  console.log("data:", data);
+  return { data, error };
 };
 
 /* USER */
@@ -26,6 +28,5 @@ export const getUserChatRoom = async () => {
   const data = await fetchApi.get<ChatRoom[]>(`${getPath()}/user`, [
     "chat-room",
   ]);
-  console.log("data:", data);
   return data;
 };
