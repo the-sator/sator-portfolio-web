@@ -1,7 +1,6 @@
 import ChatList from "@/components/chat/chat-list";
-import ChatWindow from "@/components/chat/chat-window";
 import { Input } from "@/components/ui/input";
-import { getAllRooms, getUserChatRoom } from "@/data/chat-room";
+import { getAllRooms } from "@/data/chat-room";
 import React from "react";
 
 export default async function page() {
