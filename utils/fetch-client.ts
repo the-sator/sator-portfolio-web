@@ -58,7 +58,6 @@ export async function apiFetch<T>(
       error: null,
     };
   } catch (error) {
-    console.error("API Error:", error);
     return {
       data: null,
       error: {

@@ -2,12 +2,11 @@
 import React, { useEffect, useState } from "react";
 import ChatBubble from "./chat-bubble";
 import { ChatMessage, ChatMessageFilter, ChatRoom } from "@/types/chat.type";
-import { Admin } from "@/types/admin.type";
 import socket from "@/lib/socket";
 import { isDifferentDay } from "@/utils/date";
 import ChatDate from "./chat-date";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { useGetInfiniteAdminChat } from "@/data/query/admin-chat";
+import { useGetInfiniteAdminChat } from "@/data/query/chat-message";
 import { toast } from "@/hooks/use-toast";
 import Spinner from "../ui/spinner";
 import { Auth } from "@/types/auth.type";
@@ -33,10 +32,13 @@ export default function ChatPane({
     isFetchingNextPage,
     hasNextPage,
   } = useGetInfiniteAdminChat(room.id, filter, isAdmin, {});
-  const handleUpdateChatRoom = async () => {
-    await refetch();
-  };
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+
+  const handleChatMessage = (message: ChatMessage) => {
+    setChatMessages((prev) => {
+      return [message, ...prev];
+    });
+  };
   useEffect(() => {
     if (isError) {
       toast({
@@ -53,15 +55,15 @@ export default function ChatPane({
   }, [data, isError]);
 
   useEffect(() => {
-    socket.on(`chat-room:${room.id}`, handleUpdateChatRoom);
+    socket.on(`chat-room:${room.id}`, handleChatMessage);
     return () => {
-      socket.off(`chat-room:${room.id}`, handleUpdateChatRoom);
+      socket.off(`chat-room:${room.id}`, handleChatMessage);
     };
   });
 
   return (
     <div
-      className="flex h-[calc(100%-90px)] w-full flex-col-reverse gap-4 overflow-auto px-4 py-3"
+      className="flex h-[calc(100%-88px)] w-full flex-col-reverse gap-4 overflow-auto px-4 py-3"
       id="scroll-container"
     >
       {isLoading && (

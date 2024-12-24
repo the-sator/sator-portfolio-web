@@ -1,17 +1,5 @@
+import { Color } from "@/enum/base.enum";
 import { z } from "zod";
-
-export enum Color {
-  BLUE = "BLUE",
-  RED = "RED",
-  VIOLET = "VIOLET",
-  PURPLE = "PURPLE",
-  GREEN = "GREEN",
-  YELLOW = "YELLOW",
-  ORANGE = "ORANGE",
-  GRAY = "GRAY",
-  TEAL = "TEAL",
-  INDIGO = "INDIGO",
-}
 
 export type Category = {
   id: string;
