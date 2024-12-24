@@ -35,6 +35,14 @@ export const inviteChatMember = async (payload: InviteChatMember) => {
   return data;
 };
 
+export const leave = async (roomId: string) => {
+  const data = await fetchApi.post<ChatMember>(
+    `${getAdminPath()}/${roomId}/leave`,
+    [`chat-member`],
+  );
+  return data;
+};
+
 export const removeChatMember = async (id: string) => {
   const data = await fetchApi.delete<ChatMember>(`${getAdminPath()}/${id}`, [
     `chat-member`,

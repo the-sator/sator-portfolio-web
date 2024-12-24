@@ -31,7 +31,9 @@ export default async function page({ params, searchParams }: Props) {
 
   return (
     <div className="relative col-span-2 h-[calc(100svh-72px)] w-full overflow-hidden rounded-sm bg-accent">
-      {error && <ChatBlur room={room} auth={auth} />}
+      {error && (
+        <ChatBlur room={room} filter={filter} auth={auth} isAdmin={true} />
+      )}
       <ChatWindow
         filter={filter}
         room={room}

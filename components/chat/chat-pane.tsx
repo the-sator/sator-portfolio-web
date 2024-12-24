@@ -33,9 +33,10 @@ export default function ChatPane({
     hasNextPage,
   } = useGetInfiniteAdminChat(room.id, filter, isAdmin, {});
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+  const [newMessages, setNewMessages] = useState<ChatMessage[]>([]);
 
   const handleChatMessage = (message: ChatMessage) => {
-    setChatMessages((prev) => {
+    setNewMessages((prev) => {
       return [message, ...prev];
     });
   };
@@ -50,16 +51,25 @@ export default function ChatPane({
 
     if (data) {
       const allMessages = data.pages.flatMap((page) => page.data || []);
-      setChatMessages(allMessages);
+      const mergedMessages = [...newMessages, ...allMessages].reduce(
+        (acc, message) => {
+          if (!acc.find((m) => m.id === message.id)) {
+            acc.push(message);
+          }
+          return acc;
+        },
+        [] as ChatMessage[],
+      );
+      setChatMessages(mergedMessages);
     }
-  }, [data, isError]);
+  }, [data, isError, newMessages]);
 
   useEffect(() => {
     socket.on(`chat-room:${room.id}`, handleChatMessage);
     return () => {
       socket.off(`chat-room:${room.id}`, handleChatMessage);
     };
-  });
+  }, [room.id]);
 
   return (
     <div

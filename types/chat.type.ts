@@ -10,6 +10,7 @@ export type ChatMember = {
   chat_room_id: string;
   role: ChatMemberRole;
   joined_at: Date;
+  left_at?: Date;
   admin?: Admin;
   user?: User;
   chat_room: ChatRoom;

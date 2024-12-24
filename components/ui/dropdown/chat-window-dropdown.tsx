@@ -12,11 +12,30 @@ import { Button } from "../button";
 import { IoLogOutSharp, IoPersonAdd } from "react-icons/io5";
 import { ChatRoomDetailModal, ChatRoomInvite } from "../modal/chat-room-modals";
 import { ChatRoom, InvitableChatMember } from "@/types/chat.type";
+import useConfirmationStore from "@/store/confirmation";
+import { leaveAction } from "@/action/chat-member.action";
+import { toast } from "@/hooks/use-toast";
 type Props = {
   room: ChatRoom;
   member?: InvitableChatMember | null;
 };
 export default function ChatWindowDropdown({ room, member }: Props) {
+  const { openConfirmation } = useConfirmationStore();
+  const handleLeave = async () => {
+    const { error } = await leaveAction(room.id);
+    if (error) {
+      toast({
+        title: "Leave Error",
+        description: error.error,
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Leave Successful",
+        variant: "success",
+      });
+    }
+  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -49,6 +68,15 @@ export default function ChatWindowDropdown({ room, member }: Props) {
             onClick={(e) => {
               e.stopPropagation();
               e.preventDefault();
+              openConfirmation({
+                title: "Are you absolutely sure?",
+                description:
+                  "This action cannot be undone. You are about to leave the chat room.",
+                cancelLabel: "Cancel",
+                actionLabel: "Confirm",
+                onCancel: () => {},
+                onAction: handleLeave,
+              });
             }}
           >
             <IoLogOutSharp size={14} />

@@ -1,23 +1,35 @@
 "use client";
 import React from "react";
 import { Button } from "../ui/button";
-import { ChatRoom, CreateChatMember } from "@/types/chat.type";
+import {
+  ChatMessageFilter,
+  ChatRoom,
+  CreateChatMember,
+} from "@/types/chat.type";
 import { Admin } from "@/types/admin.type";
 import { toast } from "@/hooks/use-toast";
 import { joinAction } from "@/action/chat-member.action";
 import { Auth } from "@/types/auth.type";
 import { ChatMemberRole } from "@/enum/chat.enum";
+import {
+  getChatRoomQueryKey,
+  useGetInfiniteAdminChat,
+} from "@/data/query/chat-message";
+import { QueryKey, useQueryClient } from "@tanstack/react-query";
 type Props = {
   room: ChatRoom;
   auth: Partial<Auth>;
+  filter: ChatMessageFilter;
+  isAdmin: boolean;
 };
-export default function ChatBlur({ room, auth }: Props) {
+export default function ChatBlur({ room, auth, filter, isAdmin }: Props) {
+  const queryClient = useQueryClient();
   const handleJoinRoom = async () => {
     const payload: CreateChatMember = {
       chat_room_id: room.id,
-      role: ChatMemberRole.ADMIN,
-      admin_id: auth.id,
-      user_id: auth.id,
+      role: isAdmin ? ChatMemberRole.ADMIN : ChatMemberRole.MEMBER,
+      admin_id: isAdmin ? auth.id : undefined,
+      user_id: isAdmin ? undefined : auth.id,
     };
     const { error } = await joinAction(payload);
     if (error) {
@@ -26,6 +38,8 @@ export default function ChatBlur({ room, auth }: Props) {
         description: error.error,
         variant: "destructive",
       });
+    } else {
+      queryClient.invalidateQueries({ queryKey: getChatRoomQueryKey(room.id) });
     }
   };
   return (

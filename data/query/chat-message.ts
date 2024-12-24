@@ -14,7 +14,7 @@ export function useGetInfiniteAdminChat(
   roomId: string,
   filter: ChatMessageFilter,
   isAdmin: boolean,
-  options: object,
+  options?: object,
 ) {
   return useInfiniteQuery({
     queryKey: getChatRoomQueryKey(roomId),
