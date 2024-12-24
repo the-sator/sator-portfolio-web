@@ -2,6 +2,7 @@ import { z } from "zod";
 import { Admin } from "./admin.type";
 import { User } from "./user.type";
 import { BaseFilterSchema } from "./base.type";
+import { ChatMemberRole, ChatMessageType } from "@/enum/chat.enum";
 export type ChatMember = {
   id: string;
   admin_id: string;
@@ -38,14 +39,10 @@ export type ChatMessage = {
   chat_room: ChatRoom;
 };
 
-export enum ChatMessageType {
-  TEXT = "TEXT",
-  IMAGE = "IMAGE",
-}
-export enum ChatMemberRole {
-  MEMBER = "MEMBER",
-  ADMIN = "ADMIN",
-}
+export type InvitableChatMember = {
+  admins: Admin[];
+  users: User[];
+};
 
 export const CreateChatMessageSchema = z.object({
   chat_member_id: z.string(),
@@ -61,10 +58,28 @@ export const CreateChatMemberSchema = z.object({
   chat_room_id: z.string({ message: "Chat Room ID is Required" }),
 });
 
+export const CreateChatRoomSchema = z.object({
+  name: z.string().min(1, { message: "Name is Required" }),
+  chat_members: z.array(z.string()).optional(),
+  is_group: z.boolean().optional(),
+});
+
 export const ChatMessageFilterSchema = BaseFilterSchema.extend({
   content: z.string().optional(),
 });
 
+export const InviteChatMemberSchema = z.object({
+  chat_members: z.array(z.string(), { message: "Chat Member is Required" }),
+  chat_room_id: z.string({ message: "Chat Room ID is Required" }),
+});
+
+export const ChangeChatRoomNameSchema = z.object({
+  name: z.string({ message: "Name is Required" }),
+});
+
 export type CreateChatMember = z.infer<typeof CreateChatMemberSchema>;
 export type CreateChatMessage = z.infer<typeof CreateChatMessageSchema>;
+export type CreateChatRoom = z.infer<typeof CreateChatRoomSchema>;
+export type ChangeChatRoomName = z.infer<typeof ChangeChatRoomNameSchema>;
 export type ChatMessageFilter = z.infer<typeof ChatMessageFilterSchema>;
+export type InviteChatMember = z.infer<typeof InviteChatMemberSchema>;

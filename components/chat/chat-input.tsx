@@ -3,16 +3,13 @@ import React, { useState } from "react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { MdSend } from "react-icons/md";
-import {
-  ChatMessageType,
-  ChatRoom,
-  CreateChatMessage,
-} from "@/types/chat.type";
+import { ChatRoom, CreateChatMessage } from "@/types/chat.type";
 import { Admin } from "@/types/admin.type";
 import { toast } from "@/hooks/use-toast";
 import { sendMessageAction } from "@/action/chat-message.action";
 import { Auth } from "@/types/auth.type";
 import { notFound } from "next/navigation";
+import { ChatMessageType } from "@/enum/chat.enum";
 type Props = {
   auth: Partial<Auth>;
   room: ChatRoom;

@@ -1,4 +1,8 @@
-import { ChatRoom } from "@/types/chat.type";
+import {
+  ChangeChatRoomName,
+  ChatRoom,
+  CreateChatRoom,
+} from "@/types/chat.type";
 import { fetchApi } from "@/utils/fetch-client";
 const getAdminPath = () => {
   return `/admin/chat-room`;
@@ -19,7 +23,27 @@ export const getById = async (id: string) => {
     `${getAdminPath()}/${id}`,
     [`chat-room:${id}`],
   );
-  console.log("data:", data);
+  return { data, error };
+};
+
+export const createChatRoom = async (payload: CreateChatRoom) => {
+  const { data, error } = await fetchApi.post<ChatRoom>(
+    `${getAdminPath()}`,
+    payload,
+    [`chat-room`],
+  );
+  return { data, error };
+};
+
+export const changeChatRoomName = async (
+  id: string,
+  payload: ChangeChatRoomName,
+) => {
+  const { data, error } = await fetchApi.post<ChatRoom>(
+    `${getAdminPath()}/${id}/change-name`,
+    payload,
+    [`chat-room:${id}`],
+  );
   return { data, error };
 };
 

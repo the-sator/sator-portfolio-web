@@ -1,11 +1,12 @@
 "use client";
 import React from "react";
 import { Button } from "../ui/button";
-import { ChatMemberRole, ChatRoom, CreateChatMember } from "@/types/chat.type";
+import { ChatRoom, CreateChatMember } from "@/types/chat.type";
 import { Admin } from "@/types/admin.type";
 import { toast } from "@/hooks/use-toast";
 import { joinAction } from "@/action/chat-member.action";
 import { Auth } from "@/types/auth.type";
+import { ChatMemberRole } from "@/enum/chat.enum";
 type Props = {
   room: ChatRoom;
   auth: Partial<Auth>;

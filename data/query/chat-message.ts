@@ -3,11 +3,11 @@ import { ChatMessageFilter } from "@/types/chat.type";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 export function getQueryKey() {
-  return ["messages"];
+  return ["chat-message"];
 }
 
 export function getChatRoomQueryKey(roomId: string) {
-  return [`chat-messages:${roomId}`];
+  return [`chat-message:${roomId}`];
 }
 
 export function useGetInfiniteAdminChat(

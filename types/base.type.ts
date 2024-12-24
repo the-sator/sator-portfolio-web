@@ -1,3 +1,4 @@
+import { UploadState } from "@/enum/base.enum";
 import { z } from "zod";
 
 export const breakpointColumnsObj = {
@@ -23,12 +24,6 @@ export type ImagePreview = {
   url: string | null;
   status: UploadState;
 };
-
-export enum UploadState {
-  PENDING = "pending",
-  UPLOADED = "uploaded",
-  FAILED = "failed",
-}
 
 export type InfinitePaginateResult<T> = {
   data: T;

@@ -13,12 +13,13 @@ import { MdDelete } from "react-icons/md";
 import { Input } from "../input";
 import { cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
-import { Color, CreateCategory } from "@/types/category.type";
+import { CreateCategory } from "@/types/category.type";
 import {
   deleteCategoryAction,
   updateCategoryAction,
 } from "@/action/category.action";
 import { toast } from "@/hooks/use-toast";
+import { Color } from "@/enum/base.enum";
 
 type Props = {
   category: {
