@@ -53,7 +53,7 @@ export const removeChatMemberAction = async (id: string, roomId: string) => {
 };
 
 export const leaveAction = async (roomId: string) => {
-  const { data, error } = await leave(roomId);
+  const { data, error } = await leave();
   if (error) {
     return { data: null, error };
   }
