@@ -39,8 +39,8 @@ import {
   inviteAction,
   removeChatMemberAction,
 } from "@/action/chat-member.action";
-import { removeChatMember } from "@/data/chat-member";
 import Spinner from "../spinner";
+import { Auth } from "@/types/auth.type";
 type Props = {
   member: InvitableChatMember | null;
   admin: Admin;
@@ -134,10 +134,11 @@ export function CreateChatRoomModal({ member, admin }: Props) {
 
 type DetailProps = {
   room: ChatRoom;
+  auth: Partial<Auth>;
 };
-export function ChatRoomDetailModal({ room }: DetailProps) {
+export function ChatRoomDetailModal({ room, auth }: DetailProps) {
   const [isEdit, setIsEdit] = useState(false);
-  const [isRemovePending, startRemoveTransition] = useTransition();
+  const [, startRemoveTransition] = useTransition();
   const [loadingMemberId, setLoadingMemberId] = useState<string | null>(null);
 
   const handleChangeName = async (formData: FormData) => {
@@ -237,13 +238,15 @@ export function ChatRoomDetailModal({ room }: DetailProps) {
             ) : (
               <div className="flex items-center gap-2">
                 <p className="text-md">{room.name}</p>
-                <Button
-                  variant="icon"
-                  className="h-fit w-fit p-0"
-                  onClick={() => setIsEdit(true)}
-                >
-                  <MdEdit />
-                </Button>
+                {auth.role_id && (
+                  <Button
+                    variant="icon"
+                    className="h-fit w-fit p-0"
+                    onClick={() => setIsEdit(true)}
+                  >
+                    <MdEdit />
+                  </Button>
+                )}
               </div>
             )}
           </div>
@@ -253,9 +256,7 @@ export function ChatRoomDetailModal({ room }: DetailProps) {
           <div className="mt-3 flex flex-col gap-2">
             {room.chat_members.map((member) => {
               const isAdmin = member.admin ? true : false;
-              console.log("loadingMemberId:", loadingMemberId);
               const isLoading = loadingMemberId === member.id;
-              console.log("isLoading:", isLoading);
               return (
                 <div
                   className="flex items-center justify-between"
@@ -279,16 +280,20 @@ export function ChatRoomDetailModal({ room }: DetailProps) {
                       )}
                     </div>
                   </div>
-                  {isLoading ? (
-                    <Spinner />
-                  ) : (
-                    <Button
-                      variant="icon"
-                      className="h-fit w-fit p-0"
-                      onClick={() => handleRemoveMember(member.id)}
-                    >
-                      <IoIosRemoveCircleOutline className="text-red-500 opacity-60 hover:opacity-100" />
-                    </Button>
+                  {auth.role_id && (
+                    <>
+                      {isLoading ? (
+                        <Spinner />
+                      ) : (
+                        <Button
+                          variant="icon"
+                          className="h-fit w-fit p-0"
+                          onClick={() => handleRemoveMember(member.id)}
+                        >
+                          <IoIosRemoveCircleOutline className="text-red-500 opacity-60 hover:opacity-100" />
+                        </Button>
+                      )}
+                    </>
                   )}
                 </div>
               );

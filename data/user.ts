@@ -44,7 +44,7 @@ export const userlogin = async (payload: Login) => {
 
 export const getUserSession = async () => {
   const { data, error } = await fetchApi.get<AuthSession>(`${getPath()}/me`, [
-    "user-sessin",
+    "user-session",
   ]);
   const { auth, session } = data || {};
   return { auth, session, error };

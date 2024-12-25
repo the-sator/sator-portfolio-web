@@ -1,9 +1,8 @@
 import ChatBlur from "@/components/chat/chat-blur";
-import ChatList from "@/components/chat/chat-list";
 import ChatWindow from "@/components/chat/chat-window";
-import { Input } from "@/components/ui/input";
+import { USER_LOGIN_PATH } from "@/constant/base";
 import { paginateMessagesByRoomID } from "@/data/chat-message";
-import { getAllRooms, getById, getUserChatRoom } from "@/data/chat-room";
+import { getById } from "@/data/chat-room";
 import { getUserSession } from "@/data/user";
 import { notFound, redirect } from "next/navigation";
 import React from "react";
@@ -14,20 +13,14 @@ type Props = {
 export default async function page({ params, searchParams }: Props) {
   const id = (await params).id;
   const filter = await searchParams;
-  const [
-    { data: rooms },
-    { data: room, error: roomError },
-    { error },
-    { auth },
-  ] = await Promise.all([
-    getUserChatRoom(),
+  const [{ data: room }, { error }, { auth }] = await Promise.all([
     getById(id),
     paginateMessagesByRoomID(id, filter, false),
     getUserSession(),
   ]);
 
   if (!auth) {
-    redirect("/admin-panel/login");
+    redirect(USER_LOGIN_PATH);
   }
 
   if (!room) {
@@ -36,7 +29,7 @@ export default async function page({ params, searchParams }: Props) {
 
   return (
     <div className="relative col-span-2 h-[calc(100svh-72px)] w-full overflow-hidden rounded-sm bg-accent">
-      {error && <ChatBlur room={room} auth={auth} />}
+      {error && <ChatBlur room={room} auth={auth} isAdmin={false} />}
       <ChatWindow filter={filter} room={room} auth={auth} isAdmin={false} />
     </div>
   );

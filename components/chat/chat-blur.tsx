@@ -6,23 +6,18 @@ import {
   ChatRoom,
   CreateChatMember,
 } from "@/types/chat.type";
-import { Admin } from "@/types/admin.type";
 import { toast } from "@/hooks/use-toast";
 import { joinAction } from "@/action/chat-member.action";
 import { Auth } from "@/types/auth.type";
 import { ChatMemberRole } from "@/enum/chat.enum";
-import {
-  getChatRoomQueryKey,
-  useGetInfiniteAdminChat,
-} from "@/data/query/chat-message";
-import { QueryKey, useQueryClient } from "@tanstack/react-query";
+import { getChatRoomQueryKey } from "@/data/query/chat-message";
+import { useQueryClient } from "@tanstack/react-query";
 type Props = {
   room: ChatRoom;
   auth: Partial<Auth>;
-  filter: ChatMessageFilter;
   isAdmin: boolean;
 };
-export default function ChatBlur({ room, auth, filter, isAdmin }: Props) {
+export default function ChatBlur({ room, auth, isAdmin }: Props) {
   const queryClient = useQueryClient();
   const handleJoinRoom = async () => {
     const payload: CreateChatMember = {

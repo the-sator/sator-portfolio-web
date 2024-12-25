@@ -30,7 +30,9 @@ export default async function layout({ children }: Props) {
           {rooms && rooms.length > 0 ? (
             <ChatList rooms={rooms} isAdmin={true} />
           ) : (
-            <div>No Result</div>
+            <div className="flex h-full items-center justify-center">
+              <p className="text-sm text-label">Click + to add chat room</p>
+            </div>
           )}
         </div>
       </div>

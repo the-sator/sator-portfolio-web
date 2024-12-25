@@ -23,6 +23,8 @@ export type ChatRoom = {
   updated_at: Date;
   name: string;
   is_group: boolean;
+  last_message_id?: string;
+  last_message?: ChatMessage;
   chat_members: ChatMember[];
   chat_messages: ChatMessage[];
 };
@@ -35,6 +37,7 @@ export type ChatMessage = {
   chat_member_id: string;
   chat_room_id: string;
   content: string;
+  media?: string[];
   message_type: ChatMessageType;
   chat_member: ChatMember;
   chat_room: ChatRoom;
@@ -48,7 +51,8 @@ export type InvitableChatMember = {
 export const CreateChatMessageSchema = z.object({
   chat_member_id: z.string(),
   chat_room_id: z.string(),
-  content: z.string().trim().min(1, { message: "Message cannot be empty" }),
+  content: z.string().trim(),
+  media: z.array(z.string()).optional(),
   message_type: z.nativeEnum(ChatMessageType),
 });
 

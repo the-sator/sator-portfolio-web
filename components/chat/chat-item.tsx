@@ -5,7 +5,6 @@ import { ChatRoom } from "@/types/chat.type";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useParams } from "next/navigation";
-import { formatTime } from "@/utils/date";
 type Props = {
   room: ChatRoom;
   isAdmin?: boolean;
@@ -13,6 +12,11 @@ type Props = {
 export default function ChatItem({ room, isAdmin = false }: Props) {
   const params = useParams();
   const time = new Date(room.updated_at);
+  const last_message_username = room.last_message
+    ? room.last_message.chat_member.user
+      ? room.last_message.chat_member.user.username
+      : room.last_message.chat_member.admin!.username
+    : "";
 
   return (
     <Link href={isAdmin ? `/admin-panel/chat/${room.id}` : `/chat/${room.id}`}>
@@ -22,18 +26,21 @@ export default function ChatItem({ room, isAdmin = false }: Props) {
           params.id === room.id && "bg-popover",
         )}
       >
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <Avatar className="size-11">
             <AvatarImage src="https://github.com/shadcn.png" />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
           <div>
-            <h2 className="font-semibold">{room.name}</h2>
-            <p className="text-sm text-label">How are you doing?</p>
+            <h2 className="line-clamp-1 font-semibold">{room.name}</h2>
+            <p className="line-clamp-1 text-sm text-label">
+              {room.last_message &&
+                `${last_message_username}: ${room.last_message.content}`}
+            </p>
           </div>
         </div>
         <div className="justify-end">
-          <p className="text-sm text-label">
+          <p className="text-xs text-label md:text-sm">
             {time.toLocaleTimeString("en-us", { timeStyle: "short" })}
           </p>
         </div>

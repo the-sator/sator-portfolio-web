@@ -1,5 +1,11 @@
 "use client";
-import React, { Dispatch, SetStateAction, useEffect, useRef } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Button } from "../button";
 import { Input } from "../input";
 import Masonry from "react-masonry-css";
@@ -7,17 +13,14 @@ import ImageContainerBlurClient from "../image/image-container-blur-client";
 import { IoIosClose } from "react-icons/io";
 import { uploadImage } from "@/data/upload";
 import Spinner from "../spinner";
-import {
-  breakpointColumnsObj,
-  ImagePreview,
-  UploadState,
-} from "@/types/base.type";
+import { breakpointColumnsObj, ImagePreview } from "@/types/base.type";
+import { UploadState } from "@/enum/base.enum";
 type UploadButtonProps = {
   children: React.ReactNode;
   className?: string;
   images: File[] | null;
   setImages: Dispatch<SetStateAction<File[] | null>>;
-  imagePreviews: ImagePreview[];
+  imagePreviews?: ImagePreview[];
   setImagePreviews: Dispatch<SetStateAction<ImagePreview[]>>;
 };
 
@@ -30,6 +33,7 @@ export default function MultiUploadButton({
   setImagePreviews,
 }: UploadButtonProps) {
   const uploadRef = useRef<HTMLInputElement>(null);
+  const [newImages, setNewImages] = useState<Set<File>>(new Set());
 
   const handleUploadClick = (event: React.PointerEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -41,24 +45,26 @@ export default function MultiUploadButton({
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       const filesArray = Array.from(event.target.files);
-      setImages(filesArray);
+      setImages((prev) => (prev ? [...prev, ...filesArray] : filesArray));
+      setNewImages((prev) => new Set([...prev, ...filesArray]));
     }
   };
 
   useEffect(() => {
     if (!images) return;
     const handleUploadGallery = async (images: File[]) => {
-      const previews: ImagePreview[] = images.map(() => {
-        return {
-          id: crypto.randomUUID(),
-          status: UploadState.PENDING,
-          url: null,
-        };
-      });
+      // Add new images to previews
+      const previews: ImagePreview[] = newImages
+        ? Array.from(newImages).map(() => ({
+            id: crypto.randomUUID(),
+            url: null,
+            status: UploadState.PENDING,
+          }))
+        : [];
 
       setImagePreviews((prev) => [...prev, ...previews]);
 
-      const startIndex = imagePreviews.length;
+      const startIndex = imagePreviews ? imagePreviews.length : 0;
 
       // Process each image
       const uploadPromises = images.map(async (image, localIndex) => {
@@ -89,6 +95,7 @@ export default function MultiUploadButton({
       });
 
       await Promise.all(uploadPromises);
+      setNewImages(new Set());
     };
 
     handleUploadGallery(images);

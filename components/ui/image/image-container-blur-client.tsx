@@ -14,6 +14,7 @@ type Props = {
   preview?: boolean;
   blur?: boolean;
   priority?: boolean;
+  style?: React.CSSProperties;
 };
 
 const handleClick = (e: React.MouseEvent) => {
@@ -30,6 +31,7 @@ export default function ImageContainerBlurClient({
   preview = true,
   priority = false,
   skeletonHeight,
+  style,
 }: Props) {
   const imageProps = {
     src,
@@ -50,7 +52,7 @@ export default function ImageContainerBlurClient({
   }
 
   return (
-    <div className={cn("relative", className)}>
+    <div className={cn("relative", className)} style={style}>
       {preview ? (
         <PhotoProvider>
           <div onClick={handleClick} className="h-full w-full">

@@ -7,19 +7,20 @@ import {
   DropdownMenuTrigger,
 } from "../dropdown-menu";
 import { SlOptionsVertical } from "react-icons/sl";
-import { BiSolidCommentDetail } from "react-icons/bi";
 import { Button } from "../button";
-import { IoLogOutSharp, IoPersonAdd } from "react-icons/io5";
+import { IoLogOutSharp } from "react-icons/io5";
 import { ChatRoomDetailModal, ChatRoomInvite } from "../modal/chat-room-modals";
 import { ChatRoom, InvitableChatMember } from "@/types/chat.type";
 import useConfirmationStore from "@/store/confirmation";
 import { leaveAction } from "@/action/chat-member.action";
 import { toast } from "@/hooks/use-toast";
+import { Auth } from "@/types/auth.type";
 type Props = {
   room: ChatRoom;
+  auth: Partial<Auth>;
   member?: InvitableChatMember | null;
 };
-export default function ChatWindowDropdown({ room, member }: Props) {
+export default function ChatWindowDropdown({ room, member, auth }: Props) {
   const { openConfirmation } = useConfirmationStore();
   const handleLeave = async () => {
     const { error } = await leaveAction(room.id);
@@ -45,18 +46,19 @@ export default function ChatWindowDropdown({ room, member }: Props) {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem className="p-0" onSelect={(e) => e.preventDefault()}>
-          <ChatRoomDetailModal room={room} />
+          <ChatRoomDetailModal room={room} auth={auth} />
         </DropdownMenuItem>
-
-        <DropdownMenuItem
-          className="p-0"
-          onSelect={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-          }}
-        >
-          <ChatRoomInvite member={member} room={room} />
-        </DropdownMenuItem>
+        {auth.role_id && (
+          <DropdownMenuItem
+            className="p-0"
+            onSelect={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+          >
+            <ChatRoomInvite member={member} room={room} />
+          </DropdownMenuItem>
+        )}
 
         <DropdownMenuItem
           className="p-0 text-red-500"

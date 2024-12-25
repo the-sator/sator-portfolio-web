@@ -72,7 +72,7 @@ export default function ChatPane({
 
   return (
     <div
-      className="flex h-[calc(100%-88px)] w-full flex-col-reverse gap-4 overflow-auto px-4 py-3"
+      className="flex w-full flex-grow flex-col-reverse gap-4 overflow-auto px-4 py-3"
       id="scroll-container"
     >
       {isLoading && (
