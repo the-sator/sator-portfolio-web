@@ -26,7 +26,6 @@ export default function ChatPane({
     data,
     error,
     isError,
-    refetch,
     isLoading,
     fetchNextPage,
     isFetchingNextPage,

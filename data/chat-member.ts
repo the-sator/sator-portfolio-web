@@ -35,11 +35,10 @@ export const inviteChatMember = async (payload: InviteChatMember) => {
   return data;
 };
 
-export const leave = async (roomId: string) => {
-  const data = await fetchApi.post<ChatMember>(
-    `${getAdminPath()}/${roomId}/leave`,
-    [`chat-member`],
-  );
+export const leave = async () => {
+  const data = await fetchApi.post<ChatMember>(`${getAdminPath()}/leave`, [
+    `chat-member`,
+  ]);
   return data;
 };
 
