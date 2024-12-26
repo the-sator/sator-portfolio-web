@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { MdSend } from "react-icons/md";
-import { ChatRoom, CreateChatMessage } from "@/types/chat.type";
+import { ChatRoom, ChatRoomRef, CreateChatMessage } from "@/types/chat.type";
 import { toast } from "@/hooks/use-toast";
 import { sendMessageAction } from "@/action/chat-message.action";
 import { Auth } from "@/types/auth.type";
@@ -20,8 +20,9 @@ type Props = {
   auth: Partial<Auth>;
   room: ChatRoom;
   isAdmin: boolean;
+  chatRoomRef: React.RefObject<ChatRoomRef>;
 };
-export default function ChatInput({ room, auth, isAdmin }: Props) {
+export default function ChatInput({ room, auth, isAdmin, chatRoomRef }: Props) {
   const [content, setContent] = useState("");
   const [imagePreviews, setImagePreviews] = useState<ImagePreview[]>([]);
   const [images, setImages] = useState<File[] | null>(null);
@@ -67,6 +68,9 @@ export default function ChatInput({ room, auth, isAdmin }: Props) {
         variant: "destructive",
       });
     } else {
+      if (chatRoomRef.current) {
+        chatRoomRef.current.scrollToBottom();
+      }
       setContent("");
       setImagePreviews([]);
       setImages(null);

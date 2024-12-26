@@ -3,7 +3,7 @@ import ChatWindow from "@/components/chat/chat-window";
 import { getAdminSession } from "@/data/admin";
 import { getAllInvitableChatMember } from "@/data/chat-member";
 import { paginateMessagesByRoomID } from "@/data/chat-message";
-import { adminGetById } from "@/data/chat-room";
+import { getById } from "@/data/chat-room";
 import { notFound, redirect } from "next/navigation";
 import React from "react";
 type Props = {
@@ -15,7 +15,7 @@ export default async function page({ params, searchParams }: Props) {
   const filter = await searchParams;
   const [{ data: room }, { error }, { data: members }, { auth }] =
     await Promise.all([
-      adminGetById(id),
+      getById(id, true),
       paginateMessagesByRoomID(id, filter, true),
       getAllInvitableChatMember(id),
       getAdminSession(),

@@ -38,7 +38,7 @@ export default function ChatList({ rooms, isAdmin }: Props) {
   });
   return (
     <div>
-      <div className="grid grid-cols-1 gap-4">
+      <div className="grid grid-cols-1 gap-2">
         {chatRooms.map((room) => (
           <ChatItem key={room.id} room={room} isAdmin={isAdmin} />
         ))}

@@ -48,6 +48,10 @@ export type InvitableChatMember = {
   users: User[];
 };
 
+export type ChatRoomRef = {
+  scrollToBottom: () => void;
+};
+
 export const CreateChatMessageSchema = z.object({
   chat_member_id: z.string(),
   chat_room_id: z.string(),

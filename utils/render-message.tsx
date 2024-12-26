@@ -12,11 +12,14 @@ type Props = {
 const chatBubbleClassName =
   "relative h-fit min-w-[10%] max-w-[60%] rounded-lg bg-primary px-4 py-1.5 text-sm text-background";
 
-export function RenderMessage({ message, isMe }: Props) {
+export function renderMessage({ message, isMe }: Props) {
   if (message.message_type === ChatMessageType.TEXT) {
     return (
       <div
-        className={cn(chatBubbleClassName, isMe && "bg-blue-500 text-white")}
+        className={cn(
+          "relative h-fit min-w-[10%] max-w-[60%] rounded-lg bg-primary px-4 py-1.5 text-sm text-background",
+          isMe && "bg-blue-500 text-white",
+        )}
       >
         {!isMe && (
           <p className="text-xs font-bold">
@@ -31,7 +34,9 @@ export function RenderMessage({ message, isMe }: Props) {
         </p>
       </div>
     );
-  } else if (message.message_type === ChatMessageType.IMAGE) {
+  }
+
+  if (message.message_type === ChatMessageType.IMAGE) {
     return (
       <div
         className={cn(
@@ -67,7 +72,13 @@ export function RenderMessage({ message, isMe }: Props) {
         </div>
       </div>
     );
-  } else {
+  }
+
+  if (
+    message.message_type === ChatMessageType.LEAVE ||
+    message.message_type === ChatMessageType.JOIN ||
+    message.message_type === ChatMessageType.INVITE
+  ) {
     return (
       <div className={cn("flex w-full", "justify-center")}>
         <span className="rounded-full bg-background px-3 py-1 text-xs text-foreground">

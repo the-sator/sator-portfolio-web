@@ -18,11 +18,11 @@ export const getAllRooms = async () => {
   return data;
 };
 
-export const adminGetById = async (id: string) => {
-  const { data, error } = await fetchApi.get<ChatRoom>(
-    `${getAdminPath()}/${id}`,
-    [`chat-room:${id}`],
-  );
+export const getById = async (id: string, isAdmin = false) => {
+  const endpoint = isAdmin ? `${getAdminPath()}/${id}` : `${getPath()}/${id}`;
+  const { data, error } = await fetchApi.get<ChatRoom>(`${endpoint}`, [
+    `chat-room:${id}`,
+  ]);
   return { data, error };
 };
 
@@ -53,11 +53,4 @@ export const getUserChatRoom = async () => {
     "chat-room",
   ]);
   return data;
-};
-
-export const getById = async (id: string) => {
-  const { data, error } = await fetchApi.get<ChatRoom>(`${getPath()}/${id}`, [
-    `chat-room:${id}`,
-  ]);
-  return { data, error };
 };

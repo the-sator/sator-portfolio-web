@@ -18,11 +18,16 @@ export default function ChatItem({ room, isAdmin = false }: Props) {
       : room.last_message.chat_member.admin!.username
     : "";
 
+  const last_message_content =
+    room.last_message?.message_type === "TEXT"
+      ? room.last_message.content
+      : "Photo";
+
   return (
     <Link href={isAdmin ? `/admin-panel/chat/${room.id}` : `/chat/${room.id}`}>
       <div
         className={cn(
-          "flex w-full justify-between rounded-md px-1 py-2 hover:cursor-pointer hover:bg-popover",
+          "flex w-full justify-between rounded-md px-2 py-2 hover:cursor-pointer hover:bg-popover",
           params.id === room.id && "bg-popover",
         )}
       >
@@ -35,7 +40,7 @@ export default function ChatItem({ room, isAdmin = false }: Props) {
             <h2 className="line-clamp-1 font-semibold">{room.name}</h2>
             <p className="line-clamp-1 text-sm text-label">
               {room.last_message &&
-                `${last_message_username}: ${room.last_message.content}`}
+                `${last_message_username}: ${last_message_content}`}
             </p>
           </div>
         </div>
