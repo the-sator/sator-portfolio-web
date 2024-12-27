@@ -17,6 +17,8 @@ import Spinner from "../ui/spinner";
 import { Auth } from "@/types/auth.type";
 import { FaArrowDown } from "react-icons/fa6";
 import { Button } from "../ui/button";
+import { WSEventType, WSReceiver } from "@/enum/ws-event.enum";
+import { WSPayload } from "@/types/base.type";
 type Props = {
   auth: Partial<Auth>;
   room: ChatRoom;
@@ -44,22 +46,20 @@ export default function ChatPane({
   const [newMessages, setNewMessages] = useState<ChatMessage[]>([]);
   const [isAtBottom, setIsAtBottom] = useState(true);
   const chatPaneRef = React.useRef<HTMLDivElement | null>(null);
+  // const ownMemberId = room.chat_members.find(
+  //   (member) => member.user_id === auth.id || member.admin_id === auth.id,
+  // )?.id;
 
-  const handleChatMessage = (message: ChatMessage) => {
-    setNewMessages((prev) => {
-      return [message, ...prev];
-    });
+  const handleChatMessage = (payload: WSPayload<ChatMessage>) => {
+    if (payload.type === WSEventType.NEW_MESSAGE)
+      setNewMessages((prev) => {
+        return [payload.data, ...prev];
+      });
   };
 
   const handleScroll = () => {
     if (chatPaneRef.current) {
-      const { scrollTop, scrollHeight, clientHeight } = chatPaneRef.current;
-      console.log(
-        "scrollTop, scrollHeight, clientHeight :",
-        scrollTop,
-        scrollHeight,
-        clientHeight,
-      );
+      const { scrollTop } = chatPaneRef.current;
       setIsAtBottom(scrollTop >= -5);
     }
   };
@@ -98,9 +98,9 @@ export default function ChatPane({
   }, [data, isError, newMessages]);
 
   useEffect(() => {
-    socket.on(`chat-room:${room.id}`, handleChatMessage);
+    socket.on(`${WSReceiver.CHAT_ROOM}:${room.id}`, handleChatMessage);
     return () => {
-      socket.off(`chat-room:${room.id}`, handleChatMessage);
+      socket.off(`${WSReceiver.CHAT_ROOM}:${room.id}`, handleChatMessage);
     };
   }, [room.id]);
 
@@ -158,8 +158,6 @@ export default function ChatPane({
           </div>
         }
       >
-        {/* <div ref={divRef}></div> */}
-
         {chatMessages &&
           chatMessages.map((message, index) => {
             const currentDate = new Date(message.created_at);

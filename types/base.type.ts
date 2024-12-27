@@ -1,4 +1,5 @@
 import { UploadState } from "@/enum/base.enum";
+import { WSEventType } from "@/enum/ws-event.enum";
 import { z } from "zod";
 
 export const breakpointColumnsObj = {
@@ -41,6 +42,11 @@ export type PaginateMetadata = {
 export type PaginateResult<T> = {
   data: T;
   metadata: PaginateMetadata;
+};
+
+export type WSPayload<T> = {
+  type: WSEventType;
+  data: T;
 };
 
 export const BaseFilterSchema = z.object({

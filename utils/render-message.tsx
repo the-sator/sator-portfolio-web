@@ -16,10 +16,7 @@ export function renderMessage({ message, isMe }: Props) {
   if (message.message_type === ChatMessageType.TEXT) {
     return (
       <div
-        className={cn(
-          "relative h-fit min-w-[10%] max-w-[60%] rounded-lg bg-primary px-4 py-1.5 text-sm text-background",
-          isMe && "bg-blue-500 text-white",
-        )}
+        className={cn(chatBubbleClassName, isMe && "bg-blue-500 text-white")}
       >
         {!isMe && (
           <p className="text-xs font-bold">

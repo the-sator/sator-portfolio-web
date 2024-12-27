@@ -1,6 +1,6 @@
 "use client";
-import React, { useEffect } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import React from "react";
+import { Avatar, AvatarFallback } from "../ui/avatar";
 import ChatPane from "./chat-pane";
 import {
   ChatMessageFilter,
@@ -31,10 +31,12 @@ export default function ChatWindow({
       <div className="z-20 flex w-full items-center justify-between bg-primary p-2">
         <div className="flex items-center gap-2">
           <Avatar className="size-8">
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>CN</AvatarFallback>
+            {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
+            <AvatarFallback className="text-xs">
+              {room.name.slice(0, 2).toUpperCase()}
+            </AvatarFallback>
           </Avatar>
-          <p className="text-background">Jame</p>
+          <p className="text-background">{room.name}</p>
         </div>
         <ChatWindowDropdown room={room} member={members} auth={auth} />
       </div>

@@ -1,10 +1,11 @@
 "use client";
 import React from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Avatar, AvatarFallback } from "../ui/avatar";
 import { ChatRoom } from "@/types/chat.type";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useParams } from "next/navigation";
+import { ChatMessageType } from "@/enum/chat.enum";
 type Props = {
   room: ChatRoom;
   isAdmin?: boolean;
@@ -12,16 +13,31 @@ type Props = {
 export default function ChatItem({ room, isAdmin = false }: Props) {
   const params = useParams();
   const time = new Date(room.updated_at);
-  const last_message_username = room.last_message
-    ? room.last_message.chat_member.user
-      ? room.last_message.chat_member.user.username
-      : room.last_message.chat_member.admin!.username
-    : "";
+  const last_message_username = (() => {
+    if (
+      room.last_message?.message_type === ChatMessageType.IMAGE ||
+      room.last_message?.message_type === ChatMessageType.TEXT
+    ) {
+      return `${
+        room.last_message
+          ? room.last_message.chat_member.user
+            ? room.last_message.chat_member.user.username
+            : room.last_message.chat_member.admin!.username
+          : ""
+      }: `;
+    }
+    return "";
+  })();
 
-  const last_message_content =
-    room.last_message?.message_type === "TEXT"
-      ? room.last_message.content
-      : "Photo";
+  const last_message_content = (() => {
+    if (!room.last_message) return "";
+    switch (room.last_message.message_type) {
+      case ChatMessageType.IMAGE:
+        return "Photo";
+      default:
+        return room.last_message.content;
+    }
+  })();
 
   return (
     <Link href={isAdmin ? `/admin-panel/chat/${room.id}` : `/chat/${room.id}`}>
@@ -33,14 +49,16 @@ export default function ChatItem({ room, isAdmin = false }: Props) {
       >
         <div className="flex items-center gap-3">
           <Avatar className="size-11">
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>CN</AvatarFallback>
+            {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
+            <AvatarFallback className="bg-primary text-xs text-background">
+              {room.name.slice(0, 2).toUpperCase()}
+            </AvatarFallback>
           </Avatar>
           <div>
             <h2 className="line-clamp-1 font-semibold">{room.name}</h2>
             <p className="line-clamp-1 text-sm text-label">
               {room.last_message &&
-                `${last_message_username}: ${last_message_content}`}
+                `${last_message_username}${last_message_content}`}
             </p>
           </div>
         </div>

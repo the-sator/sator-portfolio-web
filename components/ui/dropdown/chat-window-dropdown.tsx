@@ -15,6 +15,7 @@ import useConfirmationStore from "@/store/confirmation";
 import { leaveAction } from "@/action/chat-member.action";
 import { toast } from "@/hooks/use-toast";
 import { Auth } from "@/types/auth.type";
+import { useParams } from "next/navigation";
 type Props = {
   room: ChatRoom;
   auth: Partial<Auth>;
@@ -22,20 +23,30 @@ type Props = {
 };
 export default function ChatWindowDropdown({ room, member, auth }: Props) {
   const { openConfirmation } = useConfirmationStore();
+  const params = useParams();
   const handleLeave = async () => {
-    const { error } = await leaveAction(room.id);
+    const id = params.id as string;
+    console.log("id:", id);
+    if (!id) {
+      toast({
+        title: "No ID",
+        variant: "destructive",
+      });
+      return;
+    }
+    const { error } = await leaveAction(id);
     if (error) {
       toast({
         title: "Leave Error",
         description: error.error,
         variant: "destructive",
       });
-    } else {
-      toast({
-        title: "Leave Successful",
-        variant: "success",
-      });
+      return;
     }
+    toast({
+      title: "Leave Successful",
+      variant: "success",
+    });
   };
   return (
     <DropdownMenu>

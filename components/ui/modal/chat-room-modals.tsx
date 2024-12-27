@@ -41,6 +41,7 @@ import {
 } from "@/action/chat-member.action";
 import Spinner from "../spinner";
 import { Auth } from "@/types/auth.type";
+import { useQueryClient } from "@tanstack/react-query";
 type Props = {
   member: InvitableChatMember | null;
   admin: Admin;
@@ -48,6 +49,7 @@ type Props = {
 export function CreateChatRoomModal({ member, admin }: Props) {
   const [open, setOpen] = useState(false);
   const [selectedMembers, setSelectedMembers] = useState<string[]>([admin.id]);
+  const queryClient = useQueryClient();
   const options = [
     ...(member?.admins?.map((admin) => ({
       label: admin.username,
@@ -89,6 +91,7 @@ export function CreateChatRoomModal({ member, admin }: Props) {
         duration: 1500,
       });
       setOpen(false);
+      queryClient.invalidateQueries({ queryKey: ["chat-room"] });
     }
   };
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {

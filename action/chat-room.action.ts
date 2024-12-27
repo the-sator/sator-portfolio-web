@@ -1,7 +1,12 @@
 "use server";
-import { changeChatRoomName, createChatRoom } from "@/data/chat-room";
+import {
+  changeChatRoomName,
+  createChatRoom,
+  paginateChatRoom,
+} from "@/data/chat-room";
 import {
   ChangeChatRoomName,
+  ChatRoomFilter,
   CreateChatRoom,
   CreateChatRoomSchema,
 } from "@/types/chat.type";
@@ -43,4 +48,13 @@ export const changeChatRoomNameAction = async (
   revalidateTag("chat-room");
   revalidateTag(`chat-room:${id}`);
   return { error };
+};
+
+export const paginateChatRoomAction = async (
+  filter: ChatRoomFilter,
+  isAdmin: boolean,
+) => {
+  const { data, page } = await paginateChatRoom(filter, isAdmin);
+
+  return { data, page };
 };

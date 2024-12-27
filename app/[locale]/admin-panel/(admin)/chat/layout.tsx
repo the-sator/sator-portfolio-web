@@ -1,4 +1,5 @@
 import ChatList from "@/components/chat/chat-list";
+import FilterInput from "@/components/ui/filter/filter-input";
 import { Input } from "@/components/ui/input";
 import { CreateChatRoomModal } from "@/components/ui/modal/chat-room-modals";
 import { ADMIN_LOGIN_PATH } from "@/constant/base";
@@ -21,19 +22,23 @@ export default async function layout({ children }: Props) {
   }
   return (
     <div className="grid grid-cols-3 gap-2 p-4">
-      <div className="no-scrollbar relative h-[calc(100svh-72px)] w-full overflow-y-auto rounded-sm bg-accent">
+      <div className="no-scrollbar relative h-[calc(100svh-72px)] w-full rounded-sm bg-accent">
         <div className="sticky top-0 z-10 flex w-full items-center gap-2 bg-accent p-2">
-          <Input placeholder="Search..." />
+          <FilterInput
+            placeholder="Search..."
+            filterKey="chat_room_name"
+            page={false}
+          />
           <CreateChatRoomModal member={chatMember} admin={auth} />
         </div>
         <div className="p-2">
-          {rooms && rooms.length > 0 ? (
-            <ChatList rooms={rooms} isAdmin={true} />
-          ) : (
+          {/* {rooms && rooms.length > 0 ? ( */}
+          <ChatList isAdmin={true} auth={auth} />
+          {/* ) : (
             <div className="flex h-full items-center justify-center">
               <p className="text-sm text-label">Click + to add chat room</p>
             </div>
-          )}
+          )} */}
         </div>
       </div>
       {children}

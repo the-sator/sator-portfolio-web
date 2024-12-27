@@ -86,9 +86,14 @@ export const ChangeChatRoomNameSchema = z.object({
   name: z.string({ message: "Name is Required" }),
 });
 
+export const ChatRoomFilterSchema = BaseFilterSchema.extend({
+  chat_room_name: z.string().optional(),
+});
+
 export type CreateChatMember = z.infer<typeof CreateChatMemberSchema>;
 export type CreateChatMessage = z.infer<typeof CreateChatMessageSchema>;
 export type CreateChatRoom = z.infer<typeof CreateChatRoomSchema>;
 export type ChangeChatRoomName = z.infer<typeof ChangeChatRoomNameSchema>;
 export type ChatMessageFilter = z.infer<typeof ChatMessageFilterSchema>;
 export type InviteChatMember = z.infer<typeof InviteChatMemberSchema>;
+export type ChatRoomFilter = z.infer<typeof ChatRoomFilterSchema>;

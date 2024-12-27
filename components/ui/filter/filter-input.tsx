@@ -7,12 +7,14 @@ import { useSearchParams } from "next/navigation";
 type Props = {
   filterKey: string;
   debounce?: boolean;
+  page?: boolean;
 };
 type FilterInputProps = React.ComponentProps<typeof Input> & Props;
 
 export default function FilterInput({
   debounce = true,
   filterKey,
+  page = true,
   ...props
 }: FilterInputProps) {
   const params = useSearchParams();
@@ -29,7 +31,9 @@ export default function FilterInput({
   }, 500);
 
   const handleOnFilter = () => {
-    updateQuery({ [filterKey]: query, page: "1" });
+    page
+      ? updateQuery({ [filterKey]: query, page: "1" })
+      : updateQuery({ [filterKey]: query });
   };
 
   useEffect(() => {
