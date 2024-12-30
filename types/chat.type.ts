@@ -38,6 +38,7 @@ export type ChatMessage = {
   chat_room_id: string;
   content: string;
   media?: string[];
+  unread: string[];
   message_type: ChatMessageType;
   chat_member: ChatMember;
   chat_room: ChatRoom;

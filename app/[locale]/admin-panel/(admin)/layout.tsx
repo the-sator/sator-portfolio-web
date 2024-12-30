@@ -5,10 +5,13 @@ import {
 } from "@/components/ui/sidebar/sidebar";
 import { AppSidebar } from "@/components/ui/sidebar/app-sidebar";
 import Navbar from "@/components/ui/nav";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { setRequestLocale } from "next-intl/server";
 import ConfirmationDialog from "@/components/ui/confirmation-dialog";
+import { NotificationProvider } from "@/context/notification-provider";
+import { ADMIN_LOGIN_PATH } from "@/constant/base";
+import { getAdminSession } from "@/data/admin";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -23,22 +26,29 @@ export default async function RootLayout({
   params: Promise<{ locale: string }>;
 }>) {
   const { locale } = await params;
+  const { auth } = await getAdminSession();
   if (!routing.locales.includes(locale as never)) {
     notFound();
   }
+  if (!auth) redirect(ADMIN_LOGIN_PATH);
   // Enable static rendering
   setRequestLocale(locale);
 
   return (
     <div>
-      <SidebarProvider className="relative flex flex-1">
-        <AppSidebar />
-        <div className="w-full overflow-hidden">
-          <Navbar sidebarTrigger={<SidebarTrigger />} currentLocale={locale} />
-          {children}
-          <ConfirmationDialog />
-        </div>
-      </SidebarProvider>
+      <NotificationProvider authId={auth.id}>
+        <SidebarProvider className="relative flex flex-1">
+          <AppSidebar />
+          <div className="w-full overflow-hidden">
+            <Navbar
+              sidebarTrigger={<SidebarTrigger />}
+              currentLocale={locale}
+            />
+            {children}
+            <ConfirmationDialog />
+          </div>
+        </SidebarProvider>
+      </NotificationProvider>
     </div>
   );
 }

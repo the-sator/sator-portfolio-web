@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import ChatItem from "./chat-item";
 import { ChatRoom, ChatRoomFilter } from "@/types/chat.type";
-import socket from "@/lib/socket";
 import { WSEventType, WSReceiver } from "@/enum/ws-event.enum";
 import { useSearchParams } from "next/navigation";
 import { useGetInfiniteChatRoom } from "@/data/query/chat-room";
@@ -11,6 +10,7 @@ import Spinner from "../ui/spinner";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Auth } from "@/types/auth.type";
 import { WSPayload } from "@/types/base.type";
+import { getSocket } from "@/lib/socket";
 type Props = {
   isAdmin: boolean;
   auth: Partial<Auth>;
@@ -31,6 +31,7 @@ export default function ChatList({ isAdmin, auth }: Props) {
   } = useGetInfiniteChatRoom(filter as ChatRoomFilter, isAdmin, {});
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
   const [newRooms, setNewRooms] = useState<ChatRoom[]>([]);
+  const socket = getSocket();
 
   const handleUpdateChatRoom = (payload: WSPayload<ChatRoom>) => {
     switch (payload.type) {
@@ -123,7 +124,7 @@ export default function ChatList({ isAdmin, auth }: Props) {
       >
         {/* <div className="grid grid-cols-1 gap-2"> */}
         {chatRooms.map((room) => (
-          <ChatItem key={room.id} room={room} isAdmin={isAdmin} />
+          <ChatItem key={room.id} room={room} isAdmin={isAdmin} auth={auth} />
         ))}
         {/* </div> */}
       </InfiniteScroll>

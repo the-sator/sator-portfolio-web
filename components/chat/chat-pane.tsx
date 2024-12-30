@@ -7,7 +7,6 @@ import {
   ChatRoom,
   ChatRoomRef,
 } from "@/types/chat.type";
-import socket from "@/lib/socket";
 import { isDifferentDay } from "@/utils/date";
 import ChatDate from "./chat-date";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -19,6 +18,7 @@ import { FaArrowDown } from "react-icons/fa6";
 import { Button } from "../ui/button";
 import { WSEventType, WSReceiver } from "@/enum/ws-event.enum";
 import { WSPayload } from "@/types/base.type";
+import { getSocket } from "@/lib/socket";
 type Props = {
   auth: Partial<Auth>;
   room: ChatRoom;
@@ -46,6 +46,7 @@ export default function ChatPane({
   const [newMessages, setNewMessages] = useState<ChatMessage[]>([]);
   const [isAtBottom, setIsAtBottom] = useState(true);
   const chatPaneRef = React.useRef<HTMLDivElement | null>(null);
+  const socket = getSocket();
   // const ownMemberId = room.chat_members.find(
   //   (member) => member.user_id === auth.id || member.admin_id === auth.id,
   // )?.id;
@@ -98,9 +99,9 @@ export default function ChatPane({
   }, [data, isError, newMessages]);
 
   useEffect(() => {
-    socket.on(`${WSReceiver.CHAT_ROOM}:${room.id}`, handleChatMessage);
+    socket.on(`${WSReceiver.MEMBER}:${auth.id}`, handleChatMessage);
     return () => {
-      socket.off(`${WSReceiver.CHAT_ROOM}:${room.id}`, handleChatMessage);
+      socket.off(`${WSReceiver.MEMBER}:${auth.id}`, handleChatMessage);
     };
   }, [room.id]);
 
