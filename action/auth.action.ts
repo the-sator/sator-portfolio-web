@@ -105,7 +105,7 @@ export async function userLoginAction(formData: unknown) {
       String(data.session.expiredAt),
     );
     revalidatePath("/", "layout");
-    revalidateTag("admin");
+    revalidateTag("user");
     redirect("/chat");
   } else {
     return {

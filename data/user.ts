@@ -3,6 +3,7 @@ import { PaginateResult } from "@/types/base.type";
 import { CreateUser, User, UserFilter } from "@/types/user.type";
 import { fetchApi } from "@/utils/fetch-client";
 import { toQueryString } from "@/utils/string";
+import { cache } from "react";
 
 export const getAdminPath = () => {
   return `/admin/user`;
@@ -42,10 +43,10 @@ export const userlogin = async (payload: Login) => {
   return data;
 };
 
-export const getUserSession = async () => {
+export const getUserSession = cache(async () => {
   const { data, error } = await fetchApi.get<AuthSession>(`${getPath()}/me`, [
     "user-session",
   ]);
   const { auth, session } = data || {};
   return { auth, session, error };
-};
+});

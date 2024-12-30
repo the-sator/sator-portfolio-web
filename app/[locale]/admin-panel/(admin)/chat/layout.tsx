@@ -1,19 +1,16 @@
 import ChatList from "@/components/chat/chat-list";
 import FilterInput from "@/components/ui/filter/filter-input";
-import { Input } from "@/components/ui/input";
 import { CreateChatRoomModal } from "@/components/ui/modal/chat-room-modals";
 import { ADMIN_LOGIN_PATH } from "@/constant/base";
 import { getAdminSession } from "@/data/admin";
 import { getAllInvitableChatMember } from "@/data/chat-member";
-import { getAllRooms } from "@/data/chat-room";
 import { redirect } from "next/navigation";
 import React from "react";
 type Props = {
   children: React.ReactNode;
 };
 export default async function layout({ children }: Props) {
-  const [{ data: rooms }, { data: chatMember }, { auth }] = await Promise.all([
-    getAllRooms(),
+  const [{ data: chatMember }, { auth }] = await Promise.all([
     getAllInvitableChatMember(),
     getAdminSession(),
   ]);
@@ -32,13 +29,7 @@ export default async function layout({ children }: Props) {
           <CreateChatRoomModal member={chatMember} admin={auth} />
         </div>
         <div className="p-2">
-          {/* {rooms && rooms.length > 0 ? ( */}
           <ChatList isAdmin={true} auth={auth} />
-          {/* ) : (
-            <div className="flex h-full items-center justify-center">
-              <p className="text-sm text-label">Click + to add chat room</p>
-            </div>
-          )} */}
         </div>
       </div>
       {children}
