@@ -86,7 +86,7 @@ export default function ChatItem({ room, auth, isAdmin = false }: Props) {
           </div>
         </div>
         <div className="justify-end">
-          <p className="text-xs text-label md:text-sm">
+          <p className="text-nowrap text-[10px] text-label">
             {time.toLocaleTimeString("en-us", { timeStyle: "short" })}
           </p>
         </div>

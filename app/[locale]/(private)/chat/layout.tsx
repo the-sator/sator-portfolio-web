@@ -1,4 +1,5 @@
 import ChatList from "@/components/chat/chat-list";
+import { ChatRoomContainer } from "@/components/chat/chat-room-container";
 import FilterInput from "@/components/ui/filter/filter-input";
 import { USER_LOGIN_PATH } from "@/constant/base";
 import { getUserSession } from "@/data/user";
@@ -13,15 +14,14 @@ export default async function layout({ children }: Props) {
     redirect(USER_LOGIN_PATH);
   }
   return (
-    <div className="grid grid-cols-3 gap-2 p-4">
-      <div className="no-scrollbar relative h-[calc(100svh-72px)] w-full overflow-y-auto rounded-sm bg-accent">
-        <div className="sticky top-0 z-10 flex w-full items-center gap-2 bg-accent p-2">
-          <FilterInput placeholder="Search..." filterKey="chat_room_name" />
-        </div>
-        <div className="p-2">
-          <ChatList isAdmin={false} auth={auth} />
-        </div>
-      </div>
+    <div className="grid grid-cols-1 gap-2 p-4 sm:grid-cols-3">
+      <ChatRoomContainer auth={auth} isAdmin={false}>
+        <FilterInput
+          placeholder="Search..."
+          filterKey="chat_room_name"
+          page={false}
+        />
+      </ChatRoomContainer>
       {children}
     </div>
   );
