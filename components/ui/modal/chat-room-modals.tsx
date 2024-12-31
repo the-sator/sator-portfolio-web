@@ -16,6 +16,7 @@ import SubmitButton from "../button/submit-button";
 import {
   ChangeChatRoomName,
   ChatRoom,
+  ChatRoomFilter,
   CreateChatRoom,
   InvitableChatMember,
   InviteChatMember,
@@ -42,6 +43,7 @@ import {
 import Spinner from "../spinner";
 import { Auth } from "@/types/auth.type";
 import { useQueryClient } from "@tanstack/react-query";
+import { useSearchParams } from "next/navigation";
 type Props = {
   member: InvitableChatMember | null;
   admin: Admin;
@@ -50,6 +52,10 @@ export function CreateChatRoomModal({ member, admin }: Props) {
   const [open, setOpen] = useState(false);
   const [selectedMembers, setSelectedMembers] = useState<string[]>([admin.id]);
   const queryClient = useQueryClient();
+  const searchParams = useSearchParams();
+  const filter: ChatRoomFilter = Object.fromEntries(
+    searchParams.entries(),
+  ) as unknown as ChatRoomFilter;
   const options = [
     ...(member?.admins?.map((admin) => ({
       label: admin.username,
@@ -91,7 +97,7 @@ export function CreateChatRoomModal({ member, admin }: Props) {
         duration: 1500,
       });
       setOpen(false);
-      queryClient.invalidateQueries({ queryKey: ["chat-room"] });
+      queryClient.invalidateQueries({ queryKey: ["chat-room", filter] });
     }
   };
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {

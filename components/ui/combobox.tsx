@@ -1,5 +1,4 @@
 import React from "react";
-import { Popover, PopoverContent, PopoverTrigger } from "../popover";
 import { cn } from "@/lib/utils";
 import {
   CommandInput,
@@ -10,6 +9,7 @@ import {
 } from "cmdk";
 import { ChevronsUpDown, Command, Check } from "lucide-react";
 import { Button } from "./button";
+import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 export type ComboboxOption = {
   label: string;
   value: string;

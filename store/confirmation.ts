@@ -34,7 +34,7 @@ const useConfirmationStore = create<ConfirmationState & ConfirmationActions>(
     onAction: () => {},
     onCancel: () => {},
     openConfirmation: (data) =>
-      set((state) => ({
+      set(() => ({
         open: true,
         title: data.title,
         description: data.description,
@@ -44,7 +44,7 @@ const useConfirmationStore = create<ConfirmationState & ConfirmationActions>(
         onCancel: data.onCancel,
       })),
     closeConfirmation: () =>
-      set((state) => ({
+      set(() => ({
         open: false,
         title: null,
         description: null,

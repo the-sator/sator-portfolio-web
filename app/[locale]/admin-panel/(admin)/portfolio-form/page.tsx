@@ -11,7 +11,7 @@ import { PortfolioFormFilter } from "@/types/portfolio-form.type";
 import { getTranslations } from "next-intl/server";
 import React from "react";
 type Props = {
-  searchParams?: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 export default async function page({ searchParams }: Props) {
   const t = await getTranslations("PortfolioForm");

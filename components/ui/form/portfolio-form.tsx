@@ -21,7 +21,8 @@ import { Category } from "@/types/category.type";
 import { uploadImage } from "@/data/upload";
 import Spinner from "../spinner";
 import CoverImageUpload from "../cover-image-upload";
-import { ImagePreview, UploadState } from "@/types/base.type";
+import { ImagePreview } from "@/types/base.type";
+import { UploadState } from "@/enum/base.enum";
 
 type Props = {
   admin: Admin;

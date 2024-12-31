@@ -1,5 +1,3 @@
-import { User } from "@/types/user.type";
-import { Row } from "@tanstack/react-table";
 import React, { useState } from "react";
 import {
   DropdownMenu,
@@ -11,11 +9,8 @@ import {
 import { MoreHorizontal } from "lucide-react";
 import { Button } from "../../button";
 import useConfirmationStore from "@/store/confirmation";
-import { useOverlay } from "@/store/overlay";
-import { useSelectedItem } from "@/store/selected-item";
 
-export default function UserActionColumn({ row }: { row: Row<User> }) {
-  const User = row.original;
+export default function UserActionColumn() {
   const [open, setOpen] = useState(false);
   const { openConfirmation } = useConfirmationStore();
   //TODO: Delete user

@@ -32,7 +32,6 @@ export const paginateMessagesByRoomID = async (
   //TODO: Add Filter Later
   const endpoint = isAdmin ? getAdminPath() : getPath();
   const fullUrl = `${endpoint}/${roomId}${toQueryString({ ...filter })}`;
-  console.log("fullUrl:", fullUrl);
   const { data, error } = await fetchApi.get<PaginateResult<ChatMessage[]>>(
     fullUrl,
     [`chat-message:${roomId}`],

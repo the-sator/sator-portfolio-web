@@ -31,9 +31,11 @@ export default function FilterInput({
   }, 500);
 
   const handleOnFilter = () => {
-    page
-      ? updateQuery({ [filterKey]: query, page: "1" })
-      : updateQuery({ [filterKey]: query });
+    if (page) {
+      updateQuery({ [filterKey]: query, page: "1" });
+    } else {
+      updateQuery({ [filterKey]: query });
+    }
   };
 
   useEffect(() => {

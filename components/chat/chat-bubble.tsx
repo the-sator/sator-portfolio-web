@@ -1,6 +1,5 @@
 import { cn } from "@/lib/utils";
 import { ChatMessage } from "@/types/chat.type";
-import { renderMessage } from "@/utils/render-message";
 import React from "react";
 import ImageContainerBlurClient from "../ui/image/image-container-blur-client";
 import { formatTime } from "@/utils/date";

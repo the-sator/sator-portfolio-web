@@ -13,11 +13,6 @@ import {
   SelectValue,
 } from "../../select";
 import { Button } from "../../button";
-import { PaginateMetadata } from "@/types/base.type";
-import { LIMIT } from "@/constant/base";
-import { usePathname, useRouter } from "next/navigation";
-import { TransitionStartFunction } from "react";
-
 interface DataTablePaginationProps<TData> {
   table: Table<TData>;
 }

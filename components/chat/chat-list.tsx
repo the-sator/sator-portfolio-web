@@ -1,9 +1,9 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ChatItem from "./chat-item";
 import { ChatRoom, ChatRoomFilter } from "@/types/chat.type";
 import { WSEventType, WSReceiver } from "@/enum/ws-event.enum";
-import { useSearchParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useGetInfiniteChatRoom } from "@/data/query/chat-room";
 import { toast } from "@/hooks/use-toast";
 import Spinner from "../ui/spinner";
@@ -11,15 +11,22 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { Auth } from "@/types/auth.type";
 import { WSPayload } from "@/types/base.type";
 import { getSocket } from "@/lib/socket";
+import { useUnreadMessage } from "@/store/unread-message";
 type Props = {
   isAdmin: boolean;
   auth: Partial<Auth>;
 };
 export default function ChatList({ isAdmin, auth }: Props) {
   const searchParams = useSearchParams();
+  const params = useParams();
+  const paramsRef = useRef(params.id); // Create a ref to store params.id
+  const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
+  const [newRooms, setNewRooms] = useState<ChatRoom[]>([]);
+  const { setUnreadCounts } = useUnreadMessage();
   const filter: ChatRoomFilter = Object.fromEntries(
     searchParams.entries(),
   ) as unknown as ChatRoomFilter;
+  const socket = getSocket();
   const {
     data,
     error,
@@ -29,9 +36,9 @@ export default function ChatList({ isAdmin, auth }: Props) {
     isFetchingNextPage,
     hasNextPage,
   } = useGetInfiniteChatRoom(filter as ChatRoomFilter, isAdmin, {});
-  const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
-  const [newRooms, setNewRooms] = useState<ChatRoom[]>([]);
-  const socket = getSocket();
+  useEffect(() => {
+    paramsRef.current = params.id;
+  }, [params.id]);
 
   const handleUpdateChatRoom = (payload: WSPayload<ChatRoom>) => {
     switch (payload.type) {
@@ -57,6 +64,14 @@ export default function ChatList({ isAdmin, auth }: Props) {
               new Date(a.updated_at).getTime(),
           );
         });
+        if (payload.data.id === paramsRef.current) return;
+        const unreadMessageCount =
+          payload.data.unread_messages.find(
+            (message) =>
+              message.chat_member.admin_id === auth?.id ||
+              message.chat_member.user_id === auth?.id,
+          )?.total_count || 0;
+        setUnreadCounts(payload.data.id, unreadMessageCount);
         return;
       case WSEventType.CHAT_ROOM_CREATED:
         setNewRooms((prev) => {
@@ -110,24 +125,32 @@ export default function ChatList({ isAdmin, auth }: Props) {
       className="no-scrollbar h-[calc(100svh-140px)] overflow-y-auto"
       id="scroll-container"
     >
-      <InfiniteScroll
-        className="no-scrollbar flex h-full flex-col gap-2"
-        dataLength={chatRooms.length}
-        next={fetchNextPage}
-        scrollableTarget="scroll-container"
-        hasMore={hasNextPage || isFetchingNextPage}
-        loader={
-          <div className="flex justify-center">
-            <Spinner />
-          </div>
-        }
-      >
-        {/* <div className="grid grid-cols-1 gap-2"> */}
-        {chatRooms.map((room) => (
-          <ChatItem key={room.id} room={room} isAdmin={isAdmin} auth={auth} />
-        ))}
-        {/* </div> */}
-      </InfiniteScroll>
+      {chatRooms.length > 0 ? (
+        <InfiniteScroll
+          className="no-scrollbar flex h-full flex-col gap-2"
+          dataLength={chatRooms.length}
+          next={fetchNextPage}
+          scrollableTarget="scroll-container"
+          hasMore={hasNextPage || isFetchingNextPage}
+          loader={
+            <div className="flex justify-center">
+              <Spinner />
+            </div>
+          }
+        >
+          {/* <div className="grid grid-cols-1 gap-2"> */}
+          {chatRooms.map((room) => (
+            <ChatItem key={room.id} room={room} isAdmin={isAdmin} auth={auth} />
+          ))}
+          {/* </div> */}
+        </InfiniteScroll>
+      ) : (
+        <div className="flex justify-center">
+          <p className="text-sm text-label">
+            Click on + to create new chat room
+          </p>
+        </div>
+      )}
     </div>
   );
 }

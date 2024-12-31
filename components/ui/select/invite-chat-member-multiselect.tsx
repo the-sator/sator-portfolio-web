@@ -202,7 +202,7 @@ export const InviteChatMemberMultiSelect = React.forwardRef<
             <CommandList>
               <CommandEmpty>No results found.</CommandEmpty>
               <CommandGroup>
-                {options.map((option, index) => {
+                {options.map((option) => {
                   const isSelected = selectedValues.includes(option.value);
                   const isAdmin = option.role === ROLE.ADMIN;
                   return (

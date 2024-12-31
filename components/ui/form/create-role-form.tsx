@@ -9,7 +9,7 @@ export default function CreateRoleForm() {
     <form action="" className="flex flex-col gap-4">
       <InputWithLabel label="Name" name="name" placeholder="Admin" />
       <Label>Permission</Label>
-      <RolePermissionTable resources={resources} />
+      <RolePermissionTable />
       <SubmitButton label="Save" />
     </form>
   );

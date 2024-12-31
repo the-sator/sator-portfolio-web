@@ -11,7 +11,7 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { Button } from "../button";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check } from "lucide-react";
 import { useQueryParamsContext } from "@/context/query-params-provider";
 import { IoIosArrowDown } from "react-icons/io";
 export type ComboboxOption = {

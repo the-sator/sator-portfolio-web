@@ -31,7 +31,7 @@ export async function adminLoginAction(formData: unknown) {
       String(data.session.expiredAt),
     );
     revalidatePath("/", "layout");
-    revalidateTag("admin");
+    revalidateTag("admin-session");
     redirect("/admin-panel/user");
   } else {
     return {
@@ -105,7 +105,7 @@ export async function userLoginAction(formData: unknown) {
       String(data.session.expiredAt),
     );
     revalidatePath("/", "layout");
-    revalidateTag("user");
+    revalidateTag("user-session");
     redirect("/chat");
   } else {
     return {

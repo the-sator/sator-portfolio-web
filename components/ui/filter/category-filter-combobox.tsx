@@ -153,7 +153,6 @@ export const CategoryFilterCombobox = React.forwardRef<
       : [defaultValue];
     const [selectedValues, setSelectedValues] =
       React.useState<string[]>(defaultValueArray);
-    console.log("selectedValues:", selectedValues);
     const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
     const [isAnimating, setIsAnimating] = React.useState(false);
     const [inputValue, setInputValue] = React.useState("");

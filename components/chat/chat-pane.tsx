@@ -19,6 +19,8 @@ import { Button } from "../ui/button";
 import { WSEventType, WSReceiver } from "@/enum/ws-event.enum";
 import { WSPayload } from "@/types/base.type";
 import { getSocket } from "@/lib/socket";
+import { useParams } from "next/navigation";
+import { useUnreadMessage } from "@/store/unread-message";
 type Props = {
   auth: Partial<Auth>;
   room: ChatRoom;
@@ -45,17 +47,46 @@ export default function ChatPane({
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [newMessages, setNewMessages] = useState<ChatMessage[]>([]);
   const [isAtBottom, setIsAtBottom] = useState(true);
+  const params = useParams();
+  // const queryClient = useQueryClient();
+  const { setUnreadCounts } = useUnreadMessage();
   const chatPaneRef = React.useRef<HTMLDivElement | null>(null);
   const socket = getSocket();
-  // const ownMemberId = room.chat_members.find(
-  //   (member) => member.user_id === auth.id || member.admin_id === auth.id,
-  // )?.id;
+  const unreadMessage = room.unread_messages.find(
+    (message) =>
+      message.chat_member.admin_id === auth?.id ||
+      message.chat_member.user_id === auth?.id,
+  );
 
   const handleChatMessage = (payload: WSPayload<ChatMessage>) => {
-    if (payload.type === WSEventType.NEW_MESSAGE)
+    if (payload.type === WSEventType.NEW_MESSAGE) {
       setNewMessages((prev) => {
         return [payload.data, ...prev];
       });
+      if (!unreadMessage) return;
+      if (payload.data.chat_room_id !== params.id) return;
+      socket.emit("mark-as-read", {
+        id: unreadMessage.id,
+      });
+      // handleMarkAsRead();
+    }
+  };
+
+  const handleMarkAsRead = async () => {
+    try {
+      if (unreadMessage) {
+        socket.emit("mark-as-read", {
+          id: unreadMessage.id,
+        });
+        setUnreadCounts(room.id, 0);
+      }
+    } catch (error) {
+      toast({
+        title: "Error Marking Messages as Read",
+        description: error instanceof Error ? error.message : String(error),
+        variant: "destructive",
+      });
+    }
   };
 
   const handleScroll = () => {
@@ -107,6 +138,7 @@ export default function ChatPane({
 
   useEffect(() => {
     scrollToBottom();
+    handleMarkAsRead();
   }, []);
 
   useEffect(() => {

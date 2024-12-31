@@ -26,7 +26,6 @@ export default function ChatWindowDropdown({ room, member, auth }: Props) {
   const params = useParams();
   const handleLeave = async () => {
     const id = params.id as string;
-    console.log("id:", id);
     if (!id) {
       toast({
         title: "No ID",

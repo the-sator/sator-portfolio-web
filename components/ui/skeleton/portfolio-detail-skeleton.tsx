@@ -1,7 +1,5 @@
 import React from "react";
 import { Skeleton } from "../skeleton";
-import { breakpointColumnsObj } from "@/types/base.type";
-import Masonry from "react-masonry-css";
 
 export default function PortfolioDetailSkeleton() {
   return (

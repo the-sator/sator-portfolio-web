@@ -11,7 +11,7 @@ type Props = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 export default async function page({ params, searchParams }: Props) {
-  const id = (await params).id;
+  const { id } = await params;
   const filter = await searchParams;
   const [{ data: room }, { error }, { data: members }, { auth }] =
     await Promise.all([

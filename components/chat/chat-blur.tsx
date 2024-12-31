@@ -1,11 +1,7 @@
 "use client";
 import React from "react";
 import { Button } from "../ui/button";
-import {
-  ChatMessageFilter,
-  ChatRoom,
-  CreateChatMember,
-} from "@/types/chat.type";
+import { ChatRoom, CreateChatMember } from "@/types/chat.type";
 import { toast } from "@/hooks/use-toast";
 import { joinAction } from "@/action/chat-member.action";
 import { Auth } from "@/types/auth.type";

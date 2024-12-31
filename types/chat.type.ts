@@ -27,6 +27,7 @@ export type ChatRoom = {
   last_message?: ChatMessage;
   chat_members: ChatMember[];
   chat_messages: ChatMessage[];
+  unread_messages: UnreadMessage[];
 };
 
 export type ChatMessage = {
@@ -42,6 +43,17 @@ export type ChatMessage = {
   message_type: ChatMessageType;
   chat_member: ChatMember;
   chat_room: ChatRoom;
+};
+
+export type UnreadMessage = {
+  id: string;
+  created_at: Date;
+  updated_at: Date;
+  chat_room_id: string;
+  chat_room: ChatRoom;
+  chat_member: ChatMember;
+  chat_member_id: string;
+  total_count: number;
 };
 
 export type InvitableChatMember = {
