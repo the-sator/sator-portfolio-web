@@ -4,15 +4,17 @@ import { SidebarMenuButton, SidebarMenuItem } from "./sidebar";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
+import Indicator from "../indicator";
 type Props = {
-  child: {
+  item: {
     title: string;
     url: string;
     resource: string;
     icon: ReactElement;
+    badge?: number;
   };
 };
-export default function SidebarMenuNavItem({ child }: Props) {
+export default function SidebarMenuNavItem({ item }: Props) {
   const pathname = usePathname();
   const t = useTranslations("SidebarItem");
   const isActivePath = (currentPath: string, childUrl: string) => {
@@ -22,11 +24,21 @@ export default function SidebarMenuNavItem({ child }: Props) {
     return currentPath.replace(/^\/(en|kh)/, "") === childUrl;
   };
   return (
-    <SidebarMenuItem key={child.title}>
-      <SidebarMenuButton asChild isActive={isActivePath(pathname, child.url)}>
-        <Link href={`${child.url}`} className="text-label">
-          {child.icon}
-          <span>{t(child.title)}</span>
+    <SidebarMenuItem key={item.title}>
+      <SidebarMenuButton asChild isActive={isActivePath(pathname, item.url)}>
+        <Link href={`${item.url}`} className="text-label">
+          <div className="relative">
+            {item.icon}
+            {!!item.badge && item.badge > 0 && (
+              <Indicator
+                className="absolute -right-0.5 -top-0.5 size-2 animate-none rounded-full bg-red-500"
+                count={item.badge}
+                size="xxs"
+                color="foreground"
+              />
+            )}
+          </div>
+          <span>{t(item.title)}</span>
         </Link>
       </SidebarMenuButton>
     </SidebarMenuItem>

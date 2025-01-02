@@ -8,6 +8,7 @@ import { useParams } from "next/navigation";
 import { ChatMessageType } from "@/enum/chat.enum";
 import { Auth } from "@/types/auth.type";
 import { useUnreadMessage } from "@/store/unread-message";
+import Indicator from "../ui/indicator";
 type Props = {
   room: ChatRoom;
   isAdmin?: boolean;
@@ -93,11 +94,15 @@ export default function ChatItem({ room, auth, isAdmin = false }: Props) {
         {unread &&
           unread.total_count > 0 &&
           unread.chat_room_id === room.id && (
-            <div className="absolute right-2 top-[65%] flex size-4 -translate-y-1/2 animate-pulse items-center justify-center rounded-full bg-blue-500">
-              <p className="text-[10px] text-background">
-                {unread.total_count}
-              </p>
-            </div>
+            // <div className="absolute right-2 top-[65%] flex size-4 -translate-y-1/2 animate-pulse items-center justify-center rounded-full bg-blue-500">
+            //   <p className="text-[10px] text-background">
+            //     {unread.total_count}
+            //   </p>
+            // </div>
+            <Indicator
+              count={unread.total_count}
+              className="absolute right-2 top-[65%] -translate-y-1/2"
+            />
           )}
       </div>
     </Link>
