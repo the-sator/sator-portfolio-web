@@ -5,6 +5,7 @@
   "SidebarItem": {
     "dashboard": "ក្ដារទិន្នន័យ",
     "user": "អតិថិជន",
+    "site-user": "អតិថិជនគេហទំព័រ",
     "admin": "រដ្ធបាល",
     "blog": "អត្ថបទ",
     "setting": "កែទម្រង់",
@@ -23,6 +24,9 @@
   },
   "User": {
     "user": "អតិថិជន"
+  },
+  "SiteUser": {
+    "site-user": "អតិថិជនគេហទំព័រ"
   },
   "PortfolioForm": {
     "portfolio-form": "សំណុំបែបបទស្នាដៃ"

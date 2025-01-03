@@ -24,7 +24,7 @@ export async function middleware(req: NextRequest) {
   }
 
   if (pathname.replace(/^\/(en|kh)/, "").startsWith("/admin-panel")) {
-    const { auth, error } = await getAdminSession();
+    const { error } = await getAdminSession();
 
     if (error) {
       const locale = pathname.startsWith("/kh") ? "kh" : "en";

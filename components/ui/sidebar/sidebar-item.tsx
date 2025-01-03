@@ -8,7 +8,7 @@ import {
   SidebarMenu,
 } from "./sidebar";
 import { MdArticle, MdDashboard, MdDesignServices } from "react-icons/md";
-import { FaKey, FaUser } from "react-icons/fa6";
+import { FaKey, FaUser, FaUserPen } from "react-icons/fa6";
 // import ThemeSwitch from "../theme-switch";
 import { IoIosSettings } from "react-icons/io";
 import { IoChatboxEllipses } from "react-icons/io5";
@@ -54,6 +54,13 @@ export default function SidebarItem({ role }: Props) {
           resource: "User",
           url: "/admin-panel/user",
           icon: <FaUser />,
+        },
+
+        {
+          title: "site-user",
+          resource: "Site User",
+          url: "/admin-panel/site-user",
+          icon: <FaUserPen />,
         },
       ],
     },
