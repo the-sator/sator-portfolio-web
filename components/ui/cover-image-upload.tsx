@@ -31,7 +31,7 @@ export default function CoverImageUpload({
         <div className="relative mb-2 bg-neutral-800">
           <ImageContainerBlurClient
             src={coverPreviewUrl}
-            className="aspect-video h-32 opacity-50"
+            className="object-fit aspect-video h-32 w-full opacity-50"
             skeletonHeight="h-32"
             priority={true}
             preview={true}

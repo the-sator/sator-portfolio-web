@@ -323,27 +323,33 @@ export const CategoryFilterCombobox = React.forwardRef<
             <CommandList>
               <CommandEmpty />
               <CommandGroup>
-                {options.map((option) => {
-                  const isSelected = selectedValues.includes(option.value);
-                  return (
-                    <CommandItem
-                      key={option.value}
-                      value={option.label}
-                      onSelect={() => toggleOption(option.value)}
-                    >
-                      <Check
-                        className={cn(
-                          "mr-2 h-4 w-4",
-                          isSelected ? "opacity-100" : "opacity-0",
-                        )}
-                      />
-                      {/* <p>{option.label}</p> */}
-                      <div className="flex w-full items-center justify-between">
-                        <Tag color={option.color}>{option?.label}</Tag>
-                      </div>
-                    </CommandItem>
-                  );
-                })}
+                {options.length > 0 ? (
+                  <>
+                    {options.map((option) => {
+                      const isSelected = selectedValues.includes(option.value);
+                      return (
+                        <CommandItem
+                          key={option.value}
+                          value={option.label}
+                          onSelect={() => toggleOption(option.value)}
+                        >
+                          <Check
+                            className={cn(
+                              "mr-2 h-4 w-4",
+                              isSelected ? "opacity-100" : "opacity-0",
+                            )}
+                          />
+                          {/* <p>{option.label}</p> */}
+                          <div className="flex w-full items-center justify-between">
+                            <Tag color={option.color}>{option?.label}</Tag>
+                          </div>
+                        </CommandItem>
+                      );
+                    })}
+                  </>
+                ) : (
+                  <CommandItem disabled>No options available</CommandItem>
+                )}
               </CommandGroup>
               <CommandGroup>
                 <div className="flex flex-col items-center justify-center">

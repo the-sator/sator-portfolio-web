@@ -41,5 +41,5 @@ export async function uploadImageToS3(
   const getCommand = new GetObjectCommand(params);
   await getSignedUrl(s3Client, getCommand);
 
-  return `${process.env.AWS_PUBLIC_BUCKET_URL}/${key}`;
+  return `https://${process.env.AWS_PUBLIC_BUCKET_URL}/${key}`;
 }

@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "sator-portfolio-bucket-0.s3.ap-southeast-1.amazonaws.com",
+        hostname: process.env.AWS_PUBLIC_BUCKET_URL!,
       },
     ],
   },
