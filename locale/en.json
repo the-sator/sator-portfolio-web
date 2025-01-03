@@ -4,6 +4,7 @@
   },
   "SidebarItem": {
     "dashboard": "Dashboard",
+    "site-user": "Site User",
     "user": "User",
     "blog": "Blog",
     "setting": "Setting",
@@ -23,6 +24,9 @@
   },
   "User": {
     "user": "User"
+  },
+  "SiteUser": {
+    "site-user": "Site User"
   },
   "PortfolioForm": {
     "portfolio-form": "Portfolio Form"

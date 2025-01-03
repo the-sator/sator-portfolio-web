@@ -10,7 +10,7 @@ export function getChatRoomQueryKey(roomId: string) {
   return [`chat-message:${roomId}`];
 }
 
-export function useGetInfiniteAdminChat(
+export function useGetInfiniteChat(
   roomId: string,
   filter: ChatMessageFilter,
   isAdmin: boolean,

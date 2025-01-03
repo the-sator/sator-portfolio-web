@@ -10,7 +10,7 @@ import {
 import { isDifferentDay } from "@/utils/date";
 import ChatDate from "./chat-date";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { useGetInfiniteAdminChat } from "@/data/query/chat-message";
+import { useGetInfiniteChat } from "@/data/query/chat-message";
 import { toast } from "@/hooks/use-toast";
 import Spinner from "../ui/spinner";
 import { Auth } from "@/types/auth.type";
@@ -43,7 +43,7 @@ export default function ChatPane({
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
-  } = useGetInfiniteAdminChat(room.id, filter, isAdmin, {});
+  } = useGetInfiniteChat(room.id, filter, isAdmin, {});
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [newMessages, setNewMessages] = useState<ChatMessage[]>([]);
   const [isAtBottom, setIsAtBottom] = useState(true);
