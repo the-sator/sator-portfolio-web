@@ -1,7 +1,7 @@
 import { getPortfolioBySlug } from "@/data/portfolio";
 import React, { Suspense } from "react";
 import { DynamicRenderContent } from "@/components/editor/render-content";
-import PortfolioGallery from "@/components/ui/portfolio-gallery";
+import PortfolioGallery from "@/components/portfolio/portfolio-gallery";
 import { notFound } from "next/navigation";
 import PortfolioOptionDropdown from "@/components/ui/dropdown/portfolio-option-dropdown";
 import { cn } from "@/lib/utils";

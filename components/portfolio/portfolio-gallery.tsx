@@ -2,7 +2,7 @@
 
 import React from "react";
 import Masonry from "react-masonry-css";
-import ImageContainerBlurClient from "./image/image-container-blur-client";
+import ImageContainerBlurClient from "../ui/image/image-container-blur-client";
 import { breakpointColumnsObj } from "@/types/base.type";
 type Props = {
   images: string[];
