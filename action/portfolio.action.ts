@@ -81,7 +81,6 @@ export const deletePortfolioAction = async (id: string) => {
       error: error,
     };
   }
-  revalidateTag("portfolio");
   return { data, error };
 };
 

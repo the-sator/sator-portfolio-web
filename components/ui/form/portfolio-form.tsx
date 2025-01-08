@@ -23,6 +23,8 @@ import Spinner from "../spinner";
 import CoverImageUpload from "../cover-image-upload";
 import { ImagePreview } from "@/types/base.type";
 import { UploadState } from "@/enum/base.enum";
+import { useQueryClient } from "@tanstack/react-query";
+import { getPortfolioQueryKey } from "@/data/query/portfolio";
 
 type Props = {
   admin: Admin;
@@ -63,6 +65,7 @@ export default function PortfolioForm({ admin, categories, portfolio }: Props) {
   const [slug, setSlug] = useState(portfolio && portfolio.slug);
   const [selectedCategories, setSelectedCategories] =
     useState<string[]>(categoryIds);
+  const queryClient = useQueryClient();
   const [isUploadPending, startUploadTransition] = useTransition();
   const [isSubmitPending, startSubmitTransition] = useTransition();
 
@@ -118,6 +121,9 @@ export default function PortfolioForm({ admin, categories, portfolio }: Props) {
         title: "Portfolio Saved!",
         variant: "success",
         duration: 1500,
+      });
+      queryClient.invalidateQueries({
+        queryKey: [getPortfolioQueryKey()],
       });
     }
   };

@@ -1,8 +1,8 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Portfolio, PortfolioFilter } from "@/types/portfolio.type";
 import { getPortfolioPaginationAction } from "@/action/portfolio.action";
-export function getQueryKey() {
-  return ["portfolio"];
+export function getPortfolioQueryKey() {
+  return "portfolio";
 }
 
 export function getFilterQueryKey(filter: PortfolioFilter) {
@@ -16,7 +16,7 @@ export function useGetInfinitePortfolios(
   options: object,
 ) {
   return useInfiniteQuery({
-    queryKey: getFilterQueryKey(filter),
+    queryKey: [getPortfolioQueryKey(), getFilterQueryKey(filter)],
     queryFn: ({ pageParam = initialPage }) =>
       getPortfolioPaginationAction({
         ...filter,
