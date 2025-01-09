@@ -1,24 +1,24 @@
 "use client";
 import React, { useEffect } from "react";
-import PortfolioCard from "./portfolio-card";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { PortfolioFilter } from "@/types/portfolio.type";
-import Spinner from "../ui/spinner";
-import { useGetInfinitePortfolios } from "@/data/query/portfolio";
-import { toast } from "@/hooks/use-toast";
 import CustomCreateButton from "../ui/button/custom-create-button";
+import { toast } from "@/hooks/use-toast";
+import Spinner from "../ui/spinner";
+import BlogCard from "./blog-card";
+import { useGetInfiniteBlogs } from "@/data/query/blog";
+import { BlogFilter } from "@/types/blog.type";
 type Props = {
-  filter: PortfolioFilter;
+  filter: BlogFilter;
 };
-export default function PortfolioInfiniteScroll({ filter }: Props) {
+export default function BlogInfiniteScroll({ filter }: Props) {
   const { data, fetchNextPage, hasNextPage, error, isError } =
-    useGetInfinitePortfolios(filter, {});
-  const portfolioItems = data?.pages.flatMap((page) => page.data) || [];
+    useGetInfiniteBlogs(filter, {});
+  const blogItems = data?.pages.flatMap((page) => page.data) || [];
 
   useEffect(() => {
     if (isError) {
       toast({
-        title: "Error Fetching Portfolio",
+        title: "Error Fetching Blog",
         description: error.message,
         variant: "destructive",
       });
@@ -27,9 +27,9 @@ export default function PortfolioInfiniteScroll({ filter }: Props) {
 
   return (
     <>
-      {portfolioItems.length > 0 ? (
+      {blogItems.length > 0 ? (
         <InfiniteScroll
-          dataLength={portfolioItems.length}
+          dataLength={blogItems.length}
           next={fetchNextPage}
           hasMore={hasNextPage}
           scrollThreshold={0.5}
@@ -41,16 +41,16 @@ export default function PortfolioInfiniteScroll({ filter }: Props) {
           className="my-4 mb-10 !overflow-visible"
         >
           {/* <div className="flex flex-wrap gap-4"> */}
-          <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {portfolioItems.map((portfolio) => (
-              <PortfolioCard key={portfolio?.id} portfolio={portfolio!} />
+          <div className="grid w-full grid-cols-1 gap-4">
+            {blogItems.map((blog) => (
+              <BlogCard key={blog?.id} blog={blog!} />
             ))}
           </div>
         </InfiniteScroll>
       ) : (
         <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <CustomCreateButton
-            href={"/admin-panel/portfolio/create"}
+            href={"/admin-panel/blog/create"}
             className="min-h-[350px]"
           />
         </div>

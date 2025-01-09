@@ -1,5 +1,4 @@
 import { LinkButton } from "@/components/ui/button/link-button";
-import { paginatePortfolio } from "@/data/portfolio";
 import React from "react";
 import { IoAddOutline } from "react-icons/io5";
 import PortfolioInfiniteScroll from "@/components/portfolio/portfolio-infinite-scroll";
@@ -16,10 +15,7 @@ type ComboboxOptionWithColor = ComboboxOption & {
 };
 export default async function PortfolioPage({ searchParams }: Props) {
   const filter = await searchParams;
-  const [{ data: portfolios, page }, { data: categories }] = await Promise.all([
-    paginatePortfolio(filter),
-    getAllCategories(),
-  ]);
+  const [{ data: categories }] = await Promise.all([getAllCategories()]);
   const options: ComboboxOptionWithColor[] = categories
     ? categories.map((category) => {
         return {
@@ -54,11 +50,7 @@ export default async function PortfolioPage({ searchParams }: Props) {
           className="w-full"
         />
       </div>
-      <PortfolioInfiniteScroll
-        portfolios={portfolios!}
-        page={page}
-        filter={filter}
-      />
+      <PortfolioInfiniteScroll filter={filter} />
     </div>
   );
 }

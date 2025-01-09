@@ -1,4 +1,4 @@
-import PortfolioForm from "@/components/ui/form/portfolio-form";
+import BlogForm from "@/components/ui/form/blog-form";
 import { ADMIN_LOGIN_PATH } from "@/constant/base";
 import { getAdminSession } from "@/data/admin";
 import { getAllCategories } from "@/data/category";
@@ -14,7 +14,7 @@ export default async function App() {
   }
   return (
     <div className="p-4">
-      <PortfolioForm admin={auth} categories={categories || []} />
+      <BlogForm admin={auth} categories={categories || []} />
     </div>
   );
 }

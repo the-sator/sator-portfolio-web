@@ -6,11 +6,15 @@ import Link from "next/link";
 import Indicator from "../ui/indicator";
 import { useUnreadMessage } from "@/store/unread-message";
 
-export default function AppNavbar() {
+type Props = {
+  showChat?: boolean;
+};
+export default function AppNavbar({ showChat = false }: Props) {
   const { unread_counts, fetchUnreadCounts } = useUnreadMessage();
   useEffect(() => {
+    if (!showChat) return;
     fetchUnreadCounts(false);
-  }, [fetchUnreadCounts]);
+  }, [fetchUnreadCounts, showChat]);
   const unreadTotalCount = unread_counts.reduce((acc, { total_count }) => {
     return acc + total_count;
   }, 0);
@@ -54,16 +58,18 @@ export default function AppNavbar() {
         </ul>
       </div>
       <div className="flex items-center gap-6">
-        <Link href={"/chat"} className="relative">
-          <IoChatbox size={20} />
-          {!!unreadTotalCount && unreadTotalCount > 0 && (
-            <Indicator
-              className="absolute -right-0.5 -top-0.5 size-3 animate-none rounded-full bg-red-500"
-              count={unreadTotalCount}
-              size="xs"
-            />
-          )}
-        </Link>
+        {showChat && (
+          <Link href={"/chat"} className="relative">
+            <IoChatbox size={20} />
+            {!!unreadTotalCount && unreadTotalCount > 0 && (
+              <Indicator
+                className="absolute -right-0.5 -top-0.5 size-3 animate-none rounded-full bg-red-500"
+                count={unreadTotalCount}
+                size="xs"
+              />
+            )}
+          </Link>
+        )}
         <LinkButton href={"/login"} className="h-7">
           Login
         </LinkButton>

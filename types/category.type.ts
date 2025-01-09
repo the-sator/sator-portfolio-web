@@ -16,6 +16,13 @@ export type CategoryOnPorfolio = {
   category: Category;
 };
 
+export type CategoryOnBlog = {
+  blog_id: string;
+  category_id: string;
+  assignedBy: string;
+  category: Category;
+};
+
 export const CreateCategorySchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
   color: z.nativeEnum(Color).optional(),
