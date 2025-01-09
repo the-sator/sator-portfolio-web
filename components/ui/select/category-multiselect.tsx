@@ -184,8 +184,8 @@ export const CategoryMultiSelect = React.forwardRef<
                 }
               } else {
                 toast({
-                  title: "Tag Created",
-                  description: "The tag was created successfully",
+                  title: "Category Created",
+                  description: "The category was created successfully",
                   variant: "success",
                 });
                 setInputValue("");

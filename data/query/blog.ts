@@ -1,22 +1,20 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { PortfolioFilter } from "@/types/portfolio.type";
-import { getPortfolioPaginationAction } from "@/action/portfolio.action";
+import { BlogFilter } from "@/types/blog.type";
+import { getBlogPaginationAction } from "@/action/blog.action";
 export function getQueryKey() {
-  return "portfolio";
+  return "blog";
 }
 
-export function getFilterQueryKey(filter: PortfolioFilter) {
-  return ["portfolio", filter];
+export function getFilterQueryKey(filter: BlogFilter) {
+  return ["blog", filter];
 }
 
-export function useGetInfinitePortfolios(
-  filter: PortfolioFilter,
-  options: object,
-) {
+export function useGetInfiniteBlogs(filter: PortfolioFilter, options: object) {
   return useInfiniteQuery({
     queryKey: getFilterQueryKey(filter),
     queryFn: ({ pageParam }) =>
-      getPortfolioPaginationAction({
+      getBlogPaginationAction({
         ...filter,
         page: String(pageParam),
       }),
