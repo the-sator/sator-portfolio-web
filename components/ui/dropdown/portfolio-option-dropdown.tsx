@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,6 +21,8 @@ import {
 } from "@/action/portfolio.action";
 import { Portfolio } from "@/types/portfolio.type";
 import { toast } from "@/hooks/use-toast";
+import { useQueryClient } from "@tanstack/react-query";
+import { getPortfolioQueryKey } from "@/data/query/portfolio";
 type Props = {
   portfolio: Portfolio;
   deleteRedirect?: boolean;
@@ -29,7 +31,9 @@ export default function PortfolioOptionDropdown({
   portfolio,
   deleteRedirect = false,
 }: Props) {
+  const [open, setOpen] = useState(false);
   const { openConfirmation } = useConfirmationStore();
+  const queryClient = useQueryClient();
   const handleDelete = async () => {
     const { error } = await deletePortfolioAction(portfolio.id);
     if (error) {
@@ -48,6 +52,10 @@ export default function PortfolioOptionDropdown({
       if (deleteRedirect) {
         redirect("/admin-panel/portfolio");
       }
+
+      queryClient.invalidateQueries({
+        queryKey: [getPortfolioQueryKey()],
+      });
     }
   };
   const handlePublish = async () => {
@@ -87,7 +95,7 @@ export default function PortfolioOptionDropdown({
   };
 
   return (
-    <DropdownMenu>
+    <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
         <Button variant={"ghost"} className="h-6 w-6 rounded-full p-1">
           <SlOptionsVertical />
@@ -137,7 +145,7 @@ export default function PortfolioOptionDropdown({
             onClick={(e) => {
               e.stopPropagation();
               e.preventDefault();
-
+              setOpen(false);
               openConfirmation({
                 title: "Are you absolutely sure?",
                 description:
