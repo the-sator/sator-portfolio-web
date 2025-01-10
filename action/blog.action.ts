@@ -2,6 +2,7 @@
 import {
   createBlog,
   deleteBlog,
+  increaseViewBlog,
   paginateBlog,
   publishBlog,
   unpublishBlog,
@@ -105,5 +106,16 @@ export const unpublishBlogAction = async (id: string) => {
     };
   }
   revalidateTag("blog");
+  return { data, error };
+};
+
+export const increaseViewBlogAction = async (slug: string) => {
+  const { data, error } = await increaseViewBlog(slug);
+  if (error) {
+    return {
+      data: null,
+      error: error,
+    };
+  }
   return { data, error };
 };

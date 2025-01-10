@@ -25,7 +25,7 @@ type Props = {
   blog: Blog;
   deleteRedirect?: boolean;
 };
-export default function BlogOptionDown({
+export default function BlogOptionDropDown({
   blog,
   deleteRedirect = false,
 }: Props) {

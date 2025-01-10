@@ -32,7 +32,7 @@ export default function AppNavbar({ showChat = false }: Props) {
     {
       id: 3,
       label: "Blog",
-      href: "/",
+      href: "/blog",
     },
     {
       id: 4,
@@ -49,7 +49,7 @@ export default function AppNavbar({ showChat = false }: Props) {
     <nav className="flex h-14 w-full items-center justify-between border-b px-20">
       <div className="flex gap-20">
         <p>LOGO</p>
-        <ul className="flex gap-4">
+        <ul className="flex gap-10">
           {navItems.map((item) => (
             <li key={item.id}>
               <Link href={item.href}>{item.label}</Link>

@@ -4,9 +4,9 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import CustomCreateButton from "../ui/button/custom-create-button";
 import { toast } from "@/hooks/use-toast";
 import Spinner from "../ui/spinner";
-import BlogCard from "./blog-card";
 import { useGetInfiniteBlogs } from "@/data/query/blog";
 import { BlogFilter } from "@/types/blog.type";
+import BlogCardWide from "./blog-card-wide";
 type Props = {
   filter: BlogFilter;
 };
@@ -43,7 +43,7 @@ export default function BlogInfiniteScroll({ filter }: Props) {
           {/* <div className="flex flex-wrap gap-4"> */}
           <div className="grid w-full grid-cols-1 gap-4">
             {blogItems.map((blog) => (
-              <BlogCard key={blog?.id} blog={blog!} />
+              <BlogCardWide key={blog?.id} blog={blog!} />
             ))}
           </div>
         </InfiniteScroll>

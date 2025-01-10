@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { cn } from "@/lib/utils";
 import ImageContainerBlur from "@/components/ui/image/image-container-blur";
 import { getBlogBySlug } from "@/data/blog";
-import BlogOptionDropdown from "@/components/ui/dropdown/blog-option-dropdown";
+import BlogOptionDropDown from "@/components/ui/dropdown/blog-option-dropdown";
 import BlogDetailSkeleton from "@/components/ui/skeleton/blog-detail-skeleton";
 type Props = {
   params: Promise<{ slug: string }>;
@@ -36,7 +36,7 @@ export default async function page({ params }: Props) {
               {blog.published_at ? "Published" : "Unpublish"}
             </p>
           </div>
-          <BlogOptionDropdown blog={blog} deleteRedirect />
+          <BlogOptionDropDown blog={blog} deleteRedirect />
         </div>
         {blog.cover_url && (
           <ImageContainerBlur

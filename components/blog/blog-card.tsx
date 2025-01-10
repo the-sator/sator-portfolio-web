@@ -1,49 +1,57 @@
-import Link from "next/link";
 import React from "react";
 import ImageContainerBlurClient from "../ui/image/image-container-blur-client";
-import Tag from "../ui/tag";
-import { formatDate } from "@/utils/date";
+import Link from "next/link";
+import { cva, VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
 import { Blog } from "@/types/blog.type";
-type Props = {
-  blog: Blog;
-};
-export default function BlogCard({ blog }: Props) {
-  return (
-    <Link
-      href={`/admin-panel/blog/${blog.slug}`}
-      className="flex max-h-[200px] min-h-[100px] w-full rounded-sm border transition-all duration-300 hover:cursor-pointer hover:border-label/50"
-    >
-      <ImageContainerBlurClient
-        src={
-          blog.cover_url ? blog.cover_url : "/image/placeholder-portfolio.png"
-        }
-        className="w-[30%] flex-shrink-0 overflow-hidden rounded-sm"
-      />
-      <div className="mx-10 my-6 flex w-full flex-col gap-2">
-        <div className="flex gap-2">
-          {blog.CategoryOnBlog.map((category) => (
-            <Tag
-              key={category.category_id}
-              color={category.category.color.toLowerCase()}
-            >
-              {category.category.name}
-            </Tag>
-          ))}
-        </div>
-        <div className="min-h-[90px]">
-          <h2 className="line-clamp-1 text-lg font-bold">{blog.title}</h2>
-          <p className="mt-1 line-clamp-3 text-xs text-label">
-            {blog.description}
-          </p>
-        </div>
 
-        <div className="flex w-full justify-between">
-          <p className="line-clamp-1 text-xs text-label">
-            {formatDate(blog.created_at)}
-          </p>
-          <p className="line-clamp-1 text-xs text-label">{blog.view} views</p>
-        </div>
-      </div>
-    </Link>
-  );
+const blogCardVariants = cva(
+  "w-full rounded-xl bg-card p-1 border flex flex-col transition-all duration-300 hover:cursor-pointer hover:border-label/50",
+  {
+    variants: {
+      size: {
+        default: "h-[350px]",
+        sm: "max-h-[200px] min-h-[100px]",
+        lg: "max-h-[450px] min-h-[400px]",
+        icon: "h-9 w-9",
+      },
+    },
+    defaultVariants: {
+      size: "default",
+    },
+  },
+);
+
+export interface BlogCardProps
+  extends React.ButtonHTMLAttributes<HTMLAnchorElement>,
+    VariantProps<typeof blogCardVariants> {
+  blog: Blog;
 }
+
+const BlogCard = React.forwardRef<HTMLAnchorElement, BlogCardProps>(
+  ({ className, size, blog, ...props }, ref) => {
+    return (
+      <Link
+        href={`/blog/${blog.slug}`}
+        ref={ref}
+        className={cn(blogCardVariants({ size, className }))}
+        {...props}
+      >
+        <ImageContainerBlurClient
+          src={
+            blog.cover_url ? blog.cover_url : "/image/placeholder-portfolio.png"
+          }
+          className="flex-shrink-0 basis-3/4 overflow-hidden rounded-tl-lg rounded-tr-lg"
+        />
+        <div className="flex h-full flex-col justify-center px-4">
+          <h1 className="text-lg">{blog.title}</h1>
+          <p className="line-clamp-1 text-xs text-label">{blog.description}</p>
+        </div>
+      </Link>
+    );
+  },
+);
+
+BlogCard.displayName = "BlogCard";
+
+export default BlogCard;
