@@ -36,12 +36,14 @@ export default function RenderContent({ content }: { content: Block[] }) {
     initialContent,
   });
   return (
-    <BlockNoteView
-      editor={editor}
-      data-color-scheme={resolvedTheme}
-      data-sator-render-theme
-      editable={false}
-      sideMenu={false}
-    />
+    <article>
+      <BlockNoteView
+        editor={editor}
+        data-color-scheme={resolvedTheme}
+        data-sator-render-theme
+        editable={false}
+        sideMenu={false}
+      />
+    </article>
   );
 }

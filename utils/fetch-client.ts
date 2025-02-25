@@ -1,21 +1,19 @@
 import { HttpError } from "@/types/base.type";
-import { cookies } from "next/headers";
+import { getAdminCookie, getUserCookie } from "./cookie";
 
 export async function apiFetch<T>(
   url: string,
   options: RequestInit = {},
 ): Promise<{ data: T | null; error: HttpError | null }> {
   const baseUrl =
-    process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api";
+    process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api/v1";
   const isAdmin = url.startsWith("/admin");
-  const cookie = isAdmin
-    ? (await cookies()).get("session-admin")?.value
-    : (await cookies()).get("session-user")?.value;
+  const cookie = isAdmin ? await getAdminCookie() : await getUserCookie();
   const defaultOptions: RequestInit = {
     credentials: "include", // Important for cookies
     headers: {
       "Content-Type": "application/json",
-      Cookie: `${isAdmin ? "session-admin" : "session-user"}=${cookie}`,
+      cookie: cookie || "",
       ...options.headers,
     },
   };

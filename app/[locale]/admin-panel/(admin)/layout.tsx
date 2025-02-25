@@ -26,17 +26,17 @@ export default async function RootLayout({
   params: Promise<{ locale: string }>;
 }>) {
   const { locale } = await params;
-  const { auth } = await getAdminSession();
+  const { data } = await getAdminSession();
   if (!routing.locales.includes(locale as never)) {
     notFound();
   }
-  if (!auth) redirect(ADMIN_LOGIN_PATH);
+  if (!data) redirect(ADMIN_LOGIN_PATH);
   // Enable static rendering
   setRequestLocale(locale);
 
   return (
     <div>
-      <NotificationProvider authId={auth.id}>
+      <NotificationProvider authId={data.id}>
         <SidebarProvider className="relative flex flex-1">
           <AppSidebar />
           <div className="w-full overflow-hidden">

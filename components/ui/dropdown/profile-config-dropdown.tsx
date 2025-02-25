@@ -18,12 +18,11 @@ import { adminSignoutAction } from "@/action/auth.action";
 import { Session } from "@/types/base.type";
 import { Admin } from "@/types/admin.type";
 type Props = {
-  session: Session;
-  admin: Admin;
+  auth: Admin & Session;
 };
-export default function ProfileConfigDropdown({ session, admin }: Props) {
+export default function ProfileConfigDropdown({ auth }: Props) {
   const handleSignout = async () => {
-    const { error } = await adminSignoutAction(session.id);
+    const { error } = await adminSignoutAction(auth.id);
     if (error) {
       toast({
         title: "Error Signing Out",
@@ -45,10 +44,10 @@ export default function ProfileConfigDropdown({ session, admin }: Props) {
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
             <div>
-              <p className="text-left text-sm">{admin.username}</p>
-              <p className="text-xs text-muted-foreground group-hover:text-accent-foreground/50">
-                {admin.email}
-              </p>
+              <p className="text-left text-sm">{auth.username}</p>
+              {/* <p className="text-xs text-muted-foreground group-hover:text-accent-foreground/50">
+                {auth.email}
+              </p> */}
             </div>
           </div>
           <ChevronsUpDown />

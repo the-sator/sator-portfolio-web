@@ -6,6 +6,7 @@ import ImageContainerBlur from "@/components/ui/image/image-container-blur";
 import { getBlogBySlug } from "@/data/blog";
 import BlogOptionDropDown from "@/components/ui/dropdown/blog-option-dropdown";
 import BlogDetailSkeleton from "@/components/ui/skeleton/blog-detail-skeleton";
+import BackButton from "@/components/ui/button/back-button";
 type Props = {
   params: Promise<{ slug: string }>;
 };
@@ -19,24 +20,29 @@ export default async function page({ params }: Props) {
   return (
     <div className="p-4">
       <Suspense fallback={<BlogDetailSkeleton />}>
-        <div className="mb-4 flex items-center justify-end gap-4">
-          <div
-            className={cn(
-              "flex h-fit items-center justify-center gap-4 rounded-md border border-border px-4 py-2",
-              blog.published_at && "border-green-400",
-            )}
-          >
-            <span
+        <div className="mb-4 flex items-center justify-between">
+          <BackButton />
+          <div className="flex items-center gap-4">
+            <div
               className={cn(
-                "size-2 rounded-full bg-border",
-                blog.published_at && "bg-green-400",
+                "flex h-fit items-center justify-center gap-4 rounded-md border border-border px-4 py-2",
+                blog.published_at && "border-green-400",
               )}
-            ></span>
-            <p className={cn("text-sm", blog.published_at && "text-green-400")}>
-              {blog.published_at ? "Published" : "Unpublish"}
-            </p>
+            >
+              <span
+                className={cn(
+                  "size-2 rounded-full bg-border",
+                  blog.published_at && "bg-green-400",
+                )}
+              ></span>
+              <p
+                className={cn("text-sm", blog.published_at && "text-green-400")}
+              >
+                {blog.published_at ? "Published" : "Unpublish"}
+              </p>
+            </div>
+            <BlogOptionDropDown blog={blog} deleteRedirect />
           </div>
-          <BlogOptionDropDown blog={blog} deleteRedirect />
         </div>
         {blog.cover_url && (
           <ImageContainerBlur

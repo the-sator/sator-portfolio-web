@@ -1,5 +1,5 @@
-import { AuthSession, Login } from "@/types/auth.type";
-import { PaginateResult } from "@/types/base.type";
+import { Login } from "@/types/auth.type";
+import { PaginateResult, Session } from "@/types/base.type";
 import { CreateUser, User, UserFilter } from "@/types/user.type";
 import { fetchApi } from "@/utils/fetch-client";
 import { toQueryString } from "@/utils/string";
@@ -37,16 +37,16 @@ export const createUser = async (payload: CreateUser) => {
 };
 
 export const userlogin = async (payload: Login) => {
-  const data = await fetchApi.post<AuthSession>(`${getPath()}`, payload, [
+  const data = await fetchApi.post<User & Session>(`${getPath()}`, payload, [
     "users",
   ]);
   return data;
 };
 
 export const getUserSession = cache(async () => {
-  const { data, error } = await fetchApi.get<AuthSession>(`${getPath()}/me`, [
-    "user-session",
-  ]);
-  const { auth, session } = data || {};
-  return { auth, session, error };
+  const { data, error } = await fetchApi.get<User & Session>(
+    `${getPath()}/me`,
+    ["user-session"],
+  );
+  return { data, error };
 });

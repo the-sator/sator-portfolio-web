@@ -11,13 +11,13 @@ type Props = {
 };
 export default async function page({ params }: Props) {
   const slug = (await params).slug;
-  const [{ auth }, { data: categories }, { data: portfolio }] =
+  const [{ data }, { data: categories }, { data: portfolio }] =
     await Promise.all([
       getAdminSession(),
       getAllCategories(),
       getPortfolioBySlug(slug),
     ]);
-  if (!auth) {
+  if (!data) {
     return redirect(ADMIN_LOGIN_PATH);
   }
 
@@ -29,7 +29,7 @@ export default async function page({ params }: Props) {
     <div className="p-4">
       <Suspense fallback={<Skeleton className="min-h-svh w-full" />}>
         <PortfolioForm
-          admin={auth}
+          admin={data}
           categories={categories || []}
           portfolio={portfolio}
         />

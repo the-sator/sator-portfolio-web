@@ -10,13 +10,13 @@ export default async function layout({
 }: {
   children: React.ReactNode;
 }) {
-  const { auth } = await getUserSession();
-  if (!auth) {
+  const { data } = await getUserSession();
+  if (!data) {
     redirect(ADMIN_LOGIN_PATH);
   }
   return (
     <div>
-      <NotificationProvider authId={auth.id}>
+      <NotificationProvider authId={data.id}>
         <AppNavbar />
         {children}
       </NotificationProvider>

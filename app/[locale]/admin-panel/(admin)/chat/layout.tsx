@@ -1,4 +1,3 @@
-import ChatList from "@/components/chat/chat-list";
 import { ChatRoomContainer } from "@/components/chat/chat-room-container";
 import FilterInput from "@/components/ui/filter/filter-input";
 import { CreateChatRoomModal } from "@/components/ui/modal/chat-room-modals";
@@ -9,14 +8,13 @@ import { redirect } from "next/navigation";
 import React from "react";
 type Props = {
   children: React.ReactNode;
-  params: Promise<{ id: string }>;
 };
-export default async function layout({ children, params }: Props) {
-  const [{ data: chatMember }, { auth }] = await Promise.all([
+export default async function layout({ children }: Props) {
+  const [{ data: chatMember }, { data }] = await Promise.all([
     getAllInvitableChatMember(),
     getAdminSession(),
   ]);
-  if (!auth) {
+  if (!data) {
     return redirect(ADMIN_LOGIN_PATH);
   }
   return (
@@ -34,13 +32,13 @@ export default async function layout({ children, params }: Props) {
           <ChatList isAdmin={true} auth={auth} />
         </div>
       </div> */}
-      <ChatRoomContainer auth={auth} isAdmin={true}>
+      <ChatRoomContainer auth={data} isAdmin={true}>
         <FilterInput
           placeholder="Search..."
           filterKey="chat_room_name"
           page={false}
         />
-        <CreateChatRoomModal member={chatMember} admin={auth} />
+        <CreateChatRoomModal member={chatMember} admin={data} />
       </ChatRoomContainer>
       {children}
     </div>

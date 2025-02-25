@@ -2,7 +2,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { PortfolioFilter } from "@/types/portfolio.type";
 import { BlogFilter } from "@/types/blog.type";
 import { getBlogPaginationAction } from "@/action/blog.action";
-export function getQueryKey() {
+export function getBlogQueryKey() {
   return "blog";
 }
 
@@ -12,7 +12,7 @@ export function getFilterQueryKey(filter: BlogFilter) {
 
 export function useGetInfiniteBlogs(filter: PortfolioFilter, options: object) {
   return useInfiniteQuery({
-    queryKey: getFilterQueryKey(filter),
+    queryKey: [getBlogQueryKey(), getFilterQueryKey(filter)],
     queryFn: ({ pageParam }) =>
       getBlogPaginationAction({
         ...filter,

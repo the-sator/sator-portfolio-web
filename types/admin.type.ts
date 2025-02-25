@@ -1,18 +1,17 @@
 import { z } from "zod";
-import { Session } from "./base.type";
 import { Role } from "./role.type";
+import { Auth } from "./auth.type";
 
 export type Admin = {
   id: string;
-  email: string;
-  password?: string;
   username: string;
+  auth_id: string;
+  auth: Auth | null;
   role_id: number;
   role: Role;
-  profilePictureUrl: string | null;
-  lastLogin: Date | null;
-  createdAt: Date;
-  updatedAt: Date;
+  profile_url: string | null;
+  created_at: Date;
+  updated_at: Date;
   totp_key: Buffer | null;
 };
 

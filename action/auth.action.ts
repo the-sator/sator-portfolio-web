@@ -1,11 +1,12 @@
 "use server";
 
+import { ADMIN_LOGIN_PATH, COOKIE } from "@/constant/base";
 import { adminLogin, adminSetUpTotp, adminSignout } from "@/data/admin";
 import { userlogin } from "@/data/user";
 import { UpdateAdminTotpSchema } from "@/types/admin.type";
 import { LoginSchema } from "@/types/auth.type";
-import { deleteSessionCookies, setSessionCookies } from "@/utils/session";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { deleteSessionCookies, setSessionCookies } from "@/utils/cookie";
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -25,13 +26,8 @@ export async function adminLoginAction(formData: unknown) {
   });
 
   if (!error && data) {
-    await setSessionCookies(
-      "session-admin",
-      data.session.token,
-      String(data.session.expiredAt),
-    );
+    await setSessionCookies(COOKIE.ADMIN, data.token, String(data.expires_at));
     revalidatePath("/", "layout");
-    revalidateTag("admin-session");
     redirect("/admin-panel/user");
   } else {
     return {
@@ -43,11 +39,9 @@ export async function adminLoginAction(formData: unknown) {
 export async function adminSignoutAction(id: string) {
   const { data, error } = await adminSignout(id);
   if (!error && data) {
-    await deleteSessionCookies("session-admin");
+    await deleteSessionCookies(COOKIE.ADMIN);
     revalidatePath("/", "layout");
-    revalidateTag("admin-session");
-    revalidateTag("admin");
-    redirect("/admin-panel/login");
+    redirect(ADMIN_LOGIN_PATH);
   } else {
     return {
       error: error,
@@ -99,13 +93,8 @@ export async function userLoginAction(formData: unknown) {
   });
 
   if (!error && data) {
-    await setSessionCookies(
-      "session-user",
-      data.session.token,
-      String(data.session.expiredAt),
-    );
+    await setSessionCookies(COOKIE.USER, data.token, String(data.expires_at));
     revalidatePath("/", "layout");
-    revalidateTag("user-session");
     redirect("/chat");
   } else {
     return {

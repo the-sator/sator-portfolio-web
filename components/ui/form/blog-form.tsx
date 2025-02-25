@@ -17,6 +17,8 @@ import { Category } from "@/types/category.type";
 import { uploadImage } from "@/data/upload";
 import Spinner from "../spinner";
 import CoverImageUpload from "../cover-image-upload";
+import { useQueryClient } from "@tanstack/react-query";
+import { getBlogQueryKey } from "@/data/query/blog";
 
 type Props = {
   admin: Admin;
@@ -47,6 +49,7 @@ export default function BlogForm({ admin, categories, blog }: Props) {
     useState<string[]>(categoryIds);
   const [isUploadPending, startUploadTransition] = useTransition();
   const [isSubmitPending, startSubmitTransition] = useTransition();
+  const queryClient = useQueryClient();
 
   //Constant
   const categoryOption = categories?.map((category) => {
@@ -97,6 +100,9 @@ export default function BlogForm({ admin, categories, blog }: Props) {
         title: "Blog Saved!",
         variant: "success",
         duration: 1500,
+      });
+      queryClient.invalidateQueries({
+        queryKey: [getBlogQueryKey()],
       });
     }
   };

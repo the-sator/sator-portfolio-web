@@ -4,19 +4,20 @@ import SidebarItem from "./sidebar-item";
 import { getAdminSession } from "@/data/admin";
 import { redirect } from "next/navigation";
 import { getRoleById } from "@/data/role";
+import { ADMIN_LOGIN_PATH } from "@/constant/base";
 
 export async function AppSidebar() {
-  const { session, auth } = await getAdminSession();
-  if (!session || !auth) {
-    return redirect("/admin-panel/login");
+  const { data } = await getAdminSession();
+  if (!data) {
+    return redirect(ADMIN_LOGIN_PATH);
   }
-  const { data: role } = await getRoleById(auth.role.id);
+  const { data: role } = await getRoleById(data.role_id);
   return (
     <Sidebar>
       <SidebarItem role={role} />
       <SidebarFooter>
         <div className="flex items-center justify-between">
-          <ProfileConfigDropdown session={session} admin={auth} />
+          <ProfileConfigDropdown auth={data} />
           {/* <ThemeSwitch /> */}
         </div>
       </SidebarFooter>

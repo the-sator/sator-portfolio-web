@@ -4,7 +4,7 @@ import {
   AssignAdminRole,
   UpdateAdminTotp,
 } from "@/types/admin.type";
-import { AuthSession } from "@/types/auth.type";
+import { Session } from "@/types/base.type";
 import { fetchApi } from "@/utils/fetch-client";
 import { cache } from "react";
 const getAdminPath = () => {
@@ -17,7 +17,7 @@ export const getAllAdmins = async () => {
 };
 
 export const adminLogin = async (payload: AdminLoginSchema) => {
-  const { data, error } = await fetchApi.post<AuthSession>(
+  const { data, error } = await fetchApi.post<Admin & Session>(
     `${getAdminPath()}/login`,
     payload,
     ["admin"],
@@ -26,13 +26,12 @@ export const adminLogin = async (payload: AdminLoginSchema) => {
 };
 
 export const getAdminSession = cache(async () => {
-  const { data, error } = await fetchApi.get<AuthSession>(
+  const { data, error } = await fetchApi.get<Admin & Session>(
     `${getAdminPath()}/me`,
     ["admin-session"],
   );
-  const { auth, session } = data || {};
 
-  return { auth, session, error };
+  return { data, error };
 });
 
 export const adminSignout = async (id: string) => {

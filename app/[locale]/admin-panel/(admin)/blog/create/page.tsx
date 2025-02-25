@@ -5,16 +5,16 @@ import { getAllCategories } from "@/data/category";
 import { redirect } from "next/navigation";
 
 export default async function App() {
-  const [{ auth }, { data: categories }] = await Promise.all([
+  const [{ data }, { data: categories }] = await Promise.all([
     getAdminSession(),
     getAllCategories(),
   ]);
-  if (!auth) {
+  if (!data) {
     return redirect(ADMIN_LOGIN_PATH);
   }
   return (
     <div className="p-4">
-      <BlogForm admin={auth} categories={categories || []} />
+      <BlogForm admin={data} categories={categories || []} />
     </div>
   );
 }

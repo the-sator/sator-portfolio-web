@@ -15,9 +15,8 @@ export type HttpError = {
 };
 
 export type Session = {
-  id: string;
   token: string;
-  expiredAt: Date;
+  expires_at: Date;
 };
 
 export type ImagePreview = {

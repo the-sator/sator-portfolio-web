@@ -1,13 +1,4 @@
 import { z } from "zod";
-import { Admin } from "./admin.type";
-import { User } from "./user.type";
-import { Session } from "./base.type";
-
-export type AuthSession = {
-  auth: Auth;
-  session: Session;
-};
-
 export const LoginSchema = z.object({
   username: z
     .string()
@@ -23,6 +14,14 @@ export const LoginSchema = z.object({
     .min(6, { message: "Password must be at least 6 characters long" }),
 });
 
-export type Auth = Admin & User;
+export type Auth = {
+  id: string;
+  email: string;
+  password: string;
+  totp_key: Uint8Array | null;
+  last_login: Date | null;
+  created_at: Date;
+  updated_at: Date;
+};
 
 export type Login = z.infer<typeof LoginSchema>;

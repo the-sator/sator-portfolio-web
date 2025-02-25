@@ -1,3 +1,4 @@
+import { COOKIE } from "@/constant/base";
 import { cookies } from "next/headers";
 
 export const setSessionCookies = async (
@@ -22,4 +23,13 @@ export const deleteSessionCookies = async (name: string) => {
     sameSite: "lax",
     maxAge: 0,
   });
+};
+
+export const getUserCookie = async () => {
+  // return (await cookies()).get(COOKIE.USER)!.value;
+  return `${(await cookies()).get(COOKIE.USER)!.name}=${(await cookies()).get(COOKIE.USER)!.value}`;
+};
+
+export const getAdminCookie = async () => {
+  return `${(await cookies()).get(COOKIE.ADMIN)!.name}=${(await cookies()).get(COOKIE.ADMIN)!.value}`;
 };

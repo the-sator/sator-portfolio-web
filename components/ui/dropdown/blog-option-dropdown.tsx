@@ -21,6 +21,8 @@ import { FaPen } from "react-icons/fa6";
 import { SlOptionsVertical } from "react-icons/sl";
 import { Button } from "../button";
 import { LinkButton } from "../button/link-button";
+import { useQueryClient } from "@tanstack/react-query";
+import { getBlogQueryKey } from "@/data/query/blog";
 type Props = {
   blog: Blog;
   deleteRedirect?: boolean;
@@ -30,6 +32,7 @@ export default function BlogOptionDropDown({
   deleteRedirect = false,
 }: Props) {
   const { openConfirmation } = useConfirmationStore();
+  const queryClient = useQueryClient();
   const handleDelete = async () => {
     const { error } = await deleteBlogAction(blog.id);
     if (error) {
@@ -65,6 +68,9 @@ export default function BlogOptionDropDown({
         variant: "success",
         duration: 1500,
       });
+      queryClient.invalidateQueries({
+        queryKey: [getBlogQueryKey()],
+      });
     }
   };
 
@@ -82,6 +88,9 @@ export default function BlogOptionDropDown({
         title: "Unpublish Blog Successful",
         variant: "success",
         duration: 1500,
+      });
+      queryClient.invalidateQueries({
+        queryKey: [getBlogQueryKey()],
       });
     }
   };

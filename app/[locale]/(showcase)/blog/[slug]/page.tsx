@@ -1,13 +1,19 @@
 import { increaseViewBlogAction } from "@/action/blog.action";
 import { DynamicRenderContent } from "@/components/editor/render-content";
 import BackButton from "@/components/ui/button/back-button";
+import LikeButton from "@/components/ui/button/like-button";
 import ImageContainerBlur from "@/components/ui/image/image-container-blur";
+import { Separator } from "@/components/ui/separator";
 import BlogDetailSkeleton from "@/components/ui/skeleton/blog-detail-skeleton";
+import Tag from "@/components/ui/tag";
 import { getBlogBySlug } from "@/data/blog";
 import { cn } from "@/lib/utils";
+import { formatDate } from "@/utils/date";
 import { revalidateTag } from "next/cache";
 import { notFound } from "next/navigation";
 import React, { Suspense } from "react";
+import { AiOutlineLike } from "react-icons/ai";
+import { IoShareSocialSharp } from "react-icons/io5";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -34,7 +40,20 @@ export default async function page({ params }: Props) {
           />
         )}
 
-        <h1 className="mb-5 mt-10 text-4xl font-bold">{blog.title}</h1>
+        <section className="flex flex-col gap-2">
+          <h1 className="mt-10 text-4xl font-bold">{blog.title}</h1>
+          <Tag>Release Note</Tag>
+          <div className="mt-2 flex justify-between">
+            <p className="text-sm text-label">
+              Published at: {formatDate(new Date())}
+            </p>
+            <div className="flex gap-4">
+              <LikeButton like={blog.like} />
+              <IoShareSocialSharp size={20} />
+            </div>
+          </div>
+        </section>
+        <Separator className="my-4" />
         <DynamicRenderContent content={blog.content || []} />
       </Suspense>
     </div>
