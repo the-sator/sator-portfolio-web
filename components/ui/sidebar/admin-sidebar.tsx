@@ -1,18 +1,20 @@
 import { Sidebar, SidebarFooter } from "@/components/ui/sidebar/sidebar";
 import ProfileConfigDropdown from "../dropdown/profile-config-dropdown";
-import AppSidebarItem from "./app-sidebar-item";
-import { getUserSession } from "@/data/user";
+import { getAdminSession } from "@/data/admin";
 import { redirect } from "next/navigation";
-import { USER_LOGIN_PATH } from "@/constant/base";
+import { getRoleById } from "@/data/role";
+import { ADMIN_LOGIN_PATH } from "@/constant/base";
+import AdminSidebarItem from "./admin-sidebar-item";
 
-export async function AppSidebar() {
-  const { data } = await getUserSession();
+export async function AdminSidebar() {
+  const { data } = await getAdminSession();
   if (!data) {
-    redirect(USER_LOGIN_PATH);
+    return redirect(ADMIN_LOGIN_PATH);
   }
+  const { data: role } = await getRoleById(data.role_id);
   return (
     <Sidebar>
-      <AppSidebarItem />
+      <AdminSidebarItem role={role} />
       <SidebarFooter>
         <div className="flex items-center justify-between">
           <ProfileConfigDropdown auth={data} />

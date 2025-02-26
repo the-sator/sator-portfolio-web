@@ -41,9 +41,9 @@ import {
   removeChatMemberAction,
 } from "@/action/chat-member.action";
 import Spinner from "../spinner";
-import { Auth } from "@/types/auth.type";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
+import { User } from "@/types/user.type";
 type Props = {
   member: InvitableChatMember | null;
   admin: Admin;
@@ -143,7 +143,7 @@ export function CreateChatRoomModal({ member, admin }: Props) {
 
 type DetailProps = {
   room: ChatRoom;
-  auth: Partial<Auth>;
+  auth: Admin | User;
 };
 export function ChatRoomDetailModal({ room, auth }: DetailProps) {
   const [isEdit, setIsEdit] = useState(false);
@@ -247,7 +247,7 @@ export function ChatRoomDetailModal({ room, auth }: DetailProps) {
             ) : (
               <div className="flex items-center gap-2">
                 <p className="text-md">{room.name}</p>
-                {auth.role_id && (
+                {"role_id" in auth && (
                   <Button
                     variant="icon"
                     className="h-fit w-fit p-0"
@@ -289,7 +289,7 @@ export function ChatRoomDetailModal({ room, auth }: DetailProps) {
                       )}
                     </div>
                   </div>
-                  {auth.role_id && (
+                  {"role_id" in auth && (
                     <>
                       {isLoading ? (
                         <Spinner />

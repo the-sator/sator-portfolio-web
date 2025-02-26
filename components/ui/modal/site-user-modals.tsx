@@ -9,25 +9,30 @@ import {
 } from "../dialog";
 import { Button } from "../button";
 import { IoAddOutline } from "react-icons/io5";
-import { InputWithLabel } from "../input-label";
+import { InputWithLabel, SelectOption, SelectWithLabel } from "../input-label";
 import SubmitButton from "../button/submit-button";
-import { Checkbox } from "../checkbox";
-import { Label } from "../label";
 import { toast } from "@/hooks/use-toast";
 import { ZodFormattedError } from "zod";
 import { CreateSiteUser } from "@/types/site-user.type";
 import { createSiteUserAction } from "@/action/site-user.action";
-
-export function CreateSiteUserModal() {
-  const [inputType, setInputType] = useState("password");
+import { User } from "@/types/user.type";
+type Props = {
+  users: User[];
+};
+export function CreateSiteUserModal({ users }: Props) {
   const [open, setOpen] = useState(false);
   const [errors, setErrors] = useState<ZodFormattedError<CreateSiteUser>>();
+  const options: SelectOption[] = users.map((user) => ({
+    label: user.username,
+    value: user.id,
+  }));
   const handleCreateSiteUser = async (formData: FormData) => {
     const data: CreateSiteUser = {
-      email: formData.get("email")?.toString() || "",
-      password: formData.get("password")?.toString() || "",
-      username: formData.get("username")?.toString() || "",
+      website_name: formData.get("website_name")?.toString() || "",
+      link: formData.get("link")?.toString() || "",
+      user_id: formData.get("user_id")?.toString() || "",
     };
+    console.log(data);
     const { error } = await createSiteUserAction(data);
     if (error) {
       if ("statusCode" in error) {
@@ -66,27 +71,25 @@ export function CreateSiteUserModal() {
         </DialogHeader>
         <form onSubmit={handleSubmit} className="mt-4 grid grid-cols-1 gap-4">
           <InputWithLabel
-            label="Username"
-            name="username"
-            errors={errors?.username}
+            label="Website Name"
+            name="website_name"
+            errors={errors?.website_name}
+            placeholder="Sator's Portfolio"
           />
-          <InputWithLabel label="Email" name="email" errors={errors?.email} />
           <InputWithLabel
-            type={inputType}
-            label="Password"
-            name="password"
-            errors={errors?.password}
+            label="Link"
+            name="link"
+            errors={errors?.link}
+            placeholder="https://www.sator-tech.live"
           />
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              onCheckedChange={() =>
-                setInputType((prev) =>
-                  prev === "password" ? "text" : "password",
-                )
-              }
-            />
-            <Label className="text-xs">Show Password</Label>
-          </div>
+          <SelectWithLabel
+            label="User"
+            name="user_id"
+            errors={errors?.user_id}
+            options={options}
+            placeholder="Please Select User"
+          />
+          {/* <InviteChatMemberMultiSelect /> */}
           <SubmitButton label="Save" />
         </form>
       </DialogContent>

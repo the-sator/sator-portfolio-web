@@ -21,7 +21,7 @@ import { useUnreadMessage } from "@/store/unread-message";
 type Props = {
   role: Role | null;
 };
-export default function SidebarItem({ role }: Props) {
+export default function AdminSidebarItem({ role }: Props) {
   const t = useTranslations("SidebarItem");
   const { unread_counts, fetchUnreadCounts } = useUnreadMessage();
 

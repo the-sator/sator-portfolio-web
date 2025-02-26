@@ -6,27 +6,23 @@ import { Button } from "../button";
 import { Admin, UpdateAdminTotp } from "@/types/admin.type";
 import { adminTotp } from "@/action/auth.action";
 import { toast } from "@/hooks/use-toast";
-import { Session } from "@/types/base.type";
 type Props = {
   encodedTOTPKey: string;
   setOpen: Dispatch<SetStateAction<boolean>>;
-  admin: Admin;
-  session: Session;
+  auth: Admin;
 };
 export default function SetupTotpForm({
   encodedTOTPKey,
   setOpen,
-  admin,
-  session,
+  auth,
 }: Props) {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // Prevent default form reset behavior
     const formData = new FormData(e.currentTarget);
     const payload: UpdateAdminTotp = {
-      id: admin.id,
+      id: auth.id,
       key: formData.get("key")!.toString(),
       code: formData.get("code")!.toString(),
-      sessionId: session.id,
     };
     const { error } = await adminTotp(payload);
     if (error) {

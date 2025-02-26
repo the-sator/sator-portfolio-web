@@ -1,25 +1,21 @@
 import { z } from "zod";
 import { BaseFilterSchema } from "./base.type";
 export type SiteUser = {
+  link: string;
   id: string;
   created_at: Date;
   updated_at: Date;
-  email: string;
-  password: string;
-  username: string;
+  auth_id: string;
   profile_url: string | null;
-  totp_key: Uint8Array | null;
-  last_login: Date | null;
+  user_id: string;
+  website_name: string;
+  api_key: Uint8Array;
 };
 
 export const CreateSiteUserSchema = z.object({
-  username: z.string().trim().min(1).max(20, {
-    message: "Username must not exceeed 20 characters",
-  }),
-  email: z.string().email(),
-  password: z
-    .string()
-    .min(6, { message: "Password must be at least 6 characters long" }),
+  website_name: z.string().trim().min(1),
+  link: z.string().min(1).trim(),
+  user_id: z.string().min(1).trim(),
 });
 
 export const SiteUserFilterSchema = BaseFilterSchema.extend({

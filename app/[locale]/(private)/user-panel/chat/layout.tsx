@@ -1,4 +1,3 @@
-import ChatList from "@/components/chat/chat-list";
 import { ChatRoomContainer } from "@/components/chat/chat-room-container";
 import FilterInput from "@/components/ui/filter/filter-input";
 import { USER_LOGIN_PATH } from "@/constant/base";
@@ -9,13 +8,13 @@ type Props = {
   children: React.ReactNode;
 };
 export default async function layout({ children }: Props) {
-  const { auth } = await getUserSession();
-  if (!auth) {
+  const { data } = await getUserSession();
+  if (!data) {
     redirect(USER_LOGIN_PATH);
   }
   return (
-    <div className="grid grid-cols-1 gap-2 p-4 sm:grid-cols-3">
-      <ChatRoomContainer auth={auth} isAdmin={false}>
+    <div className="grid w-full grid-cols-1 gap-2 p-4 sm:grid-cols-3">
+      <ChatRoomContainer auth={data} isAdmin={false}>
         <FilterInput
           placeholder="Search..."
           filterKey="chat_room_name"

@@ -2,8 +2,9 @@ import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import FilterInput from "@/components/ui/filter/filter-input";
 import { CreateSiteUserModal } from "@/components/ui/modal/site-user-modals";
-import { SiteUserColumns } from "@/components/ui/table/columns/site-user.columns";
+import { SiteUserColumn } from "@/components/ui/table/columns/site-user.column";
 import { getPaginateSiteUser } from "@/data/site-user";
+import { getAllUsers } from "@/data/user";
 import { getTranslations } from "next-intl/server";
 import React from "react";
 type Props = {
@@ -12,12 +13,16 @@ type Props = {
 export default async function SiteUserPage({ searchParams }: Props) {
   const filter = await searchParams;
   const t = await getTranslations("SiteUser");
-  const { data, metadata, error } = await getPaginateSiteUser(filter);
+  const [{ data, metadata, error }, { data: users }] = await Promise.all([
+    getPaginateSiteUser(filter),
+    getAllUsers(),
+  ]);
+  console.log("users:", users);
   return (
     <div className="p-4">
       <div className="mb-4 flex items-center justify-between">
         <h1 className="text-2xl">{t("site-user")}</h1>
-        <CreateSiteUserModal />
+        <CreateSiteUserModal users={users || []} />
       </div>
       <div className="flex items-center gap-2">
         <FilterInput placeholder="Username" filterKey="username" />
@@ -25,7 +30,7 @@ export default async function SiteUserPage({ searchParams }: Props) {
         <Button variant="destructive">Clear</Button>
       </div>
       <DataTable
-        columns={SiteUserColumns}
+        columns={SiteUserColumn}
         data={data || []}
         error={error}
         metadata={metadata}

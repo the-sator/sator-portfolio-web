@@ -7,21 +7,19 @@ import { renderSVG } from "uqr";
 import React from "react";
 import { getAdminSession } from "@/data/admin";
 import { redirect } from "next/navigation";
+import { ADMIN_LOGIN_PATH } from "@/constant/base";
 
 export default async function page() {
-  const { auth, session } = await getAdminSession();
-  if (!session) {
-    return redirect("/admin-panel/login");
-  }
-  if (!auth) {
-    return redirect("/admin-panel/login");
+  const { data } = await getAdminSession();
+  if (!data) {
+    return redirect(ADMIN_LOGIN_PATH);
   }
   const totpKey = new Uint8Array(20);
   crypto.getRandomValues(totpKey);
   const encodedTOTPKey = encodeBase64(totpKey);
   const keyURI = createTOTPKeyURI(
     "Sator Portfolio",
-    auth.username,
+    data.username,
     totpKey,
     30,
     6,
@@ -52,8 +50,7 @@ export default async function page() {
           <TotpModal
             qrcode={qrcode}
             encodedTOTPKey={encodedTOTPKey}
-            admin={auth}
-            session={session}
+            auth={data}
           />
           {/* <Button variant={"outline"}>Set up</Button> */}
         </div>

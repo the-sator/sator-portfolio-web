@@ -15,10 +15,10 @@ import { ChevronsUpDown } from "lucide-react";
 import { IoLogOutSharp } from "react-icons/io5";
 import { toast } from "@/hooks/use-toast";
 import { adminSignoutAction } from "@/action/auth.action";
-import { Session } from "@/types/base.type";
 import { Admin } from "@/types/admin.type";
+import { User } from "@/types/user.type";
 type Props = {
-  auth: Admin & Session;
+  auth: Admin | User;
 };
 export default function ProfileConfigDropdown({ auth }: Props) {
   const handleSignout = async () => {

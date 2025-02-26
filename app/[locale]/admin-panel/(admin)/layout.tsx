@@ -3,7 +3,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar/sidebar";
-import { AppSidebar } from "@/components/ui/sidebar/app-sidebar";
+import { AdminSidebar } from "@/components/ui/sidebar/admin-sidebar";
 import Navbar from "@/components/ui/nav";
 import { notFound, redirect } from "next/navigation";
 import { routing } from "@/i18n/routing";
@@ -38,7 +38,7 @@ export default async function RootLayout({
     <div>
       <NotificationProvider authId={data.id}>
         <SidebarProvider className="relative flex flex-1">
-          <AppSidebar />
+          <AdminSidebar />
           <div className="w-full overflow-hidden">
             <Navbar
               sidebarTrigger={<SidebarTrigger />}

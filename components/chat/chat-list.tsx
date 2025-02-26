@@ -8,13 +8,14 @@ import { useGetInfiniteChatRoom } from "@/data/query/chat-room";
 import { toast } from "@/hooks/use-toast";
 import Spinner from "../ui/spinner";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { Auth } from "@/types/auth.type";
 import { WSPayload } from "@/types/base.type";
 import { getSocket } from "@/lib/socket";
 import { useUnreadMessage } from "@/store/unread-message";
+import { Admin } from "@/types/admin.type";
+import { User } from "@/types/user.type";
 type Props = {
   isAdmin: boolean;
-  auth: Partial<Auth>;
+  auth: Admin | User;
 };
 export default function ChatList({ isAdmin, auth }: Props) {
   const searchParams = useSearchParams();

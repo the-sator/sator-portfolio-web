@@ -28,7 +28,13 @@ export const getPaginateUsers = async (filter: UserFilter) => {
     error: null,
   };
 };
-
+export const getAllUsers = async () => {
+  const { data, error } = await fetchApi.get<User[]>(`${getAdminPath()}/all`);
+  if (error) {
+    return { data: null, metadata: null, error };
+  }
+  return { data, error };
+};
 export const createUser = async (payload: CreateUser) => {
   const data = await fetchApi.post<User>(`${getAdminPath()}`, payload, [
     "users",

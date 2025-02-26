@@ -12,9 +12,9 @@ export const createSiteUserAction = async (formData: unknown) => {
     };
   }
   const { data, error } = await createSiteUser({
-    email: result.data.email,
-    password: result.data.password,
-    username: result.data.username,
+    website_name: result.data.website_name,
+    link: result.data.link,
+    user_id: result.data.user_id,
   });
 
   if (error) {

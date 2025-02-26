@@ -36,7 +36,6 @@ export const UpdateAdminTotpSchema = z.object({
 
   key: z.string().trim().min(1, { message: "Key is required" }),
   code: z.string().trim().min(1, { message: "Code is required" }),
-  sessionId: z.string().trim().min(1, { message: "Session ID is required" }),
 });
 
 export const AssignAdminRoleSchema = z.object({

@@ -20,10 +20,15 @@
     "content-management": "គ្រប់គ្រងវេទិការ",
     "communication": "ទំនាក់ទំនង",
     "configuration": "រចនាសម្ព័ន្ធ",
-    "portfolio": "ស្នាដៃ"
+    "portfolio": "ស្នាដៃ",
+    "site": "វិបសាយ",
+    "site-management": "គ្រប់គ្រងវិបសាយ"
   },
   "User": {
     "user": "អតិថិជន"
+  },
+  "Site": {
+    "website": "វិបសាយ"
   },
   "SiteUser": {
     "site-user": "អតិថិជនគេហទំព័រ"

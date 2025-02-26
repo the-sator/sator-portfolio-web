@@ -197,7 +197,7 @@ export function TextAreaWithLabel({
         className="h-full"
       />
       {showCount && (
-        <p className="absolute bottom-1 right-5 text-[12px] text-neutral-500">
+        <p className="absolute bottom-1 right-5 text-[12px] text-label/80">
           {text?.length || 0}/{maxLength}
         </p>
       )}
@@ -219,7 +219,7 @@ export function SelectWithLabel({
 
       <Select defaultValue={defaultValue} name={name}>
         <SelectTrigger className="w-full">
-          <SelectValue placeholder={placeholder} />
+          <SelectValue placeholder={placeholder} className="" />
         </SelectTrigger>
         <SelectContent>
           {options.map((option, index) => (

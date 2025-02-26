@@ -3,7 +3,7 @@ import { adminRoleById } from "@/action/role.action";
 export function getQueryKey() {
   return ["role"];
 }
-export function useGetRoleByID(id: number, options: {}) {
+export function useGetRoleByID(id: number, options: object) {
   return useQuery({
     queryKey: getQueryKey(),
     queryFn: async () => {

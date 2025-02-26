@@ -20,10 +20,15 @@
     "content-management": "Content Managemnet",
     "communication": "Communication",
     "configuration": "Configuration",
-    "portfolio": "Portfolio"
+    "portfolio": "Portfolio",
+    "site": "Website",
+    "site-management": "Website Management"
   },
   "User": {
     "user": "User"
+  },
+  "Site": {
+    "website": "Website"
   },
   "SiteUser": {
     "site-user": "Site User"

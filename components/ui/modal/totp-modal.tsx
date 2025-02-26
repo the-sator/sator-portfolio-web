@@ -10,27 +10,20 @@ import {
 } from "../dialog";
 import { Button } from "../button";
 import SetupTotpForm from "../form/setup-totp-form";
-import { Session } from "@/types/base.type";
 import { Admin } from "@/types/admin.type";
 
 type Props = {
   qrcode: string;
   encodedTOTPKey: string;
-  admin: Admin;
-  session: Session;
+  auth: Admin;
 };
-export default function TotpModal({
-  qrcode,
-  encodedTOTPKey,
-  admin,
-  session,
-}: Props) {
+export default function TotpModal({ qrcode, encodedTOTPKey, auth }: Props) {
   const [open, setOpen] = useState(false);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant={"outline"}>
-          {!!admin.totp_key ? "Edit" : "Set up"}
+          {!!auth.totp_key ? "Edit" : "Set up"}
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -55,8 +48,7 @@ export default function TotpModal({
           </div>
           <SetupTotpForm
             encodedTOTPKey={encodedTOTPKey}
-            admin={admin}
-            session={session}
+            auth={auth}
             setOpen={setOpen}
           />
         </div>

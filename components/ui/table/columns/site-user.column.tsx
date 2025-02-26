@@ -10,7 +10,7 @@ import { SiteUser } from "@/types/site-user.type";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
-export const SiteUserColumns: ColumnDef<SiteUser>[] = [
+export const SiteUserColumn: ColumnDef<SiteUser>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -38,18 +38,18 @@ export const SiteUserColumns: ColumnDef<SiteUser>[] = [
     header: "ID",
   },
   {
-    accessorKey: "username",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Username" />
-    ),
+    accessorKey: "website_name",
+    header: "Website",
   },
+
   {
-    accessorKey: "email",
-    header: "Email",
+    accessorKey: "link",
+    header: "Link",
   },
+
   {
-    accessorKey: "last_login",
-    header: "Last Login At",
+    accessorKey: "api_key",
+    header: "API Key",
   },
   {
     accessorKey: "created_at",

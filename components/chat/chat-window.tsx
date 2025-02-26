@@ -9,10 +9,11 @@ import {
   InvitableChatMember,
 } from "@/types/chat.type";
 import ChatInput from "./chat-input";
-import { Auth } from "@/types/auth.type";
 import ChatWindowDropdown from "../ui/dropdown/chat-window-dropdown";
+import { Admin } from "@/types/admin.type";
+import { User } from "@/types/user.type";
 type Props = {
-  auth: Partial<Auth>;
+  auth: User | Admin;
   room: ChatRoom;
   filter: ChatMessageFilter;
   members?: InvitableChatMember | null;

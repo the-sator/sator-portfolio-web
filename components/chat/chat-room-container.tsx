@@ -1,12 +1,12 @@
 "use client";
-import { Auth } from "@/types/auth.type";
-import FilterInput from "../ui/filter/filter-input";
 import ChatList from "./chat-list";
 import { useParams } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { User } from "@/types/user.type";
+import { Admin } from "@/types/admin.type";
 
 type Props = {
-  auth: Partial<Auth>;
+  auth: User | Admin;
   children: React.ReactNode;
   isAdmin: boolean;
 };

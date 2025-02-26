@@ -1,4 +1,10 @@
-import AppNavbar from "@/components/navbar/app-navbar";
+import ConfirmationDialog from "@/components/ui/confirmation-dialog";
+import Navbar from "@/components/ui/nav";
+import { AppSidebar } from "@/components/ui/sidebar/app-sidebar";
+import {
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar/sidebar";
 import { ADMIN_LOGIN_PATH } from "@/constant/base";
 import { NotificationProvider } from "@/context/notification-provider";
 import { getUserSession } from "@/data/user";
@@ -7,19 +13,31 @@ import React from "react";
 
 export default async function layout({
   children,
+  params,
 }: {
   children: React.ReactNode;
+  params: Promise<{ locale: string }>;
 }) {
+  const { locale } = await params;
   const { data } = await getUserSession();
   if (!data) {
     redirect(ADMIN_LOGIN_PATH);
   }
   return (
     <div>
-      <NotificationProvider authId={data.id}>
-        <AppNavbar />
-        {children}
-      </NotificationProvider>
+      <SidebarProvider className="relative flex flex-1">
+        <NotificationProvider authId={data.id}>
+          <AppSidebar />{" "}
+          <div className="w-full overflow-hidden">
+            <Navbar
+              sidebarTrigger={<SidebarTrigger />}
+              currentLocale={locale}
+            />
+            {children}
+            <ConfirmationDialog />
+          </div>
+        </NotificationProvider>
+      </SidebarProvider>
     </div>
   );
 }

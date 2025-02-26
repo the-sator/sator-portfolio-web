@@ -26,10 +26,11 @@ export const deleteSessionCookies = async (name: string) => {
 };
 
 export const getUserCookie = async () => {
-  // return (await cookies()).get(COOKIE.USER)!.value;
-  return `${(await cookies()).get(COOKIE.USER)!.name}=${(await cookies()).get(COOKIE.USER)!.value}`;
+  const userCookie = (await cookies()).get(COOKIE.USER);
+  return userCookie ? `${userCookie.name}=${userCookie.value}` : null;
 };
 
 export const getAdminCookie = async () => {
-  return `${(await cookies()).get(COOKIE.ADMIN)!.name}=${(await cookies()).get(COOKIE.ADMIN)!.value}`;
+  const adminCookie = (await cookies()).get(COOKIE.ADMIN);
+  return adminCookie ? `${adminCookie.name}=${adminCookie.value}` : null;
 };
