@@ -31,7 +31,7 @@ export const PortfolioFormActionColumn = ({
     if (error) {
       toast({
         title: "Error Delete Portfolio Question",
-        description: error.error,
+        description: error.message,
         variant: "destructive",
         duration: 1500,
       });

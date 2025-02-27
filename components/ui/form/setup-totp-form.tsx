@@ -29,7 +29,7 @@ export default function SetupTotpForm({
       if ("statusCode" in error) {
         toast({
           title: "Login Error",
-          description: error.error,
+          description: error.message,
           variant: "destructive",
           duration: 1500,
         });

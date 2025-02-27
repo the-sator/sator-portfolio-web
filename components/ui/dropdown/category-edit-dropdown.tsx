@@ -81,7 +81,7 @@ export default function CategoryEditDropdown({
             if ("statusCode" in response.error) {
               toast({
                 title: "Update Category Error",
-                description: response.error.error,
+                description: response.error.message,
                 variant: "destructive",
                 duration: 1500,
               });
@@ -122,7 +122,7 @@ export default function CategoryEditDropdown({
         if (error) {
           toast({
             title: "Error Deleting Category!",
-            description: error.error,
+            description: error.message,
             variant: "destructive",
           });
           return;

@@ -1,10 +1,10 @@
-import { HttpError } from "@/types/base.type";
+import { HttpResponse } from "@/types/base.type";
 import { getAdminCookie, getUserCookie } from "./cookie";
 
 export async function apiFetch<T>(
   url: string,
   options: RequestInit = {},
-): Promise<{ data: T | null; error: HttpError | null }> {
+): Promise<{ data: T | null; error: HttpResponse | null }> {
   const baseUrl =
     process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api/v1";
   const isAdmin = url.startsWith("/admin");
@@ -38,7 +38,7 @@ export async function apiFetch<T>(
         data: null,
         error: {
           statusCode: errorBody.statusCode || 500,
-          error: errorBody.error,
+          message: errorBody.error,
         },
       };
     }
@@ -60,7 +60,7 @@ export async function apiFetch<T>(
       data: null,
       error: {
         statusCode: 500,
-        error:
+        message:
           error instanceof Error ? error.message : "Unknown error occurred",
       },
     };

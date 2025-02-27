@@ -33,7 +33,7 @@ export function CreateUserModal() {
       if ("statusCode" in error) {
         toast({
           title: "Create User Error",
-          description: error.error,
+          description: error.message,
           variant: "destructive",
         });
         return;

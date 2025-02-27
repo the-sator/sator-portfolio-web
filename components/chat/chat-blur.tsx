@@ -26,7 +26,7 @@ export default function ChatBlur({ room, auth, isAdmin }: Props) {
     if (error) {
       toast({
         title: "Join Chat Room Error",
-        description: error.error,
+        description: error.message,
         variant: "destructive",
       });
     } else {

@@ -26,7 +26,7 @@ export default function ProfileConfigDropdown({ auth }: Props) {
     if (error) {
       toast({
         title: "Error Signing Out",
-        description: error.error,
+        description: error.message,
         variant: "destructive",
       });
     }

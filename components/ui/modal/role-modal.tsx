@@ -15,7 +15,7 @@ import { IoAddOutline } from "react-icons/io5";
 import { Label } from "../label";
 import SubmitButton from "../button/submit-button";
 import { Resource } from "@/types/resource.type";
-import { HttpError } from "@/types/base.type";
+import { HttpResponse } from "@/types/base.type";
 import { toast } from "@/hooks/use-toast";
 import { CreateRole, Role } from "@/types/role.type";
 import { usePermission } from "@/store/permission";
@@ -30,7 +30,7 @@ type ModalProps = {
   id?: number;
   roles?: Role[] | null;
   admins?: Admin[] | null;
-  error?: HttpError | null;
+  error?: HttpResponse | null;
 };
 export function EditRoleModal({ resources, roles }: ModalProps) {
   const { selectedItem } = useSelectedItem();
@@ -51,7 +51,7 @@ export function EditRoleModal({ resources, roles }: ModalProps) {
       if ("statusCode" in response.error) {
         toast({
           title: "Login Error",
-          description: response.error.error,
+          description: response.error.message,
           variant: "destructive",
           duration: 1500,
         });
@@ -101,7 +101,7 @@ export function CreateRoleModal({ resources, error }: ModalProps) {
   if (error) {
     toast({
       title: "Fail to Fetch Resource",
-      description: error.error,
+      description: error.message,
       variant: "destructive",
     });
   }
@@ -116,7 +116,7 @@ export function CreateRoleModal({ resources, error }: ModalProps) {
       if ("statusCode" in response.error) {
         toast({
           title: "Update Role Error",
-          description: response.error.error,
+          description: response.error.message,
           variant: "destructive",
           duration: 1500,
         });
@@ -188,7 +188,7 @@ export function AssignRoleModal({ roles, error, admins }: ModalProps) {
     if (error) {
       toast({
         title: "Fail to Fetch Resource",
-        description: error.error,
+        description: error.message,
         variant: "destructive",
       });
     }
@@ -204,7 +204,7 @@ export function AssignRoleModal({ roles, error, admins }: ModalProps) {
       if ("statusCode" in response.error) {
         toast({
           title: "Update Role Error",
-          description: response.error.error,
+          description: response.error.message,
           variant: "destructive",
           duration: 1500,
         });

@@ -96,6 +96,8 @@ export default function PortfolioForm({ admin, categories, portfolio }: Props) {
       slug: slug,
       categories: selectedCategories,
       cover_url: coverPreviewUrl || null,
+      preview_link: formData.get("preview_link"),
+      github_link: formData.get("github_link"),
       gallery: imagePreviews.map((image) => {
         return image.url;
       }),
@@ -108,7 +110,7 @@ export default function PortfolioForm({ admin, categories, portfolio }: Props) {
       if ("statusCode" in response.error) {
         toast({
           title: "Portfolio Save Error",
-          description: response.error.error,
+          description: response.error.message,
           variant: "destructive",
           duration: 1500,
         });
@@ -188,10 +190,28 @@ export default function PortfolioForm({ admin, categories, portfolio }: Props) {
         showCount
         required
         placeholder="This is my awesome portfolio and it is all about..."
-        onChange={handleSlugChange}
         defaultValue={portfolio && portfolio.description}
         errors={errors?.description}
       />
+      <div className="flex w-full gap-2">
+        <InputWithLabel
+          label="Preview Link"
+          name="preview_link"
+          placeholder="https://www.sator-tech.live"
+          defaultValue={(portfolio && portfolio.preview_link) || ""}
+          errors={errors?.title}
+          className="w-full"
+        />
+
+        <InputWithLabel
+          label="Github Link"
+          name="github_link"
+          placeholder="https://www.github.com/facebook/react"
+          defaultValue={(portfolio && portfolio.github_link) || ""}
+          className="w-full"
+          errors={errors?.title}
+        />
+      </div>
       <div className="flex flex-col gap-4">
         <Label>Category</Label>
         <CategoryMultiSelect

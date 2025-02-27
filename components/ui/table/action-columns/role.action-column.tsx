@@ -27,7 +27,7 @@ export const RoleActionColumn = ({ row }: { row: Row<Role> }) => {
     if (error) {
       toast({
         title: "Error Delete Role",
-        description: error.error,
+        description: error.message,
         variant: "destructive",
         duration: 1500,
       });

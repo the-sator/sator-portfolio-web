@@ -170,7 +170,7 @@ export const CategoryMultiSelect = React.forwardRef<
                 if ("statusCode" in response.error) {
                   toast({
                     title: "Create Category Error",
-                    description: response.error.error,
+                    description: response.error.message,
                     variant: "destructive",
                     duration: 1500,
                   });

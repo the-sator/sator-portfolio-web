@@ -101,7 +101,7 @@ export default function PortfolioQuestioForm({ setOpen, question }: Props) {
       if ("statusCode" in error) {
         toast({
           title: "Create Question Error",
-          description: error.error,
+          description: error.message,
           variant: "destructive",
           duration: 1500,
         });
@@ -158,7 +158,7 @@ export default function PortfolioQuestioForm({ setOpen, question }: Props) {
       if ("statusCode" in error) {
         toast({
           title: "Update Question Error",
-          description: error.error,
+          description: error.message,
           variant: "destructive",
           duration: 1500,
         });

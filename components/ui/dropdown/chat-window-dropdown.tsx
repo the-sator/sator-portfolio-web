@@ -37,7 +37,7 @@ export default function ChatWindowDropdown({ room, member, auth }: Props) {
     if (error) {
       toast({
         title: "Leave Error",
-        description: error.error,
+        description: error.message,
         variant: "destructive",
       });
       return;

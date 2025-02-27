@@ -40,7 +40,7 @@ export default function LoginForm({ isAdmin }: Props) {
       if ("statusCode" in response.error) {
         toast({
           title: "Login Error",
-          description: response.error.error,
+          description: response.error.message,
           variant: "destructive",
           duration: 1500,
         });

@@ -4,8 +4,8 @@ import { formatDate } from "@/utils/date";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "../data-table-columns/data-table-column-header";
-import UserActionColumn from "../action-columns/user.action-column";
 import { SiteUser } from "@/types/site-user.type";
+import SiteUserActionColumn from "../action-columns/site-user-action-column";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -48,10 +48,6 @@ export const SiteUserColumn: ColumnDef<SiteUser>[] = [
   },
 
   {
-    accessorKey: "api_key",
-    header: "API Key",
-  },
-  {
     accessorKey: "created_at",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Created At" />
@@ -63,6 +59,6 @@ export const SiteUserColumn: ColumnDef<SiteUser>[] = [
   },
   {
     id: "actions",
-    cell: UserActionColumn,
+    cell: SiteUserActionColumn,
   },
 ];

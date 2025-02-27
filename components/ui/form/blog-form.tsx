@@ -87,7 +87,7 @@ export default function BlogForm({ admin, categories, blog }: Props) {
       if ("statusCode" in response.error) {
         toast({
           title: "Blog Save Error",
-          description: response.error.error,
+          description: response.error.message,
           variant: "destructive",
           duration: 1500,
         });
