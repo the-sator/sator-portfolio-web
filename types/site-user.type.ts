@@ -9,6 +9,7 @@ export type SiteUser = {
   profile_url: string | null;
   user_id: string;
   website_name: string;
+  username: string;
   api_key: string;
 };
 

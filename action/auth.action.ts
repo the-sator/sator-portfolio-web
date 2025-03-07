@@ -21,7 +21,6 @@ export async function adminLoginAction(formData: unknown) {
   const { data, error } = await adminLogin({
     email: result.data.email,
     password: result.data.password,
-    username: result.data.username,
     otp: result.data.otp,
   });
 
@@ -60,7 +59,6 @@ export async function adminTotp(formData: unknown) {
   const { data, error } = await adminSetUpTotp({
     id: result.data.id,
     key: result.data.key,
-    sessionId: result.data.sessionId,
     code: result.data.code,
   });
 
@@ -88,7 +86,6 @@ export async function userLoginAction(formData: unknown) {
   const { data, error } = await userlogin({
     email: result.data.email,
     password: result.data.password,
-    username: result.data.username,
     otp: result.data.otp,
   });
 

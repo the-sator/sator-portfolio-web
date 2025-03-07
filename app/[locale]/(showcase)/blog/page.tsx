@@ -6,7 +6,7 @@ import { findAllBlog } from "@/data/blog";
 import React from "react";
 
 export default async function page() {
-  const { data: blogs, error } = await findAllBlog();
+  const { data: blogs } = await findAllBlog();
   return (
     <div className="my-10 w-full px-24">
       <div className="flex flex-col gap-4">

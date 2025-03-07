@@ -1,10 +1,4 @@
-import React, {
-  Dispatch,
-  FormEvent,
-  SetStateAction,
-  useRef,
-  useState,
-} from "react";
+import React, { FormEvent, useRef, useState } from "react";
 import SubmitButton from "../button/submit-button";
 import { Button } from "../button";
 import { InputWithLabel, SelectWithLabel } from "../input-label";
@@ -22,6 +16,8 @@ import {
   createQuestionAction,
   updateQuestionAction,
 } from "@/action/portfolio-form.action";
+import { useOverlay } from "@/store/overlay";
+import { MODAL_KEY } from "@/constant/modal-key";
 
 const typeSelect = [
   {
@@ -43,13 +39,13 @@ const initOption: FormOption[] = [
   },
 ];
 type Props = {
-  setOpen: Dispatch<SetStateAction<boolean>> | ((value: boolean) => void);
   question?: FormQuestion;
 };
-export default function PortfolioQuestioForm({ setOpen, question }: Props) {
+export default function PortfolioQuestioForm({ question }: Props) {
   const [options, setOptions] = useState<FormOption[]>(
     question ? question.form_option : initOption,
   );
+  const { closeModal } = useOverlay();
   const formRef = useRef<HTMLFormElement | null>(null);
   const [errors, setErrors] = useState<ZodFormattedError<CreateFormQuestion>>();
   const handleAddOption = () => {
@@ -110,7 +106,7 @@ export default function PortfolioQuestioForm({ setOpen, question }: Props) {
       }
     } else {
       formRef.current?.reset();
-      setOpen(false);
+      closeModal(MODAL_KEY.PORTFOLIO_QUESTION);
       toast({
         title: "Create Question Successful",
         variant: "success",
@@ -167,7 +163,7 @@ export default function PortfolioQuestioForm({ setOpen, question }: Props) {
       }
     } else {
       formRef.current?.reset();
-      setOpen(false);
+      closeModal(MODAL_KEY.PORTFOLIO_QUESTION);
       toast({
         title: "Update Question Successful",
         variant: "success",

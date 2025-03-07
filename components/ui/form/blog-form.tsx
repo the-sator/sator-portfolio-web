@@ -167,7 +167,6 @@ export default function BlogForm({ admin, categories, blog }: Props) {
         showCount
         required
         placeholder="This is my awesome blog and it is all about..."
-        onChange={handleSlugChange}
         defaultValue={blog && blog.description}
         errors={errors?.description}
       />

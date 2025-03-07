@@ -12,11 +12,12 @@ import {
 import { MoreHorizontal } from "lucide-react";
 import { Button } from "../../button";
 import { useSelectedItem } from "@/store/selected-item";
+import { MODAL_KEY } from "@/constant/modal-key";
 
 export const AdminActionColumn = ({ row }: { row: Row<Admin> }) => {
   const Admin = row.original;
   const { setSelectedItem } = useSelectedItem();
-  const { setShowModal } = useOverlay();
+  const { openModal } = useOverlay();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -41,7 +42,7 @@ export const AdminActionColumn = ({ row }: { row: Row<Admin> }) => {
             className="flex h-fit w-full justify-start px-2 py-1"
             onClick={() => {
               setSelectedItem(Admin.id);
-              setShowModal(true);
+              openModal(MODAL_KEY.ADMIN);
             }}
           >
             Assign Role

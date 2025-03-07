@@ -25,13 +25,13 @@ export default function LoginForm({ isAdmin }: Props) {
   async function adminLogin(formData: FormData) {
     const data = {
       email: formData.get("email"),
-      username: formData.get("username"),
       password: formData.get("password"),
       otp: Number(formData.get("otp")),
     };
     let response;
     if (isAdmin) {
       response = await adminLoginAction(data);
+      console.log("response:", response);
     } else {
       response = await userLoginAction(data);
     }
@@ -71,13 +71,6 @@ export default function LoginForm({ isAdmin }: Props) {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <InputWithLabel
-            label="Username"
-            name="username"
-            placeholder="test"
-            // defaultValue="test"
-            errors={errors?.username}
-          />
           <InputWithLabel
             label="Email"
             name="email"

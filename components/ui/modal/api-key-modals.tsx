@@ -12,6 +12,7 @@ import { SecretInputWithLabel } from "../input-label";
 import { useOverlay } from "@/store/overlay";
 import { useSelectedItem } from "@/store/selected-item";
 import { SiteUser } from "@/types/site-user.type";
+import { MODAL_KEY } from "@/constant/modal-key";
 type Props = {
   siteUsers: SiteUser[] | null;
 };
@@ -20,16 +21,20 @@ export default function ApiKeyModal({ siteUsers }: Props) {
   const selectedUser = selectedItem
     ? siteUsers?.find((user) => user.id === selectedItem)
     : undefined;
-  console.log("siteUsers:", siteUsers);
-  console.log("selectedItem:", selectedItem);
-  console.log("selectedUser:", selectedUser);
-  const { showModal, setShowModal } = useOverlay();
+  const { modals, closeModal } = useOverlay();
+  const isOpen = modals[MODAL_KEY.API_KEY];
   function handleSubmit(event: FormEvent<HTMLFormElement>): void {
+    console.log(event.target);
     throw new Error("Function not implemented.");
   }
 
   return (
-    <Dialog open={showModal} onOpenChange={setShowModal}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open) closeModal(MODAL_KEY.API_KEY);
+      }}
+    >
       <DialogContent>
         <DialogHeader>
           <DialogTitle>View API Key</DialogTitle>

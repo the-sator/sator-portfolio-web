@@ -1,18 +1,18 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { MODAL_KEY } from "@/constant/modal-key";
 import { useOverlay } from "@/store/overlay";
 import React from "react";
 import { IoAddOutline } from "react-icons/io5";
 
 export default function CreateButton() {
-  const { showModal, setShowModal } = useOverlay();
+  const { openModal } = useOverlay();
 
   return (
     <Button
       variant="outline"
       onClick={() => {
-        console.log("showModal:", showModal);
-        setShowModal(true);
+        openModal(MODAL_KEY.CREATE);
       }}
     >
       <IoAddOutline size={14} />

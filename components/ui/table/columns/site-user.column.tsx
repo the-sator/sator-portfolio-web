@@ -38,6 +38,10 @@ export const SiteUserColumn: ColumnDef<SiteUser>[] = [
     header: "ID",
   },
   {
+    accessorKey: "username",
+    header: "Username",
+  },
+  {
     accessorKey: "website_name",
     header: "Website",
   },

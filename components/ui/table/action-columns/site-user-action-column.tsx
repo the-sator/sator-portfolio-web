@@ -12,10 +12,11 @@ import { MoreHorizontal } from "lucide-react";
 import { useSelectedItem } from "@/store/selected-item";
 import { SiteUser } from "@/types/site-user.type";
 import { Row } from "@tanstack/react-table";
+import { MODAL_KEY } from "@/constant/modal-key";
 
 export default function SiteUserActionColumn({ row }: { row: Row<SiteUser> }) {
   const { id } = row.original;
-  const { setShowModal } = useOverlay();
+  const { openModal } = useOverlay();
   const { setSelectedItem } = useSelectedItem();
   return (
     <DropdownMenu>
@@ -34,11 +35,24 @@ export default function SiteUserActionColumn({ row }: { row: Row<SiteUser> }) {
             variant={"ghost"}
             className="flex h-fit w-full justify-start px-2 py-1"
             onClick={() => {
-              setShowModal(true);
+              openModal(MODAL_KEY.API_KEY);
               setSelectedItem(id);
             }}
           >
             Show API Key
+          </Button>
+        </DropdownMenuItem>
+
+        <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="p-0">
+          <Button
+            variant={"ghost"}
+            className="flex h-fit w-full justify-start px-2 py-1"
+            onClick={() => {
+              openModal(MODAL_KEY.SITE_USER_INFO);
+              setSelectedItem(id);
+            }}
+          >
+            View Detail
           </Button>
         </DropdownMenuItem>
       </DropdownMenuContent>

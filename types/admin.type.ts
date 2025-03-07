@@ -16,13 +16,6 @@ export type Admin = {
 };
 
 export const AdminLoginSchema = z.object({
-  username: z
-    .string()
-    .trim()
-    .min(1, { message: "Username is required" })
-    .max(20, {
-      message: "Username must not exceed 20 characters",
-    }),
   email: z.string().email({ message: "Invalid email format" }),
   password: z
     .string()
