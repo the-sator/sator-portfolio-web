@@ -18,10 +18,15 @@ export default function SidebarMenuNavItem({ item }: Props) {
   const pathname = usePathname();
   const t = useTranslations("SidebarItem");
   const isActivePath = (currentPath: string, childUrl: string) => {
+    console.log("childUrl:", childUrl);
     if (childUrl === "/") {
       return ["/", "/en", "/kh"].includes(currentPath);
     }
-    return currentPath.replace(/^\/(en|kh)/, "") === childUrl;
+    console.log(
+      'currentPath.replace(/^/(en|kh)/, ""):',
+      currentPath.replace(/^\/(en|kh)/, ""),
+    );
+    return currentPath.replace(/^\/(en|kh)/, "").includes(childUrl);
   };
   return (
     <SidebarMenuItem key={item.title}>

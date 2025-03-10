@@ -57,7 +57,6 @@ export async function adminTotp(formData: unknown) {
   }
 
   const { data, error } = await adminSetUpTotp({
-    id: result.data.id,
     key: result.data.key,
     code: result.data.code,
   });
@@ -92,7 +91,7 @@ export async function userLoginAction(formData: unknown) {
   if (!error && data) {
     await setSessionCookies(COOKIE.USER, data.token, String(data.expires_at));
     revalidatePath("/", "layout");
-    redirect("/chat");
+    redirect("/user-panel/chat");
   } else {
     return {
       error: error,

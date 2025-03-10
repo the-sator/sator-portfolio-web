@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import {
   Dialog,
   DialogContent,
@@ -10,21 +10,25 @@ import {
 } from "../dialog";
 import { Button } from "../button";
 import SetupTotpForm from "../form/setup-totp-form";
-import { Admin } from "@/types/admin.type";
+import { useOverlay } from "@/store/overlay";
+import { MODAL_KEY } from "@/constant/modal-key";
 
 type Props = {
   qrcode: string;
   encodedTOTPKey: string;
-  auth: Admin;
 };
-export default function TotpModal({ qrcode, encodedTOTPKey, auth }: Props) {
-  const [open, setOpen] = useState(false);
+export default function TotpModal({ qrcode, encodedTOTPKey }: Props) {
+  const { modals, closeModal } = useOverlay();
+  const isOpen = modals[MODAL_KEY.TOTP];
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open) closeModal(MODAL_KEY.TOTP);
+      }}
+    >
       <DialogTrigger asChild>
-        <Button variant={"outline"}>
-          {!!auth.totp_key ? "Edit" : "Set up"}
-        </Button>
+        <Button variant={"outline"}>Setup</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -46,11 +50,7 @@ export default function TotpModal({ qrcode, encodedTOTPKey, auth }: Props) {
               }}
             ></div>
           </div>
-          <SetupTotpForm
-            encodedTOTPKey={encodedTOTPKey}
-            auth={auth}
-            setOpen={setOpen}
-          />
+          <SetupTotpForm encodedTOTPKey={encodedTOTPKey} />
         </div>
       </DialogContent>
     </Dialog>

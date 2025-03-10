@@ -5,4 +5,5 @@ export enum MODAL_KEY {
   ADMIN = "admin",
   API_KEY = "api-key",
   CREATE = "create",
+  TOTP = "totp",
 }

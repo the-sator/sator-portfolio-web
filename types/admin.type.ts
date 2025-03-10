@@ -12,7 +12,6 @@ export type Admin = {
   profile_url: string | null;
   created_at: Date;
   updated_at: Date;
-  totp_key: Buffer | null;
 };
 
 export const AdminLoginSchema = z.object({
@@ -25,8 +24,6 @@ export const AdminLoginSchema = z.object({
 });
 
 export const UpdateAdminTotpSchema = z.object({
-  id: z.string().trim().min(1, { message: "Admin ID is required" }),
-
   key: z.string().trim().min(1, { message: "Key is required" }),
   code: z.string().trim().min(1, { message: "Code is required" }),
 });

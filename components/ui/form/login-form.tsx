@@ -31,7 +31,6 @@ export default function LoginForm({ isAdmin }: Props) {
     let response;
     if (isAdmin) {
       response = await adminLoginAction(data);
-      console.log("response:", response);
     } else {
       response = await userLoginAction(data);
     }

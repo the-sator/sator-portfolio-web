@@ -50,7 +50,7 @@ export default function ProfileConfigDropdown({ auth }: Props) {
               </p> */}
             </div>
           </div>
-          <ChevronsUpDown />
+          <ChevronsUpDown size={18} />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
