@@ -22,7 +22,7 @@ export default async function page({ params, searchParams }: Props) {
   if (!data) {
     redirect(USER_LOGIN_PATH);
   }
-
+  console.log("error:", error);
   if (!room) {
     notFound();
   }

@@ -25,7 +25,6 @@ export default function LoginForm({ isAdmin }: Props) {
   async function adminLogin(formData: FormData) {
     const data = {
       email: formData.get("email"),
-      username: formData.get("username"),
       password: formData.get("password"),
       otp: Number(formData.get("otp")),
     };
@@ -40,7 +39,7 @@ export default function LoginForm({ isAdmin }: Props) {
       if ("statusCode" in response.error) {
         toast({
           title: "Login Error",
-          description: response.error.error,
+          description: response.error.message,
           variant: "destructive",
           duration: 1500,
         });
@@ -71,13 +70,6 @@ export default function LoginForm({ isAdmin }: Props) {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <InputWithLabel
-            label="Username"
-            name="username"
-            placeholder="test"
-            // defaultValue="test"
-            errors={errors?.username}
-          />
           <InputWithLabel
             label="Email"
             name="email"

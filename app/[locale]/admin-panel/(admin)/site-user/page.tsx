@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import FilterInput from "@/components/ui/filter/filter-input";
+import ApiKeyModal from "@/components/ui/modal/api-key-modals";
+import SiteUserInfoModal from "@/components/ui/modal/site-user-info-modal";
 import { CreateSiteUserModal } from "@/components/ui/modal/site-user-modals";
 import { SiteUserColumn } from "@/components/ui/table/columns/site-user.column";
 import { getPaginateSiteUser } from "@/data/site-user";
@@ -17,12 +19,13 @@ export default async function SiteUserPage({ searchParams }: Props) {
     getPaginateSiteUser(filter),
     getAllUsers(),
   ]);
-  console.log("users:", users);
   return (
     <div className="p-4">
       <div className="mb-4 flex items-center justify-between">
         <h1 className="text-2xl">{t("site-user")}</h1>
         <CreateSiteUserModal users={users || []} />
+        <ApiKeyModal siteUsers={data} />
+        <SiteUserInfoModal siteUsers={data} />
       </div>
       <div className="flex items-center gap-2">
         <FilterInput placeholder="Username" filterKey="username" />

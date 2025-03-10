@@ -83,7 +83,7 @@ export function CreateChatRoomModal({ member, admin }: Props) {
       if ("statusCode" in error) {
         toast({
           title: "Create Chat Room Error",
-          description: error.error,
+          description: error.message,
           variant: "destructive",
           duration: 1500,
         });
@@ -159,7 +159,7 @@ export function ChatRoomDetailModal({ room, auth }: DetailProps) {
       if ("statusCode" in error) {
         toast({
           title: "Change Name Error",
-          description: error.error,
+          description: error.message,
           variant: "destructive",
         });
       } else {
@@ -184,7 +184,7 @@ export function ChatRoomDetailModal({ room, auth }: DetailProps) {
       if (error) {
         toast({
           title: "Remove Member Error",
-          description: error.error,
+          description: error.message,
           variant: "destructive",
         });
         setLoadingMemberId(null);
@@ -343,7 +343,7 @@ export function ChatRoomInvite({ member, room }: InviteProps) {
     if (error) {
       toast({
         title: "Invite Chat Member Error",
-        description: error.error,
+        description: error.message,
         variant: "destructive",
       });
     } else {

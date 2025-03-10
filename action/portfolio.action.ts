@@ -30,6 +30,8 @@ export const createPortfolioAction = async (formData: unknown) => {
     description: result.data.description,
     categories: result.data.categories,
     cover_url: result.data.cover_url,
+    preview_link: result.data.preview_link,
+    github_link: result.data.github_link,
     gallery: result.data.gallery,
   };
   const { data, error } = await createPortfolio(payload);
@@ -59,6 +61,8 @@ export const updatePortfolioAction = async (id: string, formData: unknown) => {
     description: result.data.description,
     categories: result.data.categories,
     cover_url: result.data.cover_url,
+    preview_link: result.data.preview_link,
+    github_link: result.data.github_link,
     gallery: result.data.gallery,
   };
   const { data, error } = await updatePortfolio(id, payload);

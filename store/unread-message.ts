@@ -31,7 +31,7 @@ export const useUnreadMessage = create<UnreadMessageStore>((set) => ({
       if (error) {
         toast({
           title: "Failed to fetch unread messages",
-          description: error.error,
+          description: error.message,
           variant: "destructive",
         });
       } else {

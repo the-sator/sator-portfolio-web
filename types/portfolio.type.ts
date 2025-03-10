@@ -9,6 +9,8 @@ export type Portfolio = {
   title: string;
   description: string;
   cover_url: string;
+  github_link: string | null;
+  preview_link: string | null;
   created_at: Date;
   updated_at: Date;
   published_at: Date | null;
@@ -17,7 +19,6 @@ export type Portfolio = {
   content: Block[] | null;
   CategoryOnPorfolio: CategoryOnPorfolio[];
 };
-
 export const CreatePortfolioSchema = z.object({
   admin_id: z.string().min(1, { message: "Admin ID is required" }),
   title: z.string().min(1, { message: "Title is required" }),
@@ -30,6 +31,8 @@ export const CreatePortfolioSchema = z.object({
   slug: z.string().min(1, { message: "Slug is required" }),
   cover_url: z.string({ message: "Cover Image is required" }),
   gallery: z.array(z.string()).optional(),
+  preview_link: z.string().optional(),
+  github_link: z.string().optional(),
   content: z.string().optional(),
   categories: z.array(z.string()).optional(),
 });

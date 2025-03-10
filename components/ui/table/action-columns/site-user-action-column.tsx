@@ -1,23 +1,23 @@
-import { useOverlay } from "@/store/overlay";
-import { Admin } from "@/types/admin.type";
-import { Row } from "@tanstack/react-table";
+import React from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../../dropdown-menu";
-import { MoreHorizontal } from "lucide-react";
 import { Button } from "../../button";
+import { useOverlay } from "@/store/overlay";
+import { MoreHorizontal } from "lucide-react";
 import { useSelectedItem } from "@/store/selected-item";
+import { SiteUser } from "@/types/site-user.type";
+import { Row } from "@tanstack/react-table";
 import { MODAL_KEY } from "@/constant/modal-key";
 
-export const AdminActionColumn = ({ row }: { row: Row<Admin> }) => {
-  const Admin = row.original;
-  const { setSelectedItem } = useSelectedItem();
+export default function SiteUserActionColumn({ row }: { row: Row<SiteUser> }) {
+  const { id } = row.original;
   const { openModal } = useOverlay();
+  const { setSelectedItem } = useSelectedItem();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -30,25 +30,32 @@ export const AdminActionColumn = ({ row }: { row: Row<Admin> }) => {
         <DropdownMenuLabel className="sr-only text-label">
           Actions
         </DropdownMenuLabel>
-        <DropdownMenuItem
-          onClick={() => navigator.clipboard.writeText(Admin.id)}
-        >
-          Copy User ID
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
         <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="p-0">
           <Button
             variant={"ghost"}
             className="flex h-fit w-full justify-start px-2 py-1"
             onClick={() => {
-              setSelectedItem(Admin.id);
-              openModal(MODAL_KEY.ADMIN);
+              openModal(MODAL_KEY.API_KEY);
+              setSelectedItem(id);
             }}
           >
-            Assign Role
+            Show API Key
+          </Button>
+        </DropdownMenuItem>
+
+        <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="p-0">
+          <Button
+            variant={"ghost"}
+            className="flex h-fit w-full justify-start px-2 py-1"
+            onClick={() => {
+              openModal(MODAL_KEY.SITE_USER_INFO);
+              setSelectedItem(id);
+            }}
+          >
+            View Detail
           </Button>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
-};
+}

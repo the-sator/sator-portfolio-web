@@ -56,7 +56,11 @@ export default function ChatItem({ room, auth, isAdmin = false }: Props) {
   }, []);
 
   return (
-    <Link href={isAdmin ? `/admin-panel/chat/${room.id}` : `/chat/${room.id}`}>
+    <Link
+      href={
+        isAdmin ? `/admin-panel/chat/${room.id}` : `/user-panel/chat/${room.id}`
+      }
+    >
       <div
         className={cn(
           "relative flex w-full justify-between rounded-md px-2 py-2 hover:cursor-pointer hover:bg-popover",

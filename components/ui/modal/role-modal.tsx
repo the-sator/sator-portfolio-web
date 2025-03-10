@@ -15,7 +15,7 @@ import { IoAddOutline } from "react-icons/io5";
 import { Label } from "../label";
 import SubmitButton from "../button/submit-button";
 import { Resource } from "@/types/resource.type";
-import { HttpError } from "@/types/base.type";
+import { HttpResponse } from "@/types/base.type";
 import { toast } from "@/hooks/use-toast";
 import { CreateRole, Role } from "@/types/role.type";
 import { usePermission } from "@/store/permission";
@@ -25,18 +25,20 @@ import { useOverlay } from "@/store/overlay";
 import { useSelectedItem } from "@/store/selected-item";
 import { Admin, AssignAdminRole } from "@/types/admin.type";
 import { adminAssignRole } from "@/action/admin.action";
+import { MODAL_KEY } from "@/constant/modal-key";
 type ModalProps = {
   resources?: Resource[] | null;
   id?: number;
   roles?: Role[] | null;
   admins?: Admin[] | null;
-  error?: HttpError | null;
+  error?: HttpResponse | null;
 };
+
 export function EditRoleModal({ resources, roles }: ModalProps) {
   const { selectedItem } = useSelectedItem();
   const { permissions } = usePermission();
-
-  const { setShowModal, showModal } = useOverlay();
+  const { modals, closeModal } = useOverlay();
+  const isOpen = modals[MODAL_KEY.ROLE];
   const role = selectedItem
     ? roles?.find((role) => role.id === selectedItem)
     : undefined;
@@ -51,7 +53,7 @@ export function EditRoleModal({ resources, roles }: ModalProps) {
       if ("statusCode" in response.error) {
         toast({
           title: "Login Error",
-          description: response.error.error,
+          description: response.error.message,
           variant: "destructive",
           duration: 1500,
         });
@@ -62,7 +64,7 @@ export function EditRoleModal({ resources, roles }: ModalProps) {
         variant: "success",
         duration: 1500,
       });
-      setShowModal(false);
+      closeModal(MODAL_KEY.ROLE);
     }
   };
 
@@ -73,7 +75,12 @@ export function EditRoleModal({ resources, roles }: ModalProps) {
   };
 
   return (
-    <Dialog open={showModal} onOpenChange={setShowModal}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open) closeModal(MODAL_KEY.ROLE);
+      }}
+    >
       {/* <DialogTrigger className="w-full px-2 py-1 text-left">Edit</DialogTrigger> */}
       <DialogContent>
         <DialogHeader>
@@ -94,14 +101,15 @@ export function EditRoleModal({ resources, roles }: ModalProps) {
 
 export function CreateRoleModal({ resources, error }: ModalProps) {
   const { permissions } = usePermission();
-  const [open, setOpen] = useState(false);
+  const { modals, closeModal } = useOverlay();
+  const isOpen = modals[MODAL_KEY.ROLE];
   const [errors, setErrors] = useState<ZodFormattedError<CreateRole> | null>(
     null,
   );
   if (error) {
     toast({
       title: "Fail to Fetch Resource",
-      description: error.error,
+      description: error.message,
       variant: "destructive",
     });
   }
@@ -116,7 +124,7 @@ export function CreateRoleModal({ resources, error }: ModalProps) {
       if ("statusCode" in response.error) {
         toast({
           title: "Update Role Error",
-          description: response.error.error,
+          description: response.error.message,
           variant: "destructive",
           duration: 1500,
         });
@@ -130,7 +138,7 @@ export function CreateRoleModal({ resources, error }: ModalProps) {
         variant: "success",
         duration: 1500,
       });
-      setOpen(false);
+      closeModal(MODAL_KEY.ROLE);
     }
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -139,15 +147,14 @@ export function CreateRoleModal({ resources, error }: ModalProps) {
     await handleCreateRole(formData);
   };
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open) closeModal(MODAL_KEY.ROLE);
+      }}
+    >
       <DialogTrigger asChild>
-        <Button
-          variant="outline"
-          onClick={() => {
-            setOpen((prev) => !prev);
-          }}
-          className="gap-1"
-        >
+        <Button variant="outline" className="gap-1">
           <IoAddOutline size={14} />
           <p className="text-sm group-hover:text-blue-700">Create</p>
         </Button>
@@ -173,8 +180,9 @@ export function CreateRoleModal({ resources, error }: ModalProps) {
 }
 
 export function AssignRoleModal({ roles, error, admins }: ModalProps) {
-  const { showModal, setShowModal } = useOverlay();
   const { selectedItem } = useSelectedItem();
+  const { modals, closeModal } = useOverlay();
+  const isOpen = modals[MODAL_KEY.ROLE];
   const [errors, setErrors] =
     useState<ZodFormattedError<AssignAdminRole> | null>(null);
   const admin = admins?.find((admin) => admin.id === selectedItem);
@@ -188,7 +196,7 @@ export function AssignRoleModal({ roles, error, admins }: ModalProps) {
     if (error) {
       toast({
         title: "Fail to Fetch Resource",
-        description: error.error,
+        description: error.message,
         variant: "destructive",
       });
     }
@@ -204,7 +212,7 @@ export function AssignRoleModal({ roles, error, admins }: ModalProps) {
       if ("statusCode" in response.error) {
         toast({
           title: "Update Role Error",
-          description: response.error.error,
+          description: response.error.message,
           variant: "destructive",
           duration: 1500,
         });
@@ -218,7 +226,7 @@ export function AssignRoleModal({ roles, error, admins }: ModalProps) {
         variant: "success",
         duration: 1500,
       });
-      setShowModal(false);
+      closeModal(MODAL_KEY.ROLE);
     }
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -227,7 +235,12 @@ export function AssignRoleModal({ roles, error, admins }: ModalProps) {
     await handleAssignRole(formData);
   };
   return (
-    <Dialog open={showModal} onOpenChange={setShowModal}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open) closeModal(MODAL_KEY.ROLE);
+      }}
+    >
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Assign Role</DialogTitle>

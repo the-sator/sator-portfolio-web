@@ -1,5 +1,9 @@
 "use client";
-import React, { useState } from "react";
+import React, {
+  ComponentProps,
+  ComponentPropsWithoutRef,
+  useState,
+} from "react";
 import { Label } from "./label";
 import { Input } from "./input";
 import { Textarea } from "./textarea";
@@ -15,28 +19,32 @@ import { cn } from "@/lib/utils";
 import { TooltipContent, TooltipProvider, TooltipTrigger } from "./tooltip";
 import { Tooltip } from "@radix-ui/react-tooltip";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
+import SecretInput from "./secret-input";
 export type SelectOption = {
   value: string;
   label: string;
 };
 
-type Props = {
-  label: string;
-  placeholder?: string;
-  type?: string;
-  name?: string;
-  value?: string;
-  showCount?: boolean;
-  maxLength?: number;
-  defaultValue?: string;
-  required?: boolean;
-  minHeight?: number;
-  className?: string;
-  instruction?: string;
-  register?: UseFormRegisterReturn;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  errors?: ZodErrorFormatted | null;
+type ZodErrorFormatted = {
+  _errors: string[];
 };
+
+type IconInputWithLabelProps = {
+  label: string;
+  icon: React.ReactNode;
+  errors?: ZodErrorFormatted;
+} & ComponentPropsWithoutRef<typeof Input>;
+
+type InputWithLabelProps = {
+  label: string;
+  instruction?: string;
+  errors?: {
+    _errors: string[];
+  };
+  register?: UseFormRegisterReturn;
+  className?: string;
+} & ComponentPropsWithoutRef<typeof Input>;
+
 type SelectWithLabelProps = {
   label: string;
   defaultValue?: string;
@@ -45,21 +53,26 @@ type SelectWithLabelProps = {
   options: SelectOption[];
   errors?: ZodErrorFormatted | null;
 };
+
+type TextAreaWithLabelProps = {
+  showCount: boolean;
+  label: string;
+  register?: UseFormRegisterReturn;
+  minHeight?: number;
+  defaultValue?: string;
+  errors?: ZodErrorFormatted | null;
+} & ComponentProps<typeof Textarea>;
+
 export function InputWithLabel({
   label,
   required = false,
-  name,
-  type = "text",
-  placeholder,
-  maxLength,
-  onChange,
-  className,
   instruction,
-  value,
-  defaultValue,
-  errors,
   register,
-}: Props) {
+  name,
+  className,
+  errors,
+  ...props
+}: InputWithLabelProps) {
   return (
     <div className={cn("flex flex-col gap-3", className)}>
       <Label htmlFor={name} className="flex items-center gap-2">
@@ -85,16 +98,11 @@ export function InputWithLabel({
         )}
       </Label>
       <Input
+        {...props}
         {...register}
-        type={type}
         name={name}
         variant={"outline"}
-        placeholder={placeholder}
-        maxLength={maxLength}
-        value={value}
         required={required}
-        defaultValue={defaultValue}
-        onChange={onChange}
         className={cn(errors && "border-red-400")}
       />
       {errors && (
@@ -111,38 +119,44 @@ export function InputWithLabel({
   );
 }
 
-type ZodErrorFormatted = {
-  _errors: string[];
-};
-
-type IconInputWithLabelProps = {
-  label: string;
-  placeholder?: string;
-  name?: string;
-  defaultValue?: string;
-  icon: React.ReactNode;
-  errors?: ZodErrorFormatted;
-};
-
-export function IconInputWithLabel({
+export function SecretInputWithLabel({
   label,
+  required = false,
+  instruction,
+  register,
   name,
-  placeholder,
-  icon,
+  className,
   errors,
-  defaultValue,
-}: IconInputWithLabelProps) {
+  ...props
+}: InputWithLabelProps) {
   return (
-    <div className="flex w-full flex-col gap-3">
-      <div className="flex items-center gap-2">
-        {icon}
-        <Label>{label}</Label>
-      </div>
-      <Input
+    <div className={cn("flex flex-col gap-3", className)}>
+      <Label htmlFor={name} className="flex items-center gap-2">
+        <div>
+          {label}
+          {required && <span className="text-red-500">{" *"}</span>}
+        </div>
+        {instruction && (
+          <TooltipProvider delayDuration={300}>
+            <Tooltip>
+              <TooltipTrigger>
+                <span className="sr-only w-full basis-1/2">Instruction</span>
+                <AiOutlineExclamationCircle size={16} />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{instruction}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
+      </Label>
+      <SecretInput
+        {...props}
+        {...register}
         name={name}
         variant={"outline"}
-        placeholder={placeholder}
-        defaultValue={defaultValue}
+        required={required}
+        className={cn(errors && "border-red-400")}
       />
       {errors && (
         <p className="text-xs text-red-400">
@@ -158,18 +172,45 @@ export function IconInputWithLabel({
   );
 }
 
-export function TextAreaWithLabel({
+export function IconInputWithLabel({
   label,
-  placeholder,
+  icon,
+  errors,
+  ...props
+}: IconInputWithLabelProps) {
+  return (
+    <div className="flex w-full flex-col gap-3">
+      <div className="flex items-center gap-2">
+        {icon}
+        <Label>{label}</Label>
+      </div>
+      <Input variant={"outline"} {...props} />
+      {errors && (
+        <p className="text-xs text-red-400">
+          {errors._errors.map((error, index) => (
+            <span key={index}>
+              {error}
+              <br />
+            </span>
+          ))}
+        </p>
+      )}
+    </div>
+  );
+}
+
+export function TextAreaWithLabel({
   showCount = false,
   maxLength = 100,
-  name,
-  required,
-  minHeight = 80,
-  defaultValue,
+  minHeight,
   register,
-}: Props) {
-  const [text, setText] = useState(defaultValue);
+  errors,
+  required,
+  defaultValue = "",
+  label,
+  ...props
+}: TextAreaWithLabelProps) {
+  const [text, setText] = useState<string>(defaultValue);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newText = e.target.value;
@@ -185,20 +226,29 @@ export function TextAreaWithLabel({
       </Label>
       <Textarea
         {...register}
-        name={name}
+        {...props}
         value={text}
         onChange={handleChange}
-        placeholder={placeholder}
         variant={"outline"}
         required={required}
         style={{
           minHeight: `${minHeight}px`,
         }}
-        className="h-full"
+        className={cn("h-full", errors && "border-red-400")}
       />
       {showCount && (
         <p className="absolute bottom-1 right-5 text-[12px] text-label/80">
           {text?.length || 0}/{maxLength}
+        </p>
+      )}
+      {errors && (
+        <p className="text-xs text-red-400">
+          {errors._errors.map((error, index) => (
+            <span key={index}>
+              {error}
+              <br />
+            </span>
+          ))}
         </p>
       )}
     </div>

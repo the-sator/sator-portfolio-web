@@ -87,7 +87,7 @@ export default function BlogForm({ admin, categories, blog }: Props) {
       if ("statusCode" in response.error) {
         toast({
           title: "Blog Save Error",
-          description: response.error.error,
+          description: response.error.message,
           variant: "destructive",
           duration: 1500,
         });
@@ -167,7 +167,6 @@ export default function BlogForm({ admin, categories, blog }: Props) {
         showCount
         required
         placeholder="This is my awesome blog and it is all about..."
-        onChange={handleSlugChange}
         defaultValue={blog && blog.description}
         errors={errors?.description}
       />

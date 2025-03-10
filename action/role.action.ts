@@ -61,7 +61,7 @@ export async function adminUpdateRole(id: number, formData: unknown) {
 export async function adminRoleById(id: number) {
   try {
     const { data, error } = await getRoleById(id);
-    if (error) throw error.error;
+    if (error) throw error.message;
     return data;
   } catch (error) {
     throw error;

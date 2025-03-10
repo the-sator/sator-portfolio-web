@@ -15,6 +15,7 @@ import { MoreHorizontal } from "lucide-react";
 import { Button } from "../../button";
 import { FormQuestion } from "@/types/portfolio-form.type";
 import { deleteQuestionAction } from "@/action/portfolio-form.action";
+import { MODAL_KEY } from "@/constant/modal-key";
 
 export const PortfolioFormActionColumn = ({
   row,
@@ -25,13 +26,13 @@ export const PortfolioFormActionColumn = ({
   const [open, setOpen] = useState(false);
   const { openConfirmation } = useConfirmationStore();
   const { setSelectedItem } = useSelectedItem();
-  const { setShowModal } = useOverlay();
+  const { openModal } = useOverlay();
   const handleDelete = async () => {
     const { error } = await deleteQuestionAction(Question.id);
     if (error) {
       toast({
         title: "Error Delete Portfolio Question",
-        description: error.error,
+        description: error.message,
         variant: "destructive",
         duration: 1500,
       });
@@ -61,7 +62,7 @@ export const PortfolioFormActionColumn = ({
             className="flex h-fit w-full justify-start px-2 py-1"
             onClick={() => {
               setSelectedItem(Question.id);
-              setShowModal(true);
+              openModal(MODAL_KEY.PORTFOLIO_QUESTION);
             }}
           >
             Edit

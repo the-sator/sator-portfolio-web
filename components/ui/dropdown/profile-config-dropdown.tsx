@@ -26,7 +26,7 @@ export default function ProfileConfigDropdown({ auth }: Props) {
     if (error) {
       toast({
         title: "Error Signing Out",
-        description: error.error,
+        description: error.message,
         variant: "destructive",
       });
     }
@@ -50,7 +50,7 @@ export default function ProfileConfigDropdown({ auth }: Props) {
               </p> */}
             </div>
           </div>
-          <ChevronsUpDown />
+          <ChevronsUpDown size={18} />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">

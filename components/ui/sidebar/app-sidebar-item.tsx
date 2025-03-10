@@ -9,22 +9,12 @@ import {
   SidebarMenu,
 } from "./sidebar";
 import SidebarMenuNavItem from "./sidebar-menu-nav-item";
-import { MdDashboard } from "react-icons/md";
 import { RiGlobalLine } from "react-icons/ri";
 import { IoIosSettings } from "react-icons/io";
 import { IoChatboxEllipses } from "react-icons/io5";
 
 export default function AppSidebarItem() {
   const t = useTranslations("SidebarItem");
-  //   const { unread_counts, fetchUnreadCounts } = useUnreadMessage();
-
-  //   useEffect(() => {
-  //     fetchUnreadCounts(true);
-  //   }, [fetchUnreadCounts]);
-  //   const unreadTotalCount = unread_counts.reduce((acc, { total_count }) => {
-  //     return acc + total_count;
-  //   }, 0);
-
   const items = [
     {
       title: "site-management",

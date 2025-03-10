@@ -65,7 +65,7 @@ export default function ChatInput({ room, auth, isAdmin, chatRoomRef }: Props) {
     if (error) {
       toast({
         title: "Send Message Error",
-        description: error.error,
+        description: error.message,
         variant: "destructive",
       });
     } else {

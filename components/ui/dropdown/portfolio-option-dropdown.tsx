@@ -39,7 +39,7 @@ export default function PortfolioOptionDropdown({
     if (error) {
       toast({
         title: "Error Delete Portfolio",
-        description: error.error,
+        description: error.message,
         variant: "destructive",
         duration: 1500,
       });
@@ -63,7 +63,7 @@ export default function PortfolioOptionDropdown({
     if (error) {
       toast({
         title: "Error Publish Portfolio",
-        description: error.error,
+        description: error.message,
         variant: "destructive",
         duration: 1500,
       });
@@ -81,7 +81,7 @@ export default function PortfolioOptionDropdown({
     if (error) {
       toast({
         title: "Error Unpublish Portfolio",
-        description: error.error,
+        description: error.message,
         variant: "destructive",
         duration: 1500,
       });

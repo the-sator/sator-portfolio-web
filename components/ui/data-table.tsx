@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/table";
 import { useEffect, useState } from "react";
 import { DataTablePagination } from "./table/data-table-columns/data-table-columns-pagination";
-import { HttpError, PaginateMetadata } from "@/types/base.type";
+import { HttpResponse, PaginateMetadata } from "@/types/base.type";
 import { toast } from "@/hooks/use-toast";
 import Spinner from "./spinner";
 import { DataTablePaginationRemote } from "./table/data-table-columns/data-table-columns-pagination-remote";
@@ -31,7 +31,7 @@ import { useQueryParamsContext } from "@/context/query-params-provider";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  error?: HttpError | null;
+  error?: HttpResponse | null;
   showPagination?: boolean;
   metadata?: PaginateMetadata | null;
   remote?: boolean;
@@ -59,7 +59,7 @@ export function DataTable<TData, TValue>({
     if (error) {
       toast({
         title: "Something Went Wrong",
-        description: error.error,
+        description: error.message,
         variant: "destructive",
       });
     }

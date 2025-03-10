@@ -9,7 +9,8 @@ export type SiteUser = {
   profile_url: string | null;
   user_id: string;
   website_name: string;
-  api_key: Uint8Array;
+  username: string;
+  api_key: string;
 };
 
 export const CreateSiteUserSchema = z.object({

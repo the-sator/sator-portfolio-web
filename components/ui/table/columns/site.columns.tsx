@@ -1,16 +1,16 @@
 "use client";
 
+import { User } from "@/types/user.type";
 import { formatDate } from "@/utils/date";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "../data-table-columns/data-table-column-header";
-import { SiteUser } from "@/types/site-user.type";
-import SiteUserActionColumn from "../action-columns/site-user-action-column";
+import UserActionColumn from "../action-columns/user.action-column";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
-export const SiteUserColumn: ColumnDef<SiteUser>[] = [
+export const UserColumns: ColumnDef<User>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -39,18 +39,18 @@ export const SiteUserColumn: ColumnDef<SiteUser>[] = [
   },
   {
     accessorKey: "username",
-    header: "Username",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Username" />
+    ),
   },
   {
-    accessorKey: "website_name",
-    header: "Website",
+    accessorKey: "email",
+    header: "Email",
   },
-
   {
-    accessorKey: "link",
-    header: "Link",
+    accessorKey: "last_login",
+    header: "Last Login At",
   },
-
   {
     accessorKey: "created_at",
     header: ({ column }) => (
@@ -63,6 +63,6 @@ export const SiteUserColumn: ColumnDef<SiteUser>[] = [
   },
   {
     id: "actions",
-    cell: SiteUserActionColumn,
+    cell: UserActionColumn,
   },
 ];

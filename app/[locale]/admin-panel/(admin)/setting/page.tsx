@@ -47,11 +47,7 @@ export default async function page() {
               authentication codes when prompted.
             </p>
           </div>
-          <TotpModal
-            qrcode={qrcode}
-            encodedTOTPKey={encodedTOTPKey}
-            auth={data}
-          />
+          <TotpModal qrcode={qrcode} encodedTOTPKey={encodedTOTPKey} />
           {/* <Button variant={"outline"}>Set up</Button> */}
         </div>
       </div>

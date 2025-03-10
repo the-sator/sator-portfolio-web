@@ -1,6 +1,6 @@
 "use client";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../dialog";
-import React, { useState } from "react";
+import React from "react";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import { Button } from "../button";
 import { IoAddOutline } from "react-icons/io5";
@@ -9,11 +9,18 @@ import PortfolioQuestioForm from "../form/portfolio-question-form";
 import { useSelectedItem } from "@/store/selected-item";
 import { useOverlay } from "@/store/overlay";
 import { FormQuestion } from "@/types/portfolio-form.type";
+import { MODAL_KEY } from "@/constant/modal-key";
 
 export function CreateQuestionModal() {
-  const [open, setOpen] = useState(false);
+  const { modals, closeModal } = useOverlay();
+  const isOpen = modals[MODAL_KEY.PORTFOLIO_QUESTION];
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open) closeModal(MODAL_KEY.PORTFOLIO_QUESTION);
+      }}
+    >
       <DialogTrigger asChild>
         <Button variant="outline" className="gap-1">
           <IoAddOutline size={14} />
@@ -24,7 +31,7 @@ export function CreateQuestionModal() {
         <DialogHeader>
           <DialogTitle>Question Modal</DialogTitle>
         </DialogHeader>
-        <PortfolioQuestioForm setOpen={setOpen} />
+        <PortfolioQuestioForm />
       </DialogContent>
     </Dialog>
   );
@@ -35,7 +42,8 @@ type EditProps = {
 };
 
 export function EditQuestionModal({ questions }: EditProps) {
-  const { showModal, setShowModal } = useOverlay();
+  const { modals, closeModal } = useOverlay();
+  const isOpen = modals[MODAL_KEY.PORTFOLIO_QUESTION];
   const { selectedItem } = useSelectedItem();
   const selectedQuestion =
     selectedItem && questions
@@ -43,15 +51,17 @@ export function EditQuestionModal({ questions }: EditProps) {
       : undefined;
 
   return (
-    <Dialog open={showModal} onOpenChange={setShowModal}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open) closeModal(MODAL_KEY.PORTFOLIO_QUESTION);
+      }}
+    >
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Question Modal</DialogTitle>
         </DialogHeader>
-        <PortfolioQuestioForm
-          setOpen={setShowModal}
-          question={selectedQuestion}
-        />
+        <PortfolioQuestioForm question={selectedQuestion} />
       </DialogContent>
     </Dialog>
   );

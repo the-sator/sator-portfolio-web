@@ -38,7 +38,7 @@ export function CreateSiteUserModal({ users }: Props) {
       if ("statusCode" in error) {
         toast({
           title: "Create Site User Error",
-          description: error.error,
+          description: error.message,
           variant: "destructive",
         });
         return;
