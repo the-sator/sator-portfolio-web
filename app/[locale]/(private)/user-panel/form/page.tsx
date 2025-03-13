@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import FilterInput from "@/components/ui/filter/filter-input";
+import FormAttemptModal from "@/components/ui/modal/form-attempt-modal";
 import { CreateUserModal } from "@/components/ui/modal/user-modals";
 import { FormColumn } from "@/components/ui/table/columns/form-columns";
 import { paginateAttemptByUser } from "@/data/portfolio-form";
@@ -20,9 +21,9 @@ export default async function page({ searchParams }: Props) {
   } = await paginateAttemptByUser(filter as FormAttemptFilter);
   return (
     <div className="p-4">
+      <FormAttemptModal formAttempts={attempts} />
       <div className="mb-4 flex items-center justify-between">
         <h1 className="text-2xl">{t("form")}</h1>
-        <CreateUserModal />
       </div>
       <div className="flex items-center gap-2">
         <FilterInput placeholder="Username" filterKey="username" />

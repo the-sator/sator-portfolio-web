@@ -12,6 +12,7 @@ import SidebarMenuNavItem from "./sidebar-menu-nav-item";
 import { RiGlobalLine } from "react-icons/ri";
 import { IoIosSettings } from "react-icons/io";
 import { IoChatboxEllipses, IoDocumentText } from "react-icons/io5";
+import Link from "next/link";
 
 export default function AppSidebarItem() {
   const t = useTranslations("SidebarItem");
@@ -69,9 +70,9 @@ export default function AppSidebarItem() {
   ];
   return (
     <SidebarContent>
-      <div className="w-full p-4">
+      <Link href="/" className="w-full p-4">
         <p>SATOR</p>
-      </div>
+      </Link>
       {items.map((item) => (
         <SidebarGroup key={item.title}>
           <SidebarGroupLabel>{t(item.title)}</SidebarGroupLabel>

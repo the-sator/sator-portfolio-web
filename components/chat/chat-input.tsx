@@ -147,18 +147,8 @@ export default function ChatInput({ room, auth, isAdmin, chatRoomRef }: Props) {
           setImages={setImages}
           className="absolute right-14"
         >
-          <Button variant="icon" type="button">
-            <FiPaperclip />
-          </Button>
-        </MultiUploadButton>
-        {/* <Button
-          variant="icon"
-          type="button"
-          className="absolute right-14"
-          onClick={() => setIsShow(!isShow)}
-        >
           <FiPaperclip />
-        </Button> */}
+        </MultiUploadButton>
       </div>
     </div>
   );

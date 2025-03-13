@@ -38,6 +38,8 @@ export type FormResponse = {
   question_id: string;
   option_id: string;
   metadata?: JSON | null;
+  form_question: FormQuestion;
+  form_option: FormOption;
 };
 
 export type FormAttempt = {

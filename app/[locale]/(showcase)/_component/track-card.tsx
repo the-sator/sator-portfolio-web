@@ -56,7 +56,7 @@ export default function TrackCard() {
   return (
     <div
       ref={cardRef}
-      className="relative h-[550px] w-[400px] flex-shrink-0 bg-card p-2 drop-shadow-xl transition-transform duration-300 ease-out"
+      className="relative h-[400px] w-[550px] flex-shrink-0 bg-card p-2 drop-shadow-xl transition-transform duration-300 ease-out"
     >
       <div className="flex h-full w-full items-center justify-center border">
         <p className="text-5xl font-bold">Sator</p>

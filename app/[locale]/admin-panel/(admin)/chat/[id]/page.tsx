@@ -14,7 +14,7 @@ type Props = {
 export default async function page({ params, searchParams }: Props) {
   const { id } = await params;
   const filter = await searchParams;
-  const [{ data: room }, { error }, { data: members }, { data }] =
+  const [{ data: room }, { error }, { data: members }, { data: admin }] =
     await Promise.all([
       getById(id, true),
       paginateMessagesByRoomID(id, filter, true),
@@ -25,17 +25,17 @@ export default async function page({ params, searchParams }: Props) {
     notFound();
   }
 
-  if (!data) {
+  if (!admin) {
     redirect(ADMIN_LOGIN_PATH);
   }
 
   return (
     <div className="relative col-span-2 h-[calc(100svh-72px)] w-full overflow-hidden rounded-sm bg-accent">
-      {error && <ChatBlur room={room} auth={data} isAdmin={true} />}
+      {error && <ChatBlur room={room} auth={admin} isAdmin={true} />}
       <ChatWindow
         filter={filter}
         room={room}
-        auth={data}
+        auth={admin}
         isAdmin={true}
         members={members}
       />

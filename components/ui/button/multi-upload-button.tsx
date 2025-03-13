@@ -16,8 +16,8 @@ import Spinner from "../spinner";
 import { breakpointColumnsObj, ImagePreview } from "@/types/base.type";
 import { UploadState } from "@/enum/base.enum";
 type UploadButtonProps = {
-  children: React.ReactNode;
   className?: string;
+  children: React.ReactNode;
   images: File[] | null;
   setImages: Dispatch<SetStateAction<File[] | null>>;
   imagePreviews?: ImagePreview[];
@@ -25,8 +25,8 @@ type UploadButtonProps = {
 };
 
 export default function MultiUploadButton({
-  children,
   className = "absolute bottom-0 right-0 hover:bg-neutral-700/50 rounded-full",
+  children,
   images,
   setImages,
   imagePreviews,
@@ -145,7 +145,7 @@ export default function MultiUploadButton({
         variant={"icon"}
         size={"icon"}
         className={className}
-        asChild
+        // asChild
       >
         {children}
       </Button>

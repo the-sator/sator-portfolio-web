@@ -22,6 +22,7 @@ import { useParams } from "next/navigation";
 import { useUnreadMessage } from "@/store/unread-message";
 import { User } from "@/types/user.type";
 import { Admin } from "@/types/admin.type";
+import { cn } from "@/lib/utils";
 type Props = {
   auth: User | Admin;
   room: ChatRoom;

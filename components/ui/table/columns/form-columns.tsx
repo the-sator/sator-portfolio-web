@@ -6,6 +6,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "../data-table-columns/data-table-column-header";
 import { FormAttempt } from "@/types/portfolio-form.type";
 import { priceRangeToString } from "@/utils/string";
+import { FormActionColumn } from "../action-columns/form-action-column";
 export const FormColumn: ColumnDef<FormAttempt>[] = [
   {
     id: "select",
@@ -51,8 +52,8 @@ export const FormColumn: ColumnDef<FormAttempt>[] = [
       return formatDate(row.getValue("created_at"));
     },
   },
-  //   {
-  //     id: "actions",
-  //     cell: AdminActionColumn,
-  //   },
+  {
+    id: "actions",
+    cell: FormActionColumn,
+  },
 ];

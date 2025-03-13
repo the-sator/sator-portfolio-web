@@ -91,7 +91,7 @@ export async function userLoginAction(formData: unknown) {
   if (!error && data) {
     await setSessionCookies(COOKIE.USER, data.token, String(data.expires_at));
     revalidatePath("/", "layout");
-    redirect("/user-panel/chat");
+    redirect("/user-panel/site");
   } else {
     return {
       error: error,

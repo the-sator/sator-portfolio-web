@@ -6,4 +6,5 @@ export enum MODAL_KEY {
   API_KEY = "api-key",
   CREATE = "create",
   TOTP = "totp",
+  FORM_ATTEMPT = "form-attempt",
 }

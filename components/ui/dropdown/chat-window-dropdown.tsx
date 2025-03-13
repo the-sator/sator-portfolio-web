@@ -14,11 +14,12 @@ import { ChatRoom, InvitableChatMember } from "@/types/chat.type";
 import useConfirmationStore from "@/store/confirmation";
 import { leaveAction } from "@/action/chat-member.action";
 import { toast } from "@/hooks/use-toast";
-import { Auth } from "@/types/auth.type";
 import { useParams } from "next/navigation";
+import { Admin } from "@/types/admin.type";
+import { User } from "@/types/user.type";
 type Props = {
   room: ChatRoom;
-  auth: Partial<Auth>;
+  auth: User | Admin;
   member?: InvitableChatMember | null;
 };
 export default function ChatWindowDropdown({ room, member, auth }: Props) {
@@ -58,7 +59,7 @@ export default function ChatWindowDropdown({ room, member, auth }: Props) {
         <DropdownMenuItem className="p-0" onSelect={(e) => e.preventDefault()}>
           <ChatRoomDetailModal room={room} auth={auth} />
         </DropdownMenuItem>
-        {auth.role_id && (
+        {"role_id" in auth && (
           <DropdownMenuItem
             className="p-0"
             onSelect={(e) => {

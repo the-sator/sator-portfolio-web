@@ -90,6 +90,10 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+
+  .text-rainbow {
+    @apply bg-gradient-to-r from-fuchsia-100 via-blue-200 to-indigo-300 bg-clip-text font-bold text-transparent
+  }
 }
 
 @layer utilities {
