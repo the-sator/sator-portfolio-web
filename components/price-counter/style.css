@@ -1,0 +1,51 @@
+:root {
+    --counter-from: 0;
+    --counter-to: 100;
+    --duration: 2s;
+}
+
+@property --percent {
+    syntax: "<number>";
+    initial-value: 0;
+    inherits: false;
+}
+
+@property --temp {
+    syntax: "<number>";
+    initial-value: 0;
+    inherits: false;
+}
+
+@property --v1 {
+    syntax: "<integer>";
+    initial-value: 0;
+    inherits: false;
+}
+
+@property --v2 {
+    syntax: "<integer>";
+    initial-value: 0;
+    inherits: false;
+}
+
+.animated-counter {
+    animation: counter var(--duration) forwards ease-in-out;
+    transition: --percent 2s;
+    --v1: max(var(--percent) - 0.5, 0);
+    --v2: max((var(--percent) - var(--v1)) * 100, 0);
+    counter-reset: v1 var(--v1) v2 var(--v2);
+}
+
+.animated-counter::before {
+    content: "$" counter(v1) "." counter(v2, decimal-leading-zero);
+}
+
+@keyframes counter {
+    from {
+        --percent: var(--counter-from)
+    }
+
+    to {
+        --percent: var(--counter-to)
+    }
+}

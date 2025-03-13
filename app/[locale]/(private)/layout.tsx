@@ -5,7 +5,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar/sidebar";
-import { ADMIN_LOGIN_PATH } from "@/constant/base";
+import { USER_LOGIN_PATH } from "@/constant/base";
 import { NotificationProvider } from "@/context/notification-provider";
 import { getUserSession } from "@/data/user";
 import { redirect } from "next/navigation";
@@ -21,7 +21,7 @@ export default async function layout({
   const { locale } = await params;
   const { data } = await getUserSession();
   if (!data) {
-    redirect(ADMIN_LOGIN_PATH);
+    redirect(USER_LOGIN_PATH);
   }
   return (
     <div>

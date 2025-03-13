@@ -1,10 +1,13 @@
 "use server";
 import {
+  createFormAttempt,
   createQuestion,
   deleteQuestion,
   updateQuestion,
 } from "@/data/portfolio-form";
 import {
+  CreateFormAttempt,
+  CreateFormAttemptSchema,
   CreateFormQuestion,
   CreateFormQuestionSchema,
 } from "@/types/portfolio-form.type";
@@ -64,4 +67,20 @@ export async function updateQuestionAction(id: string, formData: unknown) {
   }
   revalidateTag("portfolio-form");
   return { error };
+}
+
+export async function createFormAttemptAction(formData: unknown) {
+  const result = CreateFormAttemptSchema.safeParse(formData);
+  if (!result.success) {
+    return {
+      error: result.error.format(),
+    };
+  }
+  const payload: CreateFormAttempt = {
+    responses: result.data.responses,
+  };
+  const { data, error } = await createFormAttempt(payload);
+
+  revalidateTag("form-attempt");
+  return { data, error };
 }

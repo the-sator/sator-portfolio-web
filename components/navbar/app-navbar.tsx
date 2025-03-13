@@ -5,6 +5,7 @@ import { LinkButton } from "../ui/button/link-button";
 import Link from "next/link";
 import Indicator from "../ui/indicator";
 import { useUnreadMessage } from "@/store/unread-message";
+import ThemeSwitch from "../ui/theme-switch";
 
 type Props = {
   showChat?: boolean;
@@ -70,8 +71,9 @@ export default function AppNavbar({ showChat = false }: Props) {
             )}
           </Link>
         )}
-        <LinkButton href={"/login"} className="h-7">
-          Login
+        <ThemeSwitch />
+        <LinkButton href={"/user-panel/site"} className="h-7">
+          Dashboard
         </LinkButton>
       </div>
     </nav>

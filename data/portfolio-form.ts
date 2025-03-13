@@ -1,7 +1,11 @@
 import { PaginateResult } from "@/types/base.type";
 import {
+  CreateFormAttempt,
   CreateFormQuestion,
+  FormAttempt,
+  FormAttemptFilter,
   FormQuestion,
+  FormQuestionPagination,
   PortfolioFormFilter,
 } from "@/types/portfolio-form.type";
 import { fetchApi } from "@/utils/fetch-client";
@@ -11,6 +15,14 @@ export const getAllQuestions = async () => {
   const data = await fetchApi.get<FormQuestion[]>("/admin/question/all", [
     "form-question",
   ]);
+  return data;
+};
+
+export const getQuestionById = async (id = "first") => {
+  const data = await fetchApi.get<FormQuestionPagination>(`/question/${id}`, [
+    "form-question",
+  ]);
+  console.log("data:", data);
   return data;
 };
 
@@ -55,4 +67,37 @@ export const updateQuestion = async (
     ["form-question"],
   );
   return data;
+};
+
+// Attempt and Response
+export const getAttemptById = async (id: string) => {
+  const data = await fetchApi.get<FormAttempt>(`/form-attempt/${id}`, [
+    `form-attempt:${id}`,
+  ]);
+  return data;
+};
+
+export const createFormAttempt = async (payload: CreateFormAttempt) => {
+  const data = await fetchApi.post<FormAttempt>(`/form-attempt`, payload, [
+    `form-attempt`,
+  ]);
+  return data;
+};
+
+export const paginateAttemptByUser = async (filter?: FormAttemptFilter) => {
+  const fullUrl = `/form-attempt${toQueryString({ ...filter })}`;
+  const { data, error } = await fetchApi.get<PaginateResult<FormAttempt[]>>(
+    fullUrl,
+    [`form-attempt`],
+  );
+
+  if (error) {
+    return { data: null, error };
+  }
+
+  return {
+    data: data?.data || null,
+    metadata: data?.metadata || null,
+    error: null,
+  };
 };

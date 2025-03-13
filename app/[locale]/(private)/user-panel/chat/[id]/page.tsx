@@ -18,11 +18,9 @@ export default async function page({ params, searchParams }: Props) {
     paginateMessagesByRoomID(id, filter, false),
     getUserSession(),
   ]);
-
   if (!data) {
     redirect(USER_LOGIN_PATH);
   }
-  console.log("error:", error);
   if (!room) {
     notFound();
   }

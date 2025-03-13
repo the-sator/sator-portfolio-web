@@ -4,7 +4,7 @@ import { Button } from "../ui/button";
 import { FiMinusCircle } from "react-icons/fi";
 import { FormOption } from "@/types/portfolio-form.type";
 import { toast } from "@/hooks/use-toast";
-import { priceRangeToString, stringToPriceRange } from "@/utils/string";
+import { numArrayToString, stringToPriceRange } from "@/utils/string";
 type Props = {
   option: FormOption;
   options: FormOption[];
@@ -65,7 +65,7 @@ export default function FormOptionInput({
           name="price"
           required
           onChange={handlePriceRange}
-          defaultValue={priceRangeToString(option.price)}
+          defaultValue={numArrayToString(option.price)}
           instruction={`Denote " - " for range`}
         />
       </div>

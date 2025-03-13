@@ -43,6 +43,11 @@ export type PaginateResult<T> = {
   metadata: PaginateMetadata;
 };
 
+export type NextPrevious = {
+  next: string | null;
+  previous: string | null;
+};
+
 export type WSPayload<T> = {
   type: WSEventType;
   data: T;

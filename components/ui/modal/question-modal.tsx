@@ -12,17 +12,23 @@ import { FormQuestion } from "@/types/portfolio-form.type";
 import { MODAL_KEY } from "@/constant/modal-key";
 
 export function CreateQuestionModal() {
-  const { modals, closeModal } = useOverlay();
+  const { modals, closeModal, openModal } = useOverlay();
   const isOpen = modals[MODAL_KEY.PORTFOLIO_QUESTION];
   return (
     <Dialog
       open={isOpen}
       onOpenChange={(open) => {
-        if (!open) closeModal(MODAL_KEY.PORTFOLIO_QUESTION);
+        if (!open) {
+          closeModal(MODAL_KEY.PORTFOLIO_QUESTION);
+        }
       }}
     >
       <DialogTrigger asChild>
-        <Button variant="outline" className="gap-1">
+        <Button
+          variant="outline"
+          className="gap-1"
+          onClick={() => openModal(MODAL_KEY.PORTFOLIO_QUESTION)}
+        >
           <IoAddOutline size={14} />
           <p className="text-sm group-hover:text-blue-700">Create</p>
         </Button>
@@ -44,7 +50,7 @@ type EditProps = {
 export function EditQuestionModal({ questions }: EditProps) {
   const { modals, closeModal } = useOverlay();
   const isOpen = modals[MODAL_KEY.PORTFOLIO_QUESTION];
-  const { selectedItem } = useSelectedItem();
+  const { selectedItem, setSelectedItem } = useSelectedItem();
   const selectedQuestion =
     selectedItem && questions
       ? questions.find((question) => question.id === selectedItem)
@@ -54,7 +60,10 @@ export function EditQuestionModal({ questions }: EditProps) {
     <Dialog
       open={isOpen}
       onOpenChange={(open) => {
-        if (!open) closeModal(MODAL_KEY.PORTFOLIO_QUESTION);
+        if (!open) {
+          setSelectedItem(null);
+          closeModal(MODAL_KEY.PORTFOLIO_QUESTION);
+        }
       }}
     >
       <DialogContent>

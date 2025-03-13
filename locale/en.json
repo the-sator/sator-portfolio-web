@@ -12,8 +12,6 @@
     "portfolio-form": "Portfolio Form",
     "chat": "Chat",
     "analytic": "Analytic",
-    "user-management": "User Management",
-    "admin-management": "Admin Management",
     "admin": "Admin",
     "role": "Role",
     "permission": "Permission",
@@ -22,10 +20,17 @@
     "configuration": "Configuration",
     "portfolio": "Portfolio",
     "site": "Website",
-    "site-management": "Website Management"
+    "user-management": "User Management",
+    "admin-management": "Admin Management",
+    "site-management": "Website Management",
+    "form-management": "Form Management",
+    "form": "Form"
   },
   "User": {
     "user": "User"
+  },
+  "Form": {
+    "form": "Form"
   },
   "Site": {
     "website": "Website"

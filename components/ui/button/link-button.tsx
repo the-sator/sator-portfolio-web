@@ -8,6 +8,7 @@ export interface LinkButtonProps
   extends React.ButtonHTMLAttributes<HTMLAnchorElement>,
     VariantProps<typeof buttonVariants> {
   href: string;
+  disabled?: boolean;
 }
 //   type Props = {
 //     href: string;
@@ -18,11 +19,15 @@ export interface LinkButtonProps
 //   };
 
 const LinkButton = React.forwardRef<HTMLAnchorElement, LinkButtonProps>(
-  ({ className, variant, size, href, children, ...props }, ref) => {
+  ({ className, variant, size, href, disabled, children, ...props }, ref) => {
     return (
       <Link
         href={href}
-        className={cn(buttonVariants({ variant, size }), className)}
+        className={cn(
+          buttonVariants({ variant, size }),
+          disabled && "pointer-events-none opacity-45",
+          className,
+        )}
         ref={ref}
         {...props}
       >

@@ -11,7 +11,7 @@ import {
 import SidebarMenuNavItem from "./sidebar-menu-nav-item";
 import { RiGlobalLine } from "react-icons/ri";
 import { IoIosSettings } from "react-icons/io";
-import { IoChatboxEllipses } from "react-icons/io5";
+import { IoChatboxEllipses, IoDocumentText } from "react-icons/io5";
 
 export default function AppSidebarItem() {
   const t = useTranslations("SidebarItem");
@@ -25,6 +25,18 @@ export default function AppSidebarItem() {
           resource: "Website",
           url: "/user-panel/site",
           icon: <RiGlobalLine />,
+        },
+      ],
+    },
+    {
+      title: "form-management",
+      url: "#",
+      children: [
+        {
+          title: "form",
+          resource: "Form Attempt",
+          url: "/user-panel/form",
+          icon: <IoDocumentText />,
         },
       ],
     },

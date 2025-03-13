@@ -22,10 +22,15 @@
     "configuration": "រចនាសម្ព័ន្ធ",
     "portfolio": "ស្នាដៃ",
     "site": "វិបសាយ",
-    "site-management": "គ្រប់គ្រងវិបសាយ"
+    "site-management": "គ្រប់គ្រងវិបសាយ",
+    "form-management": "គ្រប់គ្រងបែបបទ",
+    "form": "បែបបទ"
   },
   "User": {
     "user": "អតិថិជន"
+  },
+  "Form": {
+    "form": "បែបបទ"
   },
   "Site": {
     "website": "វិបសាយ"

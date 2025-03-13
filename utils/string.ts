@@ -50,7 +50,7 @@ export function stringToPriceRange(str: string): number[] {
   return [start, end];
 }
 
-export function priceRangeToString(num: number[]): string {
+export function numArrayToString(num: number[], prefix?: string): string {
   if (num.length === 1) {
     return String(num);
   }
@@ -58,7 +58,28 @@ export function priceRangeToString(num: number[]): string {
   if (num.length > 2) {
     return "0";
   }
-  const str = String(num[0]) + " - " + String(num[1]);
+  const str =
+    (prefix ?? "") + String(num[0]) + " - " + (prefix ?? "") + String(num[1]);
+  return str;
+}
+
+export function priceRangeToString(num: number[]): string {
+  if (num.length === 1) {
+    return num.toLocaleString("en-US", { style: "currency", currency: "USD" });
+  }
+
+  if (num.length > 2) {
+    return "0";
+  }
+  const startRange = num[0].toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
+  });
+  const endRange = num[1].toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
+  });
+  const str = startRange + " - " + endRange;
   return str;
 }
 

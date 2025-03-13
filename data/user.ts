@@ -35,6 +35,7 @@ export const getAllUsers = async () => {
   }
   return { data, error };
 };
+
 export const createUser = async (payload: CreateUser) => {
   const data = await fetchApi.post<User>(`${getAdminPath()}`, payload, [
     "users",
