@@ -43,6 +43,9 @@ export type ChatMessage = {
   message_type: ChatMessageType;
   chat_member: ChatMember;
   chat_room: ChatRoom;
+  metadata?: {
+    id: string;
+  };
 };
 
 export type UnreadMessage = {
