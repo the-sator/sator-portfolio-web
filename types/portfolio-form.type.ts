@@ -52,6 +52,8 @@ export type FormAttempt = {
   form_response: FormResponse[];
 };
 
+export type FormAttemptWithChatRoom = FormAttempt & { chat_room_id: string };
+
 export const CreateFormOptionSchema = z.object({
   // question_id: z.string().min(1, { message: "Question ID is required" }),
   option_text: z.string().min(1, { message: "Text is required" }),

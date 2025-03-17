@@ -40,7 +40,7 @@ export default function ChatList({ isAdmin, auth }: Props) {
   useEffect(() => {
     paramsRef.current = params.id;
   }, [params.id]);
-
+  console.log("auth.id:", auth.id);
   const handleUpdateChatRoom = (payload: WSPayload<ChatRoom>) => {
     switch (payload.type) {
       case WSEventType.UPDATE_ROOM:

@@ -7,4 +7,5 @@ export enum MODAL_KEY {
   CREATE = "create",
   TOTP = "totp",
   FORM_ATTEMPT = "form-attempt",
+  FORM_ATTEMPT_ASYNC = "form-attempt-async",
 }

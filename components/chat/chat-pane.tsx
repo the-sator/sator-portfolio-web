@@ -22,7 +22,7 @@ import { useParams } from "next/navigation";
 import { useUnreadMessage } from "@/store/unread-message";
 import { User } from "@/types/user.type";
 import { Admin } from "@/types/admin.type";
-import { cn } from "@/lib/utils";
+import FormAttemptAsyncModal from "../ui/modal/form-attempt-async-modal";
 type Props = {
   auth: User | Admin;
   room: ChatRoom;
@@ -47,6 +47,7 @@ export default function ChatPane({
     hasNextPage,
   } = useGetInfiniteChat(room.id, filter, isAdmin, {});
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+  console.log("chatMessages:", chatMessages);
   const [newMessages, setNewMessages] = useState<ChatMessage[]>([]);
   const [isAtBottom, setIsAtBottom] = useState(true);
   const params = useParams();
@@ -61,6 +62,7 @@ export default function ChatPane({
   );
 
   const handleChatMessage = (payload: WSPayload<ChatMessage>) => {
+    console.log("payload:", payload);
     if (payload.type === WSEventType.NEW_MESSAGE) {
       setNewMessages((prev) => {
         return [payload.data, ...prev];
@@ -163,6 +165,7 @@ export default function ChatPane({
       className="relative flex w-full flex-grow flex-col-reverse gap-4 overflow-auto px-4 py-3"
       id="scroll-container"
     >
+      <FormAttemptAsyncModal />
       <div className="relative bottom-8 z-[100] flex w-full justify-end">
         {!isAtBottom && (
           <Button

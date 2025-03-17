@@ -1,8 +1,10 @@
 "use server";
 import {
+  bringToLife,
   createFormAttempt,
   createQuestion,
   deleteQuestion,
+  getAttemptById,
   updateQuestion,
 } from "@/data/portfolio-form";
 import {
@@ -12,6 +14,11 @@ import {
   CreateFormQuestionSchema,
 } from "@/types/portfolio-form.type";
 import { revalidateTag } from "next/cache";
+import { redirect } from "next/navigation";
+
+export async function getAttemptByIdAction(id: string) {
+  return await getAttemptById(id);
+}
 
 export async function createQuestionAction(formData: unknown) {
   const result = CreateFormQuestionSchema.safeParse(formData);
@@ -82,5 +89,16 @@ export async function createFormAttemptAction(formData: unknown) {
   const { data, error } = await createFormAttempt(payload);
 
   revalidateTag("form-attempt");
+  return { data, error };
+}
+
+export async function bringToLifeAction(id: string) {
+  const { data, error } = await bringToLife(id);
+  if (!data || error) {
+    return { data: null, error };
+  }
+  revalidateTag("form-attempt");
+  revalidateTag("bring-to-life");
+  redirect(`/user-panel/chat/${data.chat_room_id}`);
   return { data, error };
 }

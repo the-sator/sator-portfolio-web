@@ -4,6 +4,7 @@ import {
   CreateFormQuestion,
   FormAttempt,
   FormAttemptFilter,
+  FormAttemptWithChatRoom,
   FormQuestion,
   FormQuestionPagination,
   PortfolioFormFilter,
@@ -77,13 +78,6 @@ export const getAttemptById = async (id: string) => {
   return data;
 };
 
-export const createFormAttempt = async (payload: CreateFormAttempt) => {
-  const data = await fetchApi.post<FormAttempt>(`/form-attempt`, payload, [
-    `form-attempt`,
-  ]);
-  return data;
-};
-
 export const paginateAttemptByUser = async (filter?: FormAttemptFilter) => {
   const fullUrl = `/form-attempt${toQueryString({ ...filter })}`;
   const { data, error } = await fetchApi.get<PaginateResult<FormAttempt[]>>(
@@ -100,4 +94,20 @@ export const paginateAttemptByUser = async (filter?: FormAttemptFilter) => {
     metadata: data?.metadata || null,
     error: null,
   };
+};
+
+export const createFormAttempt = async (payload: CreateFormAttempt) => {
+  const data = await fetchApi.post<FormAttempt>(`/form-attempt`, payload, [
+    `form-attempt`,
+  ]);
+  return data;
+};
+
+export const bringToLife = async (id: string) => {
+  const data = await fetchApi.post<FormAttemptWithChatRoom>(
+    `/form-attempt/${id}/bring-to-life`,
+    {},
+    ["bring-to-life"],
+  );
+  return data;
 };
