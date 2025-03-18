@@ -19,6 +19,7 @@ import Spinner from "../spinner";
 import CoverImageUpload from "../cover-image-upload";
 import { useQueryClient } from "@tanstack/react-query";
 import { getBlogQueryKey } from "@/data/query/blog";
+import { useRouter } from "next/navigation";
 
 type Props = {
   admin: Admin;
@@ -50,6 +51,7 @@ export default function BlogForm({ admin, categories, blog }: Props) {
   const [isUploadPending, startUploadTransition] = useTransition();
   const [isSubmitPending, startSubmitTransition] = useTransition();
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   //Constant
   const categoryOption = categories?.map((category) => {
@@ -96,6 +98,7 @@ export default function BlogForm({ admin, categories, blog }: Props) {
         setErrors(response.error);
       }
     } else {
+      router.push("/admin-panel/blog");
       toast({
         title: "Blog Saved!",
         variant: "success",

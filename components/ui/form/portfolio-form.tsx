@@ -25,6 +25,7 @@ import { ImagePreview } from "@/types/base.type";
 import { UploadState } from "@/enum/base.enum";
 import { useQueryClient } from "@tanstack/react-query";
 import { getPortfolioQueryKey } from "@/data/query/portfolio";
+import { useRouter } from "next/navigation";
 
 type Props = {
   admin: Admin;
@@ -68,6 +69,7 @@ export default function PortfolioForm({ admin, categories, portfolio }: Props) {
   const queryClient = useQueryClient();
   const [isUploadPending, startUploadTransition] = useTransition();
   const [isSubmitPending, startSubmitTransition] = useTransition();
+  const router = useRouter();
 
   //Constant
   const categoryOption = categories?.map((category) => {
@@ -119,6 +121,7 @@ export default function PortfolioForm({ admin, categories, portfolio }: Props) {
         setErrors(response.error);
       }
     } else {
+      router.push("/admin-panel/portfolio");
       toast({
         title: "Portfolio Saved!",
         variant: "success",
